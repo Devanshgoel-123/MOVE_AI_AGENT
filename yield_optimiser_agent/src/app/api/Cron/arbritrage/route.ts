@@ -7,19 +7,30 @@ export async function GET(request: Request) {
         const supportedTokens=await fetchSupportedTokens();
         const results = await Promise.all(
             supportedTokens.map(async (token) => {
-                const userWalletBalance=await getTokenAmountOwnedByAccount(ACCOUNT_ADDRESS, token.name);
-                const formattedBalance=Math.floor((userWalletBalance/10**(token.decimals))*0.5)
+                const userWalletBalance=await getTokenAmountOwnedByAccount(ACCOUNT_ADDRESS, token.token_address);
+                console.log("the user Wallet Balance for token:",token.name,userWalletBalance,token.decimals)
+                const formattedBalance=Math.floor(userWalletBalance)/10**(token.decimals)
                 console.log("the formatted Balance is:",formattedBalance)
-                const response = await FindAndExecuteArbritrageOppurtunity(
-                    token.name.toLowerCase(),
-                    formattedBalance,
-                    5,
-                    supportedTokens
-                )
-            return response
+                if(formattedBalance>0){
+                    const response = await FindAndExecuteArbritrageOppurtunity(
+                        token.name.toLowerCase(),
+                        formattedBalance,
+                        5,
+                        supportedTokens
+                    )
+                return response
+                }
             })
         );
-        return results
+        return new Response(JSON.stringify({
+            success:true,
+            message:results
+        }),{
+            status:200,
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        })
     }catch (err) {
         console.error("Error diversifying portfolio:", err);
         return new Response(JSON.stringify({ 

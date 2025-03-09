@@ -121,6 +121,7 @@ export async function POST(request: NextRequest) {
 		}
 	  }
       const finalLength=response.length;
+	  console.log(response)
 	  return NextResponse.json({
 		agentResponse: response,
 		accountAddress: account.accountAddress.toString()

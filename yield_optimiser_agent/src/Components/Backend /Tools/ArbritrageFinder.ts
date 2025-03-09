@@ -224,7 +224,7 @@ export const FindAndExecuteArbritrageOppurtunity=async (startCurrency:string,inv
     return {
       success: true,
       message: `Found ${Math.min(opportunities.length,5)} arbitrage opportunities`,
-      opportunities: opportunities.slice(0, 5), 
+      opportunities: opportunities[0], 
       executionResult: {
         executed: true,
         success: executionResult,
