@@ -1,0 +1,12 @@
+{
+    "crons": [
+  {
+    "path": "/api/Cron/portfoliorebalancing",
+    "schedule": "0 */6 * * *"
+  },
+  {
+    "path": "/api/Cron/arbritrage",
+    "schedule": "0 */6 * * *"
+  }
+]
+  }

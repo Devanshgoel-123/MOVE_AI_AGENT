@@ -12,6 +12,7 @@ import {
   fetchSupportedTokens, 
   getTokenAmountOwnedByAccount 
 } from "../Common/Token";
+import { ACCOUNT_ADDRESS } from "../Common/Constants";
 
 // Initialize environment and services
 dotenv.config();
@@ -57,9 +58,8 @@ interface UserPreference {
 /**
  * Gets the user's current diversification preference from the database
  */
-async function getUserDiversificationPreference(walletAddress: string): Promise<UserPreference | null> {
+export async function getUserDiversificationPreference(walletAddress: string): Promise<UserPreference | null> {
   try {
-    // Fetch from database using Prisma
     const preference = await prisma.userPortfolioPreference.findUnique({
       where: { walletAddress }
     });
@@ -261,59 +261,41 @@ function calculateRequiredSwaps(
 /**
  * Executes a swap transaction
  */
-async function executeSwap(swap: SwapAction): Promise<boolean> {
+async function executeSwap(swap: SwapAction): Promise<string> {
   try {
     console.log(`Executing swap: ${swap.amount} of ${swap.from_token_address} to ${swap.to_token_address}`);
-  //   const Setup=await InitializeAgent();
-  //   const agent=Setup?.agent
-  //   if(agent!==undefined){
-  //     const response = [];
-  //     const config = { 
-  //       configurable: { 
-  //         thread_id: `aptos-agent-1` 
-  //       } 
-  //       };
-  //     const stream = await agent.stream(
-  //       {
-  //         messages: [new HumanMessage(`Swap ${swap.amount.toFixed(swap.fromTokenDecimals)} of ${swap.from_token_address} to ${swap.to_token_address}`)],
-  //       },
-  //       config
-  //       )
-  //  for await (const chunk of stream) {
-	// 	if ("agent" in chunk) {
-	// 	  response.push({
-	// 		type: "agent",
-	// 		content: chunk.agent.messages[0].content
-	// 	  });
-	// 	} else if ("tools" in chunk) {
-	// 	  response.push({
-	// 		type: "tools",
-	// 		content: chunk.tools.messages[0].content
-	// 	  });
-	// 	}
-	//   }
-	//   console.log({
-	// 	agentResponse: response,
-	//   });
-  // }
-    // const response = await client.Swap(
-    //   {
-    //     chainId:"1",
-    //     fromTokenAddress: swap.from_token_address as `0x${string}`,
-    //     toTokenAddress: swap.to_token_address as `0x${string}`,
-    //     fromTokenAmount: swap.amount.toString(),
-    //     toWalletAddress: "0x5bafe2c53415743947065e902274f85e6300e9fb27d21bc29c2ce217ea0b37c2", // Set this appropriately
-    //     slippagePercentage: "1",
-    //     integratorFeeAddress: "0x5bafe2c53415743947065e902274f85e6300e9fb27d21bc29c2ce217ea0b37c2",
-    //     integratorFeePercentage: "1",
-    //   },
-    //   process.env.PRIVATE_KEY || ""
-    // );
-    // console.log("the hash for the traxn is:",response.hash)
-     return true;
+    const Setup=await InitializeAgent();
+    const agent=Setup?.agent
+    if(agent!==undefined){
+      const response = [];
+      const config = { 
+        configurable: { 
+          thread_id: `aptos-agent-1` 
+        } 
+        };
+      const stream = await agent.stream(
+        {
+          messages: [new HumanMessage(`Swap ${swap.amount.toFixed(swap.fromTokenDecimals)} of ${swap.from_token_address} to ${swap.to_token_address}`)],
+        },
+        config
+        )
+   for await (const chunk of stream) {
+		if ("tools" in chunk) {
+		  response.push({
+			type: "tools",
+			content: chunk.tools.messages[0].content
+		  });
+		}
+	  }
+	  console.log({
+		agentResponse: response,
+	  });
+    return response[-1].content
+  } 
+    return "Error Initialzing the Agent"
   } catch (error) {
     console.error("Swap failed:", error);
-    return false;
+    return "Error sending the swap transaction"
   }
 }
 
@@ -327,99 +309,7 @@ export const PortfolioRebalancerTool = tool(
     otherPercentage,
   }) => {
     try {
-      const accountAddress="0x5bafe2c53415743947065e902274f85e6300e9fb27d21bc29c2ce217ea0b37c2";
-      const existingPreference = await getUserDiversificationPreference(accountAddress);
-      
-      // If no percentages were provided, use existing preferences if available
-      if (stablecoinPercentage === undefined && nativePercentage === undefined && otherPercentage === undefined) {
-        if (!existingPreference) {
-          return {
-            success: false,
-            message: "No target allocation provided and no existing preferences found."
-          };
-        }
-        
-        stablecoinPercentage = existingPreference.targetAllocation[TokenCategory.STABLECOIN];
-        nativePercentage = existingPreference.targetAllocation[TokenCategory.NATIVE];
-        otherPercentage = existingPreference.targetAllocation[TokenCategory.OTHER];
-      }
-      
-      // Validate that allocations add up to 100%
-      const totalPercentage = stablecoinPercentage + nativePercentage + otherPercentage;
-      if (totalPercentage !== 100) {
-        return {
-          success: false,
-          message: `Invalid allocation. Your percentages must add up to 100%, but they currently add up to ${totalPercentage}%.`
-        };
-      }
-
-      // Create target allocation object
-      const targetAllocation: Record<TokenCategory, number> = {
-        [TokenCategory.STABLECOIN]: stablecoinPercentage,
-        [TokenCategory.NATIVE]: nativePercentage,
-        [TokenCategory.OTHER]: otherPercentage
-      };
-      
-      // Fetch current portfolio
-      const userPortfolio = await fetchUserPortfolio(accountAddress);
-      
-      // Calculate current allocation and required swaps
-      const currentAllocation = calculateCurrentAllocation(userPortfolio);
-      const requiredSwaps = calculateRequiredSwaps(
-        userPortfolio,
-        currentAllocation,
-        targetAllocation
-      );
-      
-      // No swaps needed if portfolio already matches target allocation
-      if (requiredSwaps.length === 0) {
-        // Still save the user preference
-        await saveUserPreference(accountAddress, targetAllocation);
-        
-        return {
-          success: true,
-          message: "Portfolio is already balanced according to target allocation.",
-          currentAllocation,
-          targetAllocation,
-          userPortfolio
-        };
-      }
-      
-      // Execute swaps
-      const swapResults = [];
-      let allSwapsSuccessful = true;
-      
-      for (const swap of requiredSwaps) {
-        const success = await executeSwap(swap);
-        swapResults.push({
-          from: swap.from_token_address,
-          to: swap.to_token_address,
-          amount: swap.amount,
-          success
-        });
-        
-        if (!success) {
-          allSwapsSuccessful = false;
-        }
-      }
-      
-      // Only update the user preference if all swaps were successful
-      if (allSwapsSuccessful) {
-        await saveUserPreference(accountAddress, targetAllocation);
-      }
-
-      // Return results
-      return {
-        success: true,
-        message: allSwapsSuccessful 
-          ? "Portfolio rebalancing complete" 
-          : "Portfolio rebalancing partially complete with some failed swaps",
-        currentAllocation,
-        targetAllocation,
-        swapsExecuted: swapResults,
-        userPortfolio,
-        preferencesUpdated: allSwapsSuccessful
-      };
+      await RebalancerReusableFunction(stablecoinPercentage,nativePercentage,otherPercentage);
     } catch (error) {
       console.error("Portfolio rebalancing failed:", error);
       return {
@@ -438,3 +328,107 @@ export const PortfolioRebalancerTool = tool(
     })
   }
 );
+
+
+  export const RebalancerReusableFunction = async (
+    stablecoinPercentage: number,
+    nativePercentage: number,
+    otherPercentage: number,
+  ) => {
+    try {
+      const accountAddress = ACCOUNT_ADDRESS;
+      const existingPreference = await getUserDiversificationPreference(accountAddress);
+      
+      let finalStablePercentage = stablecoinPercentage ;
+      let finalNativePercentage = nativePercentage;
+      let finalOtherPercentage = otherPercentage;
+      
+      if (stablecoinPercentage === undefined && nativePercentage === undefined && otherPercentage === undefined) {
+        if (!existingPreference) {
+          return {
+            success: false,
+            message: "No target allocation provided and no existing preferences found."
+          };
+        }
+        
+        finalStablePercentage = existingPreference.targetAllocation[TokenCategory.STABLECOIN];
+        finalNativePercentage = existingPreference.targetAllocation[TokenCategory.NATIVE];
+        finalOtherPercentage = existingPreference.targetAllocation[TokenCategory.OTHER];
+      }
+      
+      const totalPercentage = finalStablePercentage + finalNativePercentage + finalOtherPercentage;
+      if (totalPercentage !== 100) {
+        return {
+          success: false,
+          message: `Invalid allocation. Your percentages must add up to 100%, but they currently add up to ${totalPercentage}%.`
+        };
+      }
+  
+      const targetAllocation: Record<TokenCategory, number> = {
+        [TokenCategory.STABLECOIN]: finalStablePercentage,
+        [TokenCategory.NATIVE]: finalNativePercentage,
+        [TokenCategory.OTHER]: finalOtherPercentage
+      };
+      
+      const userPortfolio = await fetchUserPortfolio(accountAddress);
+  
+      const currentAllocation = calculateCurrentAllocation(userPortfolio);
+      const requiredSwaps = calculateRequiredSwaps(
+        userPortfolio,
+        currentAllocation,
+        targetAllocation
+      );
+      if (requiredSwaps.length === 0) {
+        // Still save the user preference
+        await saveUserPreference(accountAddress, targetAllocation);
+        
+        return {
+          success: true,
+          message: "Portfolio is already balanced according to target allocation.",
+          currentAllocation,
+          targetAllocation,
+          userPortfolio
+        };
+      }
+      const swapResults = [];
+      let allSwapsSuccessful = true;
+      
+      for (const swap of requiredSwaps) {
+        const response= await executeSwap(swap);
+        const ParsedResponse=JSON.parse(response);
+        console.log("the parsed response is:",ParsedResponse)
+        swapResults.push({
+          from: swap.from_token_address,
+          to: swap.to_token_address,
+          amount: swap.amount,
+        });
+        
+        if (!response) {
+          allSwapsSuccessful = false;
+        }
+      }
+
+      if (allSwapsSuccessful) {
+        await saveUserPreference(accountAddress, targetAllocation);
+      }
+  
+      return {
+        success: true,
+        message: allSwapsSuccessful 
+          ? "Portfolio rebalancing complete" 
+          : "Portfolio rebalancing partially complete with some failed swaps",
+        currentAllocation,
+        targetAllocation,
+        swapsExecuted: swapResults,
+        userPortfolio,
+        preferencesUpdated: allSwapsSuccessful
+      };
+    } catch (error) {
+      console.error("Portfolio rebalancing failed:", error);
+      return {
+        success: false,
+        message: `Portfolio rebalancing failed: ${error instanceof Error ? error.message : String(error)}`
+      };
+    }
+  };
+  

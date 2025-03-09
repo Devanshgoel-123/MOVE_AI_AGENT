@@ -17,6 +17,7 @@ import { MemorySaver } from "@langchain/langgraph"
 import { HumanMessage } from "@langchain/core/messages"
 import { NextRequest, NextResponse } from "next/server"
 import { GetUserDiversificationPreferenceTool } from "@/Components/Backend /Tools/PortfolioDiversificationTool"
+import { ArbitrageFinderTool } from "@/Components/Backend /Tools/ArbritrageFinder"
 config()
 
 export const InitializeAgent = async () => {
@@ -47,7 +48,8 @@ export const InitializeAgent = async () => {
 				new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
-				GetUserDiversificationPreferenceTool
+				GetUserDiversificationPreferenceTool,
+				ArbitrageFinderTool
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
@@ -61,6 +63,9 @@ export const InitializeAgent = async () => {
 				The input json should be string (IMPORTANT)
 			`,
 		})
+
+
+		
 	
 		return { agent, account };
 	}catch(err){

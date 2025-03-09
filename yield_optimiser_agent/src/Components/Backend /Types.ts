@@ -4,6 +4,7 @@ export interface SupabaseToken {
     decimals: number;
     type: string;
     chain_id: number;
+    name:string;
 }
 
 // Define interfaces

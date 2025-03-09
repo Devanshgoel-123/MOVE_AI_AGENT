@@ -26,6 +26,7 @@ model UserPortfolioPreference {
 
 model Token{
   id       Int     @id @default(autoincrement())
+  name String @default("usdc")
   token_id Int @unique
   token_address String 
   chain_id Int 
