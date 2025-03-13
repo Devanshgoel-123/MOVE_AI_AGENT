@@ -7,7 +7,7 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, PanoraSwapTool } from "move-agent-kit"
+import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, PanoraSwapTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
@@ -18,6 +18,8 @@ import { HumanMessage } from "@langchain/core/messages"
 import { NextRequest, NextResponse } from "next/server"
 import { GetUserDiversificationPreferenceTool } from "@/Components/Backend /Tools/PortfolioDiversificationTool"
 import { ArbitrageFinderTool } from "@/Components/Backend /Tools/ArbritrageFinder"
+import { PricePredictionTool } from "@/Components/Backend /Tools/PricePredictionTool"
+import { getPoolDetails } from "@/Components/Backend /Agents/PoolDetailsAgent"
 config()
 
 export const InitializeAgent = async () => {
@@ -40,7 +42,7 @@ export const InitializeAgent = async () => {
 			anthropicApiKey: process.env.ANTHROPIC_API_KEY,
 		})
 		const memory5 = new MemorySaver()
-	
+	   
 		const agent = createReactAgent({
 			llm,
 			tools:[
@@ -49,7 +51,9 @@ export const InitializeAgent = async () => {
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
 				GetUserDiversificationPreferenceTool,
-				ArbitrageFinderTool
+				ArbitrageFinderTool,
+				PricePredictionTool,
+				new JouleGetPoolDetails(agentRuntime),
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
@@ -63,11 +67,7 @@ export const InitializeAgent = async () => {
 				The input json should be string (IMPORTANT)
 			`,
 		})
-
-
-		
-	
-		return { agent, account };
+		return { agent, account, agentRuntime };
 	}catch(err){
 		console.log(err)
 		return null
@@ -78,7 +78,7 @@ export const InitializeAgent = async () => {
 export async function POST(request: NextRequest) {
 	try {
 	const agentCache = await InitializeAgent()
-	  
+	
 	  if(agentCache===null){
 		return {
 			message:"Failed to answer your query"
@@ -86,8 +86,10 @@ export async function POST(request: NextRequest) {
 	  }
 	  const { agent, account } = agentCache;
 	  const body = await request.json();
-	  const { message } = body;
 	  
+	  const { message } = body;
+	  console.log("the message is:",message)
+	  getPoolDetails()
 	  if (!message) {
 		return NextResponse.json(
 		  { error: "Message is required" },
@@ -100,6 +102,7 @@ export async function POST(request: NextRequest) {
 		} 
 	  };
 	  const response = [];
+	  
 	  const stream = await agent.stream(
 		{
 		  messages: [new HumanMessage(message)],
@@ -123,7 +126,7 @@ export async function POST(request: NextRequest) {
       const finalLength=response.length;
 	  console.log(response)
 	  return NextResponse.json({
-		agentResponse: response,
+		agentResponse: response.filter((item)=>item.type==="agent"),
 		accountAddress: account.accountAddress.toString()
 	  });
 	} catch (error) {

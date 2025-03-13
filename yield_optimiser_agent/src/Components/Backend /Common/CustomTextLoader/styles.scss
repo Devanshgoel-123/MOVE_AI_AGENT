@@ -1,0 +1,22 @@
+.CustomTextLoader {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    color: var(--text-grey);
+    animation: colorChange 2s ease-in-out infinite;
+}
+
+@keyframes colorChange {
+    0% {
+        color: var(--text-grey);
+    }
+
+    50% {
+        color: var(--text-white);
+    }
+
+    100% {
+        color: var(--text-grey);
+    }
+}

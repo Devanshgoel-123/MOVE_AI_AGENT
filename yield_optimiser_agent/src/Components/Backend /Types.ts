@@ -28,3 +28,18 @@ export interface ArbitrageOpportunity {
     netProfit: number;
   }
   
+
+export enum CoinGeckoId{
+   usdt = "layerzero-bridged-usdt-aptos",
+   aptos="aptos",
+   usdc="layerzero-bridged-usdc-aptos",
+   weth="layerzero-bridged-weth-aptos",
+   thala="thala"
+}
+
+
+export interface UserChatSummary{
+  chatId:number;
+  user_query:string;
+  firstMessageDate:number;
+}

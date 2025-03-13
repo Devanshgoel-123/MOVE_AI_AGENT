@@ -2,7 +2,7 @@ import { tool } from "@langchain/core/tools";
 import { z as Zod } from "zod";
 import { config } from "dotenv";
 import { ExchangeRate, ArbitrageOpportunity, SupabaseToken } from "../Types";
-import { ACCOUNT_ADDRESS, exchangeRates } from "../Common/Constants";
+import {exchangeRates } from "../Common/Constants";
 import { fetchSupportedTokens } from "../Common/Token";
 import { exchanges } from "../Common/Constants";
 config();

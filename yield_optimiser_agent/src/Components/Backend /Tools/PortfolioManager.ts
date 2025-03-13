@@ -322,9 +322,9 @@ export const PortfolioRebalancerTool = tool(
     name: "portfolioRebalancerTool",
     description: "Rebalances a user's crypto portfolio based on desired asset distribution across different categories",
     schema: Zod.object({
-      stablecoinPercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for stablecoins (USDC, USDt, etc.)"),
-      nativePercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for native tokens (APT)"),
-      otherPercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for other tokens (THL, etc.)"),
+      stablecoinPercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for stablecoins (usdc,usdt, etc.)"),
+      nativePercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for native tokens (apt)"),
+      otherPercentage: Zod.number().min(0).max(100).describe("The desired percentage allocation for other tokens (thl, etc.)"),
     })
   }
 );

@@ -7,6 +7,10 @@
   {
     "path": "/api/Cron/arbritrage",
     "schedule": "0 */6 * * *"
+  },
+  {
+    "path": "/api/Cron/priceprediction",
+    "schedule": "0 */6 * * *"
   }
 ]
   }

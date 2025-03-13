@@ -1,0 +1,93 @@
+@import "../../../../app/mixin.scss";
+
+
+.ChatBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    gap: 16px;
+    background: radial-gradient(63.94% 63.94% at 20% 0, hsla(0, 0%, 100%, .03) 0, hsla(0, 0%, 100%, 0) 100%), #111;
+    border: 2px solid var(--border-color);
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+    box-sizing: border-box;
+    @include md{
+        justify-content: space-between;
+        gap: 20px;
+        width: 80%;
+    }
+    @include xl{
+        width: 60%;
+    }
+    @include xxl{
+        width: 40%;
+    }
+    .ChatHeader{
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+        width: 100%;
+        gap: 16px;
+        :nth-child(1){
+            font-size: 24px;
+            justify-content: center;
+            display: flex;
+            font-family: inherit;
+            font-weight: inherit;
+            font-style: inherit;
+            background: linear-gradient(95.86deg, var(--text-grey) -20.23%, var(--text-white) 74.96%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        :nth-child(2){
+            justify-content: center;
+            display: flex;
+            font-family: "Manrope";
+            color: #d4d4d4;
+        }
+    }
+    .ButtonsWrapper{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+    .AgentInputContainer{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-direction: row;
+        background-color: #1a1a1a;
+        border: 1px solid #1e1e1e;
+        padding-inline: 24px;
+        padding-block: 16px;
+        border-radius: 8px;
+        @include md{
+            padding-inline: 20px;
+            padding-block: 4px;
+        }
+        .AgentInput{
+            display: flex;
+            width: 90%;
+            font-size: 18px;
+            height: 50px;
+            border-radius: 8px;
+            border: 0px;
+            background-color: transparent;
+            outline: none;
+        }
+        .EnterButton{
+            color: aquamarine;
+            display: flex;
+            font-size: 24px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+}
+

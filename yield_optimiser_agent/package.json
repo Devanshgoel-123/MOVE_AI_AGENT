@@ -10,17 +10,26 @@
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.35.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@langchain/anthropic": "^0.3.15",
     "@langchain/core": "^0.3.42",
     "@langchain/langgraph": "^0.2.54",
+    "@mui/material": "^6.4.7",
     "@panoraexchange/swap-sdk": "^1.0.8",
     "@prisma/client": "^6.4.1",
+    "@tensorflow/tfjs": "^4.22.0",
     "dotenv": "^16.4.7",
     "move-agent-kit": "^0.2.0",
     "next": "15.2.1",
     "node-cron": "^3.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "saas": "^1.0.0",
+    "sass": "^1.85.1",
+    "wagmi": "^2.14.13",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

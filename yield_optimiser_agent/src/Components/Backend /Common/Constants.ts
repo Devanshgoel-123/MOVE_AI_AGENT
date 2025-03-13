@@ -44,3 +44,6 @@ export const exchanges = [
   { name: "Pontem", apiEndpoint: "https://api.pontem.exchange/v1" },
   { name: "Ditto", apiEndpoint: "https://api.ditto.exchange/v1" }
 ];
+
+
+export const DAPP_LOGO="https://images.scalebranding.com/cute-robot-logo-2c42937a-c1fe-493a-b639-d22a0b5f4671.png";
