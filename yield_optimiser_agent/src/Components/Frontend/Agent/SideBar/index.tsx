@@ -109,9 +109,9 @@ export const Sidebar=()=>{
     }
 
     const menuItems = [
-        { id: 'price', label: 'Price Prediction', icon: <BarChart3 size={18} /> },
+        // { id: 'price', label: 'Price Prediction', icon: <BarChart3 size={18} /> },
         { id: 'portfolio', label: 'Portfolio', icon: <PieChart size={18} /> },
-        { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
+        // { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
       ];
     return (
         <Box className="SideBarWrapper">

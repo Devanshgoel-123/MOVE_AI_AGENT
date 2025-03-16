@@ -55,8 +55,8 @@ export const AgentArena = () => {
           chatId:chatId
         })
         console.log(data)
-        const response:string=data.agentResponse.content;
-        useAgentStore.getState().setActiveResponse("response")
+        const response:string=data.agentResponse;
+        useAgentStore.getState().setActiveResponse(response)
       } catch (error) {
         console.error("Error processing agent response:", error);
       }
@@ -68,6 +68,7 @@ export const AgentArena = () => {
    if (response==="") return <CustomTextLoader text="Loading" />;
    console.log("the parsed response is:",JSON.parse(response))
     const ParsedResponse=JSON.parse(response);
+    console.log(ParsedResponse,JSON.parse(ParsedResponse).agentResponse)
    const renderGeneralToolResponse=(answer:string)=>{
     return (
       <div className="SwapBox">
@@ -77,9 +78,7 @@ export const AgentArena = () => {
       <div className="SwapSummary">
       <div className="nestedResponse">
       <span className="responseRow">
-      {ParsedResponse.agentResponse.split("\n").map((line:string, index:number) => (
-        <p key={index}>{line}</p>
-      ))}
+      {JSON.parse(ParsedResponse).agentResponse}
       </span>
       </div>
       </div>

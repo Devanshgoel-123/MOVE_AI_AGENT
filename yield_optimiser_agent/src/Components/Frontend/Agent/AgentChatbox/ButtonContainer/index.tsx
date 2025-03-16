@@ -29,13 +29,8 @@ export const ReadyToClickActionButton=({
                 chatId:chatId
               })
               console.log(data)
-                
-            
-            // useAgentStore.getState().setActiveResponse({
-            // outputString:agentResponse.getAgentResponse.outputString || "Sorry we Couldn't Process Your Request at the moment",
-            // quote:agentResponse.getAgentResponse.quote || "",
-            // toolCalled:agentResponse.getAgentResponse.toolCalled
-            //   })
+              const response:string=data.agentResponse;
+              useAgentStore.getState().setActiveResponse(response)
         } catch (error) {
               console.error("Error processing agent response:", error);
         }

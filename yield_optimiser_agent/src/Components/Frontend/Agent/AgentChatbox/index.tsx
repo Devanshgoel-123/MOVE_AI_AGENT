@@ -52,15 +52,25 @@ export const ChatBox=()=>{
 
     const ButtonContent:Props[]=[
       {
-        heading:"Swap",
-        content:"Swap one token for another",
-        query:"Swap token"
+        heading:"Predict Price",
+        content:"Predict the price of Any Supported Token on Aptos",
+        query:"Predict the price of token"
       },
       {
         heading:"Fetch Token Price",
         content:"Fetch Token Price of a token in USD",
         query:"Fetch the token price"
       },
+      {
+        heading:"Yield Farm",
+        content:"Fetch The Yield Farming Oppurtunity for a token",
+        query:"Fetch the Yield Farming Oppurtunity For a Token"
+      },
+      {
+        heading:"Swap",
+        content:"Swap one token to Another",
+        query:"Swap token"
+      }
     ]
     return (
         <div className="ChatBox">

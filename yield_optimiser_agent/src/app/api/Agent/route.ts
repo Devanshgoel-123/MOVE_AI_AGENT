@@ -7,7 +7,7 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, PanoraSwapTool } from "move-agent-kit"
+import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
@@ -49,7 +49,7 @@ export const InitializeAgent = async () => {
 			llm,
 			tools:[
 				PortfolioRebalancerTool,
-				new PanoraSwapTool(agentRuntime),
+				// new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
 				GetUserDiversificationPreferenceTool,
@@ -58,7 +58,8 @@ export const InitializeAgent = async () => {
 				new JouleGetPoolDetails(agentRuntime),
 				GetBestYieldingOppurtunityTool,
 				new AptosAccountAddressTool(agentRuntime),
-				new AptosBalanceTool(agentRuntime)
+				new AptosBalanceTool(agentRuntime),
+				new LiquidSwapSwapTool(agentRuntime)
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
@@ -68,7 +69,7 @@ export const InitializeAgent = async () => {
   - For internal (5XX) HTTP errors, advise the user to retry later.
   - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
   - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token
-  Response Format:
+  Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
   {
     "agentResponse":"Your simplified response as a string",
     "toolCalled": "Tool name or null if none used"
