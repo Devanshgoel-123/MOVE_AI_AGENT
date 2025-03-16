@@ -1,4 +1,4 @@
-@import "../../../../../app/mixin.scss";
+@use  "../../../../../app/mixin.scss" as *;
 
 .ButtonContainer{
     display: flex;

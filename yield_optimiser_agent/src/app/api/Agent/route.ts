@@ -7,7 +7,7 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, PanoraSwapTool } from "move-agent-kit"
+import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, PanoraSwapTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
@@ -20,6 +20,8 @@ import { GetUserDiversificationPreferenceTool } from "@/Components/Backend /Tool
 import { ArbitrageFinderTool } from "@/Components/Backend /Tools/ArbritrageFinder"
 import { PricePredictionTool } from "@/Components/Backend /Tools/PricePredictionTool"
 import { getPoolDetails } from "@/Components/Backend /Agents/PoolDetailsAgent"
+import { AptosBalanceTool, AptosAccountAddressTool } from "move-agent-kit"
+import { GetBestYieldingOppurtunityTool } from "@/Components/Backend /Tools/BestYieldAgent"
 config()
 
 export const InitializeAgent = async () => {
@@ -54,17 +56,21 @@ export const InitializeAgent = async () => {
 				ArbitrageFinderTool,
 				PricePredictionTool,
 				new JouleGetPoolDetails(agentRuntime),
+				GetBestYieldingOppurtunityTool,
+				new AptosAccountAddressTool(agentRuntime),
+				new AptosBalanceTool(agentRuntime)
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
-				You are a helpful agent that can interact onchain using the Aptos Agent Kit. You are
-				empowered to interact onchain using your tools. If you ever need funds, you can request them from the
-				faucet. If not, you can provide your wallet details and request funds from the user. If there is a 5XX
-				(internal) HTTP error code, ask the user to try again later. If someone asks you to do something you
-				can't do with your currently available tools, you must say so, and encourage them to implement it
-				themselves using the Aptos Agent Kit, recommend they go to https://www.aptosagentkit.xyz for more information. Be
-				concise and helpful with your responses. Refrain from restating your tools' descriptions unless it is explicitly requested.
-				The input json should be string (IMPORTANT)
+				You are an intelligent on-chain agent that interacts with the Aptos blockchain using the Aptos Agent Kit. You can fetch token details, check prices, find arbitrage opportunities, rebalance portfolios, predict prices, and retrieve pool details using specialized tools.
+                If a tool is required to answer a query, use it and include the tool’s name in your response.
+                If a tool isn't available for the requested action, inform the user and suggest implementing it using the Aptos Agent Kit.
+                If an internal (5XX) HTTP error occurs, ask the user to try again later.
+                Keep responses concise, accurate, and helpful while avoiding unnecessary tool descriptions unless explicitly requested.
+                Response Format:
+                Agent's Response: The main response to the user query.
+                Tool Used (if any): Name of the tool that was called.
+				Always give the response in a JSON format so that it is easy to map response in the UI
 			`,
 		})
 		return { agent, account, agentRuntime };
@@ -126,7 +132,7 @@ export async function POST(request: NextRequest) {
       const finalLength=response.length;
 	  console.log(response)
 	  return NextResponse.json({
-		agentResponse: response.filter((item)=>item.type==="agent"),
+		agentResponse: response.filter((item)=>item.type==="agent")[-1],
 		accountAddress: account.accountAddress.toString()
 	  });
 	} catch (error) {

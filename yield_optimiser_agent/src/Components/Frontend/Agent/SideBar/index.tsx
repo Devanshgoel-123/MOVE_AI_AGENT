@@ -8,6 +8,7 @@ import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
+import { MessageSquare, BarChart3, PieChart, Compass, Wallet, FileText, Settings, HelpCircle } from 'lucide-react';
 import { useMediaQuery } from "@mui/material"
 import { DAPP_LOGO } from "@/Components/Backend /Common/Constants";
 
@@ -106,6 +107,12 @@ export const Sidebar=()=>{
             </div>
         )
     }
+
+    const menuItems = [
+        { id: 'price', label: 'Price Prediction', icon: <BarChart3 size={18} /> },
+        { id: 'portfolio', label: 'Portfolio', icon: <PieChart size={18} /> },
+        { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
+      ];
     return (
         <Box className="SideBarWrapper">
             <div className="TopContainer">
@@ -116,15 +123,25 @@ export const Sidebar=()=>{
            
             <span className="HeadingTextSidebar">The Assistant</span>
         </div>
-        <div className="OptionContainer">
+        {/* <div className="OptionContainer">
             <div className="OptionElement">
                 <div className="optionElementLeft">
-                <div className="SideBarIcon">
-            <BsChatDotsFill />
+                <div className="sidebar-menu-icon">
+                
             </div>
-            <span>Chat</span>
+            <span className="sidebar-menu-label">Chat</span>
                 </div>
-                <div className="PlusIcon" onClick={()=>{
+                
+                
+            </div>
+            
+        </div> */}
+        {renderChatSummary()}
+        <div className="sidebar-menu">
+        <div key={"chat"} className="sidebar-menu-item">
+              <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
+              <span className="sidebar-menu-label">Chat</span>
+              <div className="sidebar-menu-icon" onClick={()=>{
                     useAgentStore.getState().clearCurrentValues()
                     useAgentStore.getState().setActiveChatId()
                     if(!openArena){
@@ -133,11 +150,14 @@ export const Sidebar=()=>{
                 }}>
                 <IoMdAdd />
                 </div>
-                
-            </div>
-            
         </div>
-        {renderChatSummary()}
+          {menuItems.map((item) => (
+            <div key={item.id} className="sidebar-menu-item">
+              <div className="sidebar-menu-icon">{item.icon}</div>
+              <span className="sidebar-menu-label">{item.label}</span>
+            </div>
+          ))}
+        </div>
         </div>
         <SocialComponent />
         </Box>

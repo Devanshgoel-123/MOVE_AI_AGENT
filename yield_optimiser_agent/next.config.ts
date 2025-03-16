@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images:{
     remotePatterns: [
       {
@@ -9,7 +8,14 @@ const nextConfig: NextConfig = {
         hostname: 'images.scalebranding.com',
       },
     ]
-  }
+  },
+  compress:true,
+  reactStrictMode:false,
+  webpack: (config) => {
+    config.externals.push("pino-pretty");
+    config.externals.push("encoding");
+    return config;
+  },
 };
 
 export default nextConfig;

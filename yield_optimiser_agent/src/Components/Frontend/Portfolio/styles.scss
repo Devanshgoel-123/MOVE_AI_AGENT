@@ -1,0 +1,183 @@
+@use "../../../app/mixin.scss" as *;
+
+$primary-accent: #00d4ff; // Replace with your preferred accent color
+$subtle-bg: rgba(255, 255, 255, 0.05);
+$border-color: #2d3748;
+$gray-text: #a0aec0;
+$green-text: #48bb78;
+$red-text: #f56565;
+$transition-duration: 200ms;
+
+// Animation keyframes
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Portfolio card styles
+.portfolio-card {
+  padding: 20px;
+  background: $subtle-bg;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  animation: fade-in 300ms ease-out;
+}
+
+.portfolio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.portfolio-title {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+
+  .portfolio-icon {
+    margin-right: 8px;
+    color: $primary-accent;
+  }
+}
+
+.portfolio-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.portfolio-action-btn {
+  padding: 8px;
+  background: $subtle-bg;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background $transition-duration;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.portfolio-value {
+  margin-bottom: 20px;
+
+  .portfolio-value-label {
+    font-size: 14px;
+    color: $gray-text;
+  }
+
+  .portfolio-value-amount {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.portfolio-token-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.portfolio-token-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: $subtle-bg;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  transition: background $transition-duration;
+  animation: fade-in-up 300ms ease-out;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.portfolio-token-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portfolio-token-symbol {
+  width: 32px;
+  height: 32px;
+  background: $subtle-bg;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.portfolio-token-name {
+  font-weight: 500;
+}
+
+.portfolio-token-balance {
+  font-size: 14px;
+  color: $gray-text;
+}
+
+.portfolio-token-value {
+  text-align: right;
+}
+
+.portfolio-token-amount {
+  font-weight: 500;
+}
+
+.portfolio-token-change {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &.positive {
+    color: $green-text;
+  }
+
+  &.negative {
+    color: $red-text;
+  }
+
+  .portfolio-change-icon {
+    margin-right: 4px;
+  }
+}
+
+.portfolio-view-all-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 8px;
+  background: $subtle-bg;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  color: $primary-accent;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color $transition-duration;
+
+  &:hover {
+    color: lighten($primary-accent, 10%);
+  }
+}
