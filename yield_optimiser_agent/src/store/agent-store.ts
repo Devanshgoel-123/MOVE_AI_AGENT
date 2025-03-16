@@ -18,7 +18,9 @@ interface AgentStore{
   clearCurrentValues:()=>void;
   setActiveChatId:()=>void;
   activeComponent:string;
+  predictorTokenName:string;
   setActiveComponent:(value:string)=>void;
+  setPredictorTokenName:(value:string)=>void;
 }
 
 export const useAgentStore=create<AgentStore>((set,get)=>({
@@ -37,6 +39,7 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
     userChatSummary:[],
     agentResponses:[],
     userChats:[],
+    predictorTokenName:"aptos",
     handleOpenArena:()=>{
         set((state)=>({
             openArena:true
@@ -77,6 +80,11 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
       setActiveComponent:(value:string)=>{
         set((state)=>({
           activeComponent:value
+        }))
+      },
+      setPredictorTokenName:(value:string)=>{
+        set((state)=>({
+          predictorTokenName:value
         }))
       }
       

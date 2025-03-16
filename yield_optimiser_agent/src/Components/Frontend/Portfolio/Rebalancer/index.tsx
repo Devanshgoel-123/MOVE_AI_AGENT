@@ -5,7 +5,7 @@ import "./styles.scss";
 import { Token } from "@/Components/Backend/Types";
 import axios from "axios";
 import { useAgentStore } from "@/store/agent-store";
-
+import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart';
 interface CategoryAllocation {
   name: string;
   color: string;
@@ -55,19 +55,19 @@ export const PortfolioRebalancer: React.FC<Props> = ({
     {
       name: "Stable",
       color: CATEGORY_COLORS.stable,
-      currentAllocation: Math.round((categoryValues.stable / totalValue) * 100),
+      currentAllocation: stableAllocation,
       targetAllocation: stableAllocation
     },
     {
       name: "Native",
       color: CATEGORY_COLORS.native,
-      currentAllocation: Math.round((categoryValues.native / totalValue) * 100),
+      currentAllocation:nativeAllocation,
       targetAllocation: nativeAllocation
     },
     {
       name: "Other",
       color: CATEGORY_COLORS.other,
-      currentAllocation: Math.round((categoryValues.other / totalValue) * 100),
+      currentAllocation: otherAllocation,
       targetAllocation: otherAllocation
     }
   ];
@@ -157,7 +157,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
       setRebalancing(false)
     }   
   };
-
+  
   return (
     <div className="portfolio-rebalancer-card">
       <div className="portfolio-rebalancer-header">
@@ -229,10 +229,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
         </div>
         <div className="portfolio-rebalancer-footer">
             <div className="portfolio-rebalancer-total">
-              Total: {totalAllocation}%
-              {totalAllocation !== 100 && (
-                <span className="portfolio-rebalancer-error">(Must equal 100%)</span>
-              )}
+              Total: {Math.min(totalAllocation,100)}%
+              
             </div>
             <div
               onClick={handleRebalance}
@@ -241,6 +239,42 @@ export const PortfolioRebalancer: React.FC<Props> = ({
               {rebalancing ? "Rebalancing..." : "Rebalance Portfolio"}
             </div>
           </div>
+      </div>
+      <div className="PieChart">
+      <PieChart
+      series={[
+        {
+          data: [
+            { id: 0, value: stableAllocation, label: 'StableCoin' },
+            { id: 1, value: nativeAllocation, label: 'Native' },
+            { id: 2, value: otherAllocation, label: 'Other' },
+          ],
+          innerRadius:15,
+          cx:45,
+          cy:125,
+          paddingAngle: 4,
+          cornerRadius: 2,
+          highlightScope: { fade: 'global', highlight: 'item' },
+      faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+        },
+      ]}
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fontWeight: 'bold',
+          fill:"#ffffff"
+        },
+      }}
+      slotProps={{
+        legend:{
+          labelStyle:{
+            fontSize:12,
+            fill:"#ffffff"
+          }
+        }
+      }}
+      width={300}
+      height={300}
+    />
       </div>
     </div>
   );

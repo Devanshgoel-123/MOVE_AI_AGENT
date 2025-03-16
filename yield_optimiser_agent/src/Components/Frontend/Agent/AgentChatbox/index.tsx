@@ -78,13 +78,23 @@ export const ChatBox=()=>{
             <span>How can we help you today ?</span>
             <span>We are here to help you out in every step of the way</span>
         </div> 
+        <div className="AllButton">
         <div className="ButtonsWrapper">
           {
-            ButtonContent.map((item:Props,index:number)=>{
+            ButtonContent.slice(0,2).map((item:Props,index:number)=>{
               return <ReadyToClickActionButton content={item.content} heading={item.heading} key={index} query={item.query}/>
             })
           }
         </div>
+        <div className="ButtonsWrapper">
+          {
+            ButtonContent.slice(2).map((item:Props,index:number)=>{
+              return <ReadyToClickActionButton content={item.content} heading={item.heading} key={index} query={item.query}/>
+            })
+          }
+        </div>
+        </div>
+       
         <div className="AgentInputContainer">
         <input
              ref={userInputRef}

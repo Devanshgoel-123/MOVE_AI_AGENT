@@ -16,6 +16,7 @@
     "@langchain/core": "^0.3.42",
     "@langchain/langgraph": "^0.2.54",
     "@mui/material": "^6.4.7",
+    "@mui/x-charts": "^7.27.1",
     "@panoraexchange/swap-sdk": "^1.0.8",
     "@prisma/client": "^6.4.1",
     "@tensorflow/tfjs": "^4.22.0",

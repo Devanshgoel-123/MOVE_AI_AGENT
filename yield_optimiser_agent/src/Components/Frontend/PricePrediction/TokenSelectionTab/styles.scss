@@ -1,0 +1,21 @@
+@import "../../../../app/mixin.scss";
+
+.TokenSelectionTab{
+    display: flex;
+    width: 35%;
+    border-radius:16px;
+    flex-direction: column;
+    gap: 5px;
+    .TokenButton{
+        padding: 12px;
+        border-radius: 16px;
+        background-color: #000000;
+        border: 1px solid #1e1e1e;
+        color: #c1c1c1;
+    }
+    .Active{
+        background-color: #7bf179;
+        color: #000000;
+    }
+}
+

@@ -28,7 +28,7 @@ export const Portfolio = () => {
   }, []);
 
   if (!portfolio) {
-    return <div className='portfolio-wrapper'>
+    return <div className='PortfolioLoader'>
       <CustomTextLoader text='Loading your portfolio'/>
     </div>; 
   }

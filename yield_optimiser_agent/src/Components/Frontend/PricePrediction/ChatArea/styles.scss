@@ -1,0 +1,97 @@
+@import "../../../../app/mixin.scss";
+
+.ChatWrapperPrediction{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    width:100%;
+    padding: 15px;
+    height: 60%;
+    background: #000000;
+    border: 1px solid #1e1e1e;
+    border-radius: 12px;
+    margin-top:20px;
+    .ChatHeader{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #1e1e1e;
+      .mainHeading{
+        font-size: 20px;
+      }
+      .subHeading{
+        font-size: 10px;
+        color: #c1c1c1;
+      }
+    }
+    .ChatArea{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        border-bottom: 1px solid #1e1e1e;
+        height: 60%;
+        justify-content: center;
+        .ReadyQuery{
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            display: flex;
+
+            span{
+                width: auto;
+                background-color: #1a1a1a;
+                border-radius: 12px;
+                padding: 10px;
+            }
+            @include md{
+                font-size: 12px;
+            }
+            @include xl{
+                font-size: 14px;
+            }
+        }
+        .ResponseRow{
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            display: flex;
+            span{
+                width: auto;
+                display: flex;
+                justify-content: flex-end;
+                background-color: #1a1a1a;
+                border-radius: 12px;
+                padding: 10px;
+            }
+            @include md{
+                font-size: 12px;
+            }
+            @include xl{
+                font-size: 14px;
+            }
+        }
+    }
+    .ChatFooter{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        .PredictButton{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 30%;
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: #000000;
+            cursor: pointer;
+            background-color: #7bf179;
+        }
+    }
+}

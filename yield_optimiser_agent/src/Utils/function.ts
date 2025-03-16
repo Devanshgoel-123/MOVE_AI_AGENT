@@ -17,3 +17,18 @@ export const extractJsonFromResponse = (response: { type: string; content: strin
       return null;
     }
   };
+
+  /**
+ * Function to convert the values into presentable text
+ * @param volume 
+ * @returns 
+ */
+
+export function formatDisplayText(volume:number,precision:number){
+  if (volume < 1000) {
+    return `$${volume.toFixed(precision)}`;
+  }
+  const suffix = volume >= 1000000 ? 'M' : 'K';
+  const formattedVolume = new Intl.NumberFormat().format(volume / (suffix === 'M' ? 1000000 : 1000));
+  return `$${Number(formattedVolume).toFixed(precision)}${suffix}`;
+}

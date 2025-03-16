@@ -28,7 +28,6 @@ export const ReadyToClickActionButton=({
                 message:query,
                 chatId:chatId
               })
-              console.log(data)
               const response:string=data.agentResponse;
               useAgentStore.getState().setActiveResponse(response)
         } catch (error) {

@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { AgentArena } from "./AgentArena";
 import { Sidebar } from "./SideBar";
 import { Portfolio } from "../Portfolio";
+import { PredictionPriceWrapperContainer } from "../PricePrediction";
 export const ChatAgent=()=>{
     const {
         openArena,
@@ -21,7 +22,7 @@ export const ChatAgent=()=>{
         <Sidebar/>
         {!openArena ? <div className="ChatBoxWrapper">
             {
-                activeComponent==="chat" ? <ChatBox/> : <Portfolio/>
+                activeComponent==="chat" ? <ChatBox/> : activeComponent==="Price Prediction" ? <PredictionPriceWrapperContainer/>:<Portfolio/>
             }
         </div>
         :

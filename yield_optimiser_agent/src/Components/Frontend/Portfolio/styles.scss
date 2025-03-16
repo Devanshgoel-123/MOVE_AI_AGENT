@@ -30,7 +30,16 @@ $transition-duration: 200ms;
   }
 }
 
-
+.PortfolioLoader{
+  display: flex;
+  flex-direction: row;
+  height: 95%;
+  width: 90%;
+  background-color: #111;
+  border: 1px solid #1e1e1e;
+  justify-content: center;
+  align-items: center;
+}
 .portfolio-wrapper{
   display: flex;
   flex-direction: row;

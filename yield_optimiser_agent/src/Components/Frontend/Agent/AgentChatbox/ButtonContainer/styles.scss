@@ -11,12 +11,12 @@
     cursor: pointer;
     gap: 10px;
     font-family: "Manrope";
-    max-width: 200px;
     @include md{
         padding: 14px;
     }
     @include lg{
         padding: 12px;
+        width: 80%;
     }
     .ButtonHeading{
         display: flex;

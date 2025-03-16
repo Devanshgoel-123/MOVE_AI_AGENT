@@ -12,6 +12,7 @@
     backdrop-filter: blur(4px);
     border-radius: 12px;
     box-sizing: border-box;
+    height: 60%;
     @include md{
         justify-content: space-between;
         gap: 20px;
@@ -48,12 +49,20 @@
             color: #d4d4d4;
         }
     }
+    .AllButton{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
     .ButtonsWrapper{
         display: flex;
         flex-direction: row;
         width: 100%;
         justify-content: center;
         gap: 10px;
+       
     }
     .AgentInputContainer{
         display: flex;
