@@ -1,0 +1,171 @@
+@import  "@/app/mixin.scss";
+
+$primary-accent: #7bf179; 
+$subtle-bg: #1a1a1a;   
+$border-color: #1e1e1e; 
+$gray-text: #a0aec0;
+$red-text: #f56565;
+$transition-duration: 200ms;
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.portfolio-rebalancer-card {
+  width: 50%; 
+  padding: 20px;
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  animation: fade-in 300ms ease-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.portfolio-rebalancer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  .portfolio-rebalancer-title {
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    .portfolio-rebalancer-icon {
+      margin-right: 8px;
+      color: $primary-accent;
+    }
+  }
+}
+
+.portfolio-rebalancer-content {
+  display: flex;
+  gap: 20px;
+ flex-direction: column;
+ justify-content: space-between;
+  .portfolio-rebalancer-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .portfolio-rebalancer-label {
+      font-size: 14px;
+      color: $gray-text;
+    }
+
+    .portfolio-rebalancer-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .portfolio-rebalancer-token-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        .portfolio-rebalancer-token-color {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+        }
+
+        span {
+          font-size: 14px;
+          color: #ffffff;
+        }
+
+        .portfolio-rebalancer-token-allocations {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          span {
+            font-size: 12px;
+            color: $gray-text;
+          }
+
+          .portfolio-rebalancer-input {
+            width: 60px;
+            height: 28px;
+            background: $border-color;
+            border: 1px solid $subtle-bg;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .portfolio-rebalancer-slider {
+        height: 8px;
+
+        .thumb {
+          background: $primary-accent;
+        }
+
+        .track {
+          background: $border-color;
+        }
+
+        .range {
+          background: $primary-accent;
+        }
+      }
+    }
+
+   
+  }
+
+  .portfolio-rebalancer-chart {
+    flex: 1;
+    height: 320px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.RebalancerButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+  border: #1e1e1e solid 1px;
+  background-color: #7bf179;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #1a1a1a;
+}
+
+.portfolio-rebalancer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  .portfolio-rebalancer-total {
+    font-size: 14px;
+    color: $gray-text;
+
+    .portfolio-rebalancer-error {
+      color: $red-text;
+      margin-left: 8px;
+    }
+  }
+}

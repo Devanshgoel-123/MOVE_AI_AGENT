@@ -1,22 +1,28 @@
 "use client"
-import React from "react";
+import React, { act } from "react";
 import { ChatBox } from "./AgentChatbox";
 import "./styles.scss"
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { AgentArena } from "./AgentArena";
 import { Sidebar } from "./SideBar";
+import { Portfolio } from "../Portfolio";
 export const ChatAgent=()=>{
     const {
-        openArena
+        openArena,
+        activeComponent
     }=useAgentStore(useShallow((state)=>({
-        openArena:state.openArena
+        openArena:state.openArena,
+        activeComponent:state.activeComponent
     })))
+    console.log("the active component is:",activeComponent)
        return (
         <div className="AgentUIWrapper">
         <Sidebar/>
         {!openArena ? <div className="ChatBoxWrapper">
-            <ChatBox/>
+            {
+                activeComponent==="chat" ? <ChatBox/> : <Portfolio/>
+            }
         </div>
         :
         <div className="AgentArenaWrapper">

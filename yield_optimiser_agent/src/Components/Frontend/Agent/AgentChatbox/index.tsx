@@ -41,8 +41,8 @@ export const ChatBox=()=>{
             message:userInputRef.current?.value,
             chatId:chatId
           })
-          console.log(data.agentResponse[0])
-          const response:string=data.agentResponse[0].content;
+          console.log(data.agentResponse)
+          const response:string=data.agentResponse;
           useAgentStore.getState().setActiveResponse(response)
         } catch (error) {
           console.error("Error processing agent response:", error);

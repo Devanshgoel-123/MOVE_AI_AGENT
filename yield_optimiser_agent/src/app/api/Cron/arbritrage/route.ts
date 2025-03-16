@@ -1,6 +1,6 @@
-import { ACCOUNT_ADDRESS } from "@/Components/Backend /Common/Constants";
-import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend /Common/Token";
-import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend /Tools/ArbritrageFinder";
+import { ACCOUNT_ADDRESS } from "@/Components/Backend/Common/Constants";
+import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend/Common/Token";
+import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend/Tools/ArbritrageFinder";
 
 export async function GET(request: Request) {
     try{

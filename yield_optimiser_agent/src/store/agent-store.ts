@@ -17,6 +17,8 @@ interface AgentStore{
   setActiveResponse:(response:string)=>void;
   clearCurrentValues:()=>void;
   setActiveChatId:()=>void;
+  activeComponent:string;
+  setActiveComponent:(value:string)=>void;
 }
 
 export const useAgentStore=create<AgentStore>((set,get)=>({
@@ -71,5 +73,11 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
           activeResponse:""
       }))
       },
+      activeComponent:"chat",
+      setActiveComponent:(value:string)=>{
+        set((state)=>({
+          activeComponent:value
+        }))
+      }
       
 }))

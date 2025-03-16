@@ -1,4 +1,4 @@
-@use   "../../../../app/mixin.scss" as *;
+@import    "@/app/mixin.scss";
 
 $primary-accent: #00d4ff;
 $subtle-bg: rgba(255, 255, 255, 0.05);

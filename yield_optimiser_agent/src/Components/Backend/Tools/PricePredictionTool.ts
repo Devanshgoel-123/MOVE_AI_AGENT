@@ -11,6 +11,8 @@ async function loadModel() {
   if (model) {
     model.dispose();
     model = null;
+    tf.disposeVariables();
+    await tf.nextFrame()
     console.log("Previous model disposed.");
   }
   if (!model) {
@@ -100,7 +102,7 @@ export const PricePredictionTool=tool(
   },
   {
     name: "PricePredictorTool",
-    description: "Predicts the price of the token using the name of the token",
+    description: "Predicts the price of the token using the name of the token and then it also gives the current price of the token suggesting a decrease or increase in the token",
     schema: Zod.object({
       tokenName: Zod.string().describe("The currency to predict the price of token for usdc,aptos, usdt etc.."),
     })

@@ -34,9 +34,3 @@ model Token{
   type String 
 }
 
-model UserPositions{
-  id Int @id @default(autoincrement())
-  poolId Int 
-  poolToken1 String
-  poolToken2 String
-}

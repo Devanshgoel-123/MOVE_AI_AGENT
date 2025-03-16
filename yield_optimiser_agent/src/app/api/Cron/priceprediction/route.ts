@@ -1,7 +1,7 @@
-import { ACCOUNT_ADDRESS } from "@/Components/Backend /Common/Constants";
-import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend /Common/Token";
-import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend /Tools/ArbritrageFinder";
-import { PredictNextDayPrice } from "@/Components/Backend /Tools/PricePredictionTool";
+import { ACCOUNT_ADDRESS } from "@/Components/Backend/Common/Constants";
+import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend/Common/Token";
+import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend/Tools/ArbritrageFinder";
+import { PredictNextDayPrice } from "@/Components/Backend/Tools/PricePredictionTool";
 
 export async function GET(request: Request) {
     try{ 

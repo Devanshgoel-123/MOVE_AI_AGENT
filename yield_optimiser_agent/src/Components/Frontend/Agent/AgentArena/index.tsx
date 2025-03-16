@@ -6,9 +6,9 @@ import { useShallow } from "zustand/react/shallow";
 //import { convertBigIntToUIFormat } from "@/utils/number";
 import axios from "axios"
 import { useAgentStore } from "@/store/agent-store";
-import { CustomTextLoader } from "@/Components/Backend /Common/CustomTextLoader";
+import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import Image from "next/image";
-import { DAPP_LOGO } from "@/Components/Backend /Common/Constants";
+import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 export const AgentArena = () => {
   const chatBoxRef=useRef<HTMLDivElement>(null);
  
@@ -55,8 +55,8 @@ export const AgentArena = () => {
           chatId:chatId
         })
         console.log(data)
-        const response:string=data.agentResponse[0].content;
-        useAgentStore.getState().setActiveResponse(response)
+        const response:string=data.agentResponse.content;
+        useAgentStore.getState().setActiveResponse("response")
       } catch (error) {
         console.error("Error processing agent response:", error);
       }
@@ -66,6 +66,8 @@ export const AgentArena = () => {
 
   const renderText=(response:string)=>{
    if (response==="") return <CustomTextLoader text="Loading" />;
+   console.log("the parsed response is:",JSON.parse(response))
+    const ParsedResponse=JSON.parse(response);
    const renderGeneralToolResponse=(answer:string)=>{
     return (
       <div className="SwapBox">
@@ -75,7 +77,7 @@ export const AgentArena = () => {
       <div className="SwapSummary">
       <div className="nestedResponse">
       <span className="responseRow">
-      {response.split("\n").map((line, index) => (
+      {ParsedResponse.agentResponse.split("\n").map((line:string, index:number) => (
         <p key={index}>{line}</p>
       ))}
       </span>

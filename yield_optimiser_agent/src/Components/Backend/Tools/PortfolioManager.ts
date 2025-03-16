@@ -35,6 +35,7 @@ interface TokenInfo {
   decimals: number;
   price_usd:string;
   chainId:number;
+  name:string;
 }
 
 interface Portfolio {
@@ -108,7 +109,7 @@ async function saveUserPreference(
   }
 }
 
-async function fetchUserPortfolio(accountAddress: string): Promise<Portfolio> {
+export async function fetchUserPortfolio(accountAddress: string): Promise<Portfolio> {
   //console.log("fetching user protfolio")
   const supportedTokens = await fetchSupportedTokens();
   
@@ -133,7 +134,8 @@ async function fetchUserPortfolio(accountAddress: string): Promise<Portfolio> {
       tokenAddress: token.token_address,
       decimals: token.decimals,
       price_usd:tokenPriceUsd,
-      chainId:token.chain_id
+      chainId:token.chain_id,
+      name:token.name
     });
     totalValueUsd += valueUsd;
   }
@@ -149,7 +151,7 @@ async function fetchUserPortfolio(accountAddress: string): Promise<Portfolio> {
  * @param portfolio 
  * @returns the current diversity of the portfolio
  */
-function calculateCurrentAllocation(portfolio: Portfolio): Record<TokenCategory, number> {
+export function calculateCurrentAllocation(portfolio: Portfolio): Record<TokenCategory, number> {
   const allocations: Record<TokenCategory, number> = {
     [TokenCategory.STABLECOIN]: 0,
     [TokenCategory.NATIVE]: 0,

@@ -12,16 +12,16 @@ import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { LocalSigner } from "move-agent-kit"
-import { PortfolioRebalancerTool } from "@/Components/Backend /Tools/PortfolioManager"
+import { PortfolioRebalancerTool } from "@/Components/Backend/Tools/PortfolioManager"
 import { MemorySaver } from "@langchain/langgraph"
 import { HumanMessage } from "@langchain/core/messages"
 import { NextRequest, NextResponse } from "next/server"
-import { GetUserDiversificationPreferenceTool } from "@/Components/Backend /Tools/PortfolioDiversificationTool"
-import { ArbitrageFinderTool } from "@/Components/Backend /Tools/ArbritrageFinder"
-import { PricePredictionTool } from "@/Components/Backend /Tools/PricePredictionTool"
-import { getPoolDetails } from "@/Components/Backend /Agents/PoolDetailsAgent"
+import { GetUserDiversificationPreferenceTool } from "@/Components/Backend/Tools/PortfolioDiversificationTool"
+import { ArbitrageFinderTool } from "@/Components/Backend/Tools/ArbritrageFinder"
+import { PricePredictionTool } from "@/Components/Backend/Tools/PricePredictionTool"
+import { getPoolDetails } from "@/Components/Backend/Agents/PoolDetailsAgent"
 import { AptosBalanceTool, AptosAccountAddressTool } from "move-agent-kit"
-import { GetBestYieldingOppurtunityTool } from "@/Components/Backend /Tools/BestYieldAgent"
+import { GetBestYieldingOppurtunityTool } from "@/Components/Backend/Tools/BestYieldAgent"
 config()
 
 export const InitializeAgent = async () => {
@@ -62,16 +62,18 @@ export const InitializeAgent = async () => {
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
-				You are an intelligent on-chain agent that interacts with the Aptos blockchain using the Aptos Agent Kit. You can fetch token details, check prices, find arbitrage opportunities, rebalance portfolios, predict prices, and retrieve pool details using specialized tools.
-                If a tool is required to answer a query, use it and include the tool’s name in your response.
-                If a tool isn't available for the requested action, inform the user and suggest implementing it using the Aptos Agent Kit.
-                If an internal (5XX) HTTP error occurs, ask the user to try again later.
-                Keep responses concise, accurate, and helpful while avoiding unnecessary tool descriptions unless explicitly requested.
-                Response Format:
-                Agent's Response: The main response to the user query.
-                Tool Used (if any): Name of the tool that was called.
-				Always give the response in a JSON format so that it is easy to map response in the UI
-			`,
+  You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your capabilities include fetching token details, checking prices, identifying arbitrage opportunities, rebalancing portfolios, predicting prices, and retrieving pool details using specialized tools.
+  - Use the appropriate tool for a query when required and specify the tool's name in your response.
+  - If no tool exists for a requested action, inform the user and suggest creating it with the Aptos Agent Kit.
+  - For internal (5XX) HTTP errors, advise the user to retry later.
+  - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
+  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token
+  Response Format:
+  {
+    "agentResponse":"Your simplified response as a string",
+    "toolCalled": "Tool name or null if none used"
+  }
+`,
 		})
 		return { agent, account, agentRuntime };
 	}catch(err){
@@ -95,7 +97,6 @@ export async function POST(request: NextRequest) {
 	  
 	  const { message } = body;
 	  console.log("the message is:",message)
-	  getPoolDetails()
 	  if (!message) {
 		return NextResponse.json(
 		  { error: "Message is required" },
@@ -132,7 +133,7 @@ export async function POST(request: NextRequest) {
       const finalLength=response.length;
 	  console.log(response)
 	  return NextResponse.json({
-		agentResponse: response.filter((item)=>item.type==="agent")[-1],
+		agentResponse: JSON.stringify(response[finalLength-1].content),
 		accountAddress: account.accountAddress.toString()
 	  });
 	} catch (error) {

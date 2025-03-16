@@ -107,19 +107,3 @@ export const fetchJouleFinanceYields = async (tokenName:string) => {
     }
   };
   
-//s a DeFi yield farming expert, analyze these opportunities:
-
-// ${JSON.stringify(strategies, null, 2)}
-
-// Current market context:
-// ${marketContext}
-
-// Please provide:
-// 1. Best strategy recommendation considering risk-adjusted returns
-// 2. Detailed risk assessment for each strategy
-// 3. Step-by-step implementation instructions
-// 4. Market timing considerations
-// 5. Gas cost considerations and break-even analysis
-
-// Focus on safety and sustainable yields rather than just highest APY.
-

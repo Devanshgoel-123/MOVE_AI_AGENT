@@ -1,4 +1,4 @@
-@use  "../../../../../app/mixin.scss" as *;;
+@import   "@/app/mixin.scss";
 
 .DropdownContainerAgent {
     display: flex;
@@ -9,7 +9,7 @@
     width: auto;
     height: auto;
     background-color: transparent;
-    border-radius: 8px;
+    border-radius: 10px;
     @include md {}
 
     @include lg {
@@ -110,7 +110,7 @@
 .MuiList-root {
     padding: 0px !important;
     color: var(--text-white);
-    background-color: var(-paper-black-dense);
+    background-color: var(--paper-black-dense);
 }
 
 .MuiButtonBase-root {

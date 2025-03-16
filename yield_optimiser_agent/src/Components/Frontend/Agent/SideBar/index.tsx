@@ -10,7 +10,7 @@ import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { MessageSquare, BarChart3, PieChart, Compass, Wallet, FileText, Settings, HelpCircle } from 'lucide-react';
 import { useMediaQuery } from "@mui/material"
-import { DAPP_LOGO } from "@/Components/Backend /Common/Constants";
+import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 
 export const Sidebar=()=>{
     const isXxlDevice=useMediaQuery("(min-width: 1280px)");
@@ -138,7 +138,9 @@ export const Sidebar=()=>{
         </div> */}
         {renderChatSummary()}
         <div className="sidebar-menu">
-        <div key={"chat"} className="sidebar-menu-item">
+        <div key={"chat"} className="sidebar-menu-item" onClick={()=>{
+             useAgentStore.getState().setActiveComponent("chat")
+        }}>
               <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
               <span className="sidebar-menu-label">Chat</span>
               <div className="sidebar-menu-icon" onClick={()=>{
@@ -152,7 +154,10 @@ export const Sidebar=()=>{
                 </div>
         </div>
           {menuItems.map((item) => (
-            <div key={item.id} className="sidebar-menu-item">
+            <div key={item.id} className="sidebar-menu-item" onClick={()=>{
+                console.log("setting label as",item.label)
+                useAgentStore.getState().setActiveComponent(item.label)
+            }}>
               <div className="sidebar-menu-icon">{item.icon}</div>
               <span className="sidebar-menu-label">{item.label}</span>
             </div>

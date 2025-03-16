@@ -43,3 +43,26 @@ export interface UserChatSummary{
   user_query:string;
   firstMessageDate:number;
 }
+
+export interface Token {
+  symbol: string;
+  amount: number;
+  value_usd: number;
+  category: string;
+  tokenAddress: string;
+  decimals: number;
+  price_usd: string;
+  chainId: number;
+  name:string;
+}
+
+export interface UserPortfolio {
+  tokens: Token[];
+  total_value_usd: number;
+}
+
+export interface UserAllocations {
+  stablecoin: number;
+  native: number;
+  other: number;
+}
