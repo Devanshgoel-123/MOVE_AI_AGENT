@@ -1,9 +1,9 @@
-import { DEFAULT_NATIVE, DEFAULT_OTHER, DEFAULT_STABLE } from "@/Components/Backend/Common/Constants";
+import { ACCOUNT_ADDRESS, DEFAULT_NATIVE, DEFAULT_OTHER, DEFAULT_STABLE } from "@/Components/Backend/Common/Constants";
 import { RebalancerReusableFunction } from "@/Components/Backend/Tools/PortfolioManager";
 import { getUserDiversificationPreference } from "@/Components/Backend/Tools/PortfolioManager";
 
 export async function GET(request: Request) {
-    const accountAddress = "0x5bafe2c53415743947065e902274f85e6300e9fb27d21bc29c2ce217ea0b37c2";
+    const accountAddress = ACCOUNT_ADDRESS;
     try{
         const userPreference=await getUserDiversificationPreference(accountAddress);
         const native=userPreference?.targetAllocation.native || DEFAULT_NATIVE;

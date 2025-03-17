@@ -9,6 +9,7 @@ import { useAgentStore } from "@/store/agent-store";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import Image from "next/image";
 import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
+import { AgentChat } from "@/store/agent-store";
 export const AgentArena = () => {
   const chatBoxRef=useRef<HTMLDivElement>(null);
  
@@ -54,21 +55,24 @@ export const AgentArena = () => {
           message:userInputRef.current?.value,
           chatId:chatId
         })
-        console.log(data)
-        const response:string=data.agentResponse;
+        console.log(data.data)
+        const response:string=data.data.agentResponse;
         useAgentStore.getState().setActiveResponse(response)
+        useAgentStore.getState().setAgentResponses({
+          query:activeChat,
+          outputString:response,
+          chatId:chatId
+        })
       } catch (error) {
         console.error("Error processing agent response:", error);
       }
     }
+    return
   };
   
 
   const renderText=(response:string)=>{
    if (response==="") return <CustomTextLoader text="Loading" />;
-   console.log("the parsed response is:",JSON.parse(response))
-    const ParsedResponse=JSON.parse(response);
-    console.log(ParsedResponse,JSON.parse(ParsedResponse).agentResponse)
    const renderGeneralToolResponse=(answer:string)=>{
     return (
       <div className="SwapBox">
@@ -78,7 +82,13 @@ export const AgentArena = () => {
       <div className="SwapSummary">
       <div className="nestedResponse">
       <span className="responseRow">
-      {JSON.parse(ParsedResponse).agentResponse}
+      {answer.split('\n').map((item,index)=>{
+        console.log(item)
+        return <div key={index} className="itemResponse">
+        {item}
+        <br />
+      </div>
+      })}
       </span>
       </div>
       </div>
@@ -97,16 +107,19 @@ export const AgentArena = () => {
     renderGeneralToolResponse(response)
     )
   }
-  // const chatArray= (activeResponse.quote==="" && activeResponse.outputString==="") ? response : response.slice(0,-1) ;
+   const chatArray= agentResponses.length>0 ? agentResponses : [];
+   console.log(chatArray)
   return (
     <div className="ArenaChatArea">
       <div className="ArenaChatBox" ref={chatBoxRef}>
-     {/* { 
-      chatArray.map((item)=>{
-      const agentResponse:Response={
-        quote:item.quote,
+     { 
+      chatArray.length>1 ? 
+      chatArray.slice(0,activeResponse!==""? chatArray.length-1 : chatArray.length).map((item)=>{
+      const agentResponse:AgentChat={
+        query:item.query,
         outputString:item.outputString,
-        toolCalled:item.toolCalled
+        toolCalled:item.toolCalled,
+        chatId:item.chatId
       }
       return (
         <>
@@ -117,13 +130,13 @@ export const AgentArena = () => {
       </div>
       <div className="chatTextResponse">
         {
-          renderText(agentResponse)
+          renderText(agentResponse.outputString)
         }
       </div>
         </>
       )
-     })
-      } */}
+     }):null
+      }
       {activeChat!=="" && <div className="chatTextQuestion">
         <div className="chatText">
           <span>{activeChat}</span>

@@ -12,7 +12,6 @@ async function loadModel() {
     model.dispose();
     model = null;
     tf.disposeVariables();
-    await tf.nextFrame()
     console.log("Previous model disposed.");
   }
   if (!model) {
@@ -44,7 +43,7 @@ export async function PredictNextDayPrice(tokenName:string): Promise<number> {
   let tokenId=undefined;
   if(tokenName.toLowerCase()==="usdc"){
     tokenId=CoinGeckoId["usdc"]
-  }else if(tokenName.toLowerCase()==="aptos"){
+  }else if(tokenName.toLowerCase()==="aptos" || tokenName.toLowerCase()==="apt"){
     tokenId=CoinGeckoId["aptos"]
   }else if(tokenName.toLowerCase()==="usdt"){
      tokenId=CoinGeckoId['usdt']

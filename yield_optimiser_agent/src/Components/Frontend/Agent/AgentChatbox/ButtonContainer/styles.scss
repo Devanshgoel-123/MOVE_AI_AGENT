@@ -16,7 +16,7 @@
     }
     @include lg{
         padding: 12px;
-        width: 80%;
+        width: 100%;
     }
     .ButtonHeading{
         display: flex;
@@ -33,5 +33,6 @@
         font-size: 12px;
         width: 100%;
         text-align: center;
+        justify-content: center;
     }
 }

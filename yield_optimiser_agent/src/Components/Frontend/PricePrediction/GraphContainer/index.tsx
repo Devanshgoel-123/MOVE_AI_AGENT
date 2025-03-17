@@ -10,6 +10,7 @@ import { CoinGeckoId } from "@/Components/Backend/Types";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
+import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
 
 export const TvlGraphContainer = () => {
 const [tvlDataArray, setTvlDataArray] = useState<{ timestamp: number; price: number }[]>([]);
@@ -172,7 +173,7 @@ useEffect(() => {
         </div> 
         :
         <div className="GraphLoader">
-          <CustomTextLoader text="Loading the Graph "/>
+          <CustomSpinner size="20" color="white"/>
           </div>
         }
   </div>

@@ -28,7 +28,7 @@ export const ChatAgent=()=>{
         :
         <div className="AgentArenaWrapper">
             {
-                activeComponent==="chat" ? <AgentArena/> : <Portfolio/>
+                activeComponent==="chat" ? <AgentArena/> : activeComponent==="Price Prediction" ? <PredictionPriceWrapperContainer/>:<Portfolio/>
             }
         </div>}
         </div>

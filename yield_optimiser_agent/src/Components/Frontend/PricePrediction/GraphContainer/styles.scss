@@ -20,9 +20,12 @@
     overflow: hidden;
     min-height: 330px;
     padding-inline: 10px;
-    height: 40%;
+    height: 50%;
     cursor: pointer;
-    
+    @include lg{
+        width: 90%;
+        height: 40%;
+    }
     .GraphDetails {
         width: 100%;
         display: flex;

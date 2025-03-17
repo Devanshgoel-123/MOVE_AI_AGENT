@@ -4,14 +4,17 @@ import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
+import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
 
 export const PredictionChatArea=()=>{
     const [loading,setLoading]=useState<boolean>(false);
     const [response,setResponse]=useState<string>("");
      const {
-        tokenName
+        tokenName,
+        predictionChat
      }=useAgentStore(useShallow((state)=>({
-        tokenName:state.predictorTokenName
+        tokenName:state.predictorTokenName,
+        predictionChat:state.predictionChat
      })))
   
      const handleClick=async()=>{
@@ -22,8 +25,13 @@ export const PredictionChatArea=()=>{
                     tokenName:tokenName
                 }
             });
-            setResponse(response.data.data)
-            console.log(response.data)
+            useAgentStore.getState().setPredictionChat({
+                query:`Predict the price of ${tokenName}`,
+                answer: !response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse
+            })
+            setResponse(!response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse)
+            console.log(response.data.agentResponse)
+            console.log(!response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse)
             setLoading(false)
         }catch(err){
             setResponse("Sorry We couldn't Process your request at the moment")
@@ -39,22 +47,39 @@ export const PredictionChatArea=()=>{
               <span className="subHeading">Chat With out AI Assistant for price predictions</span>
             </div>
             <div className="ChatArea">
-                <div className="ReadyQuery">
-                 <span>Welcome to the Price Predictor! Select a token and ask me about price predictions!</span>
-                </div>
-               {response!=="" ? !loading ? <div className="ResponseRow">
-                    <span>The predicted Price for the token {tokenName} is ${parseFloat(response).toFixed(4)}</span>
-                </div> :
-                <div className="ResponseRow">
-                    <CustomTextLoader text="Loading"/>
-                </div>
+                { predictionChat.length>0 ? 
+                predictionChat.map((item, index)=>{
+                    return  <div key={index}>
+                    <div className="ReadyQuery">
+                      <span>{item.query}</span>
+                    </div>
+                    <div className="ResponseRow">
+                    {item.answer.split('\n').map((item,index)=>{
+        console.log(item)
+        return <div key={index} className="itemResponse">
+        {item}
+        <br />
+      </div>
+      })}
+                    </div>
+                  </div>
+                })
                 :
-                null
-                }
-            </div>
+                (
+                    <div className="ReadyQuery">
+                      <span>Welcome to the Price Predictor! Select a token and ask me about price predictions!</span>
+                    </div>
+                  )}
+                  
+                  {response !== "" && loading && (
+                    <div className="ResponseRow">
+                      <CustomTextLoader text="Loading" />
+                    </div>
+                )}
+                </div>
             <div className="ChatFooter">
                 <div className="PredictButton" onClick={handleClick}>
-                    Predict {tokenName.toUpperCase()} Price
+                    {!loading ? `Predict ${tokenName.toUpperCase()} Price `: <CustomSpinner size="20" color="#000000"/>}
                 </div>
             </div>
         </div>

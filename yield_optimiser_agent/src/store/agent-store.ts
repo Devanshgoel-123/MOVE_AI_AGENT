@@ -1,9 +1,16 @@
 import { create } from "zustand";
-// export interface Response{
-//   outputString:string;
-//   quote:string;
-//   toolCalled?:boolean;
-// }
+export interface AgentChat{
+  outputString:string;
+  query:string;
+  toolCalled?:boolean;
+  chatId:number;
+}
+
+export interface PredictionChat{
+  query:string,
+  answer:string
+}
+
 
 interface AgentStore{
   openArena:boolean;
@@ -13,7 +20,8 @@ interface AgentStore{
   setActiveChat:(chat:string)=>void;
   activeChatId:number;
   activeResponse:string;
-  agentResponses:string[];
+  agentResponses:AgentChat[];
+  setAgentResponses:(value:AgentChat)=>void;
   setActiveResponse:(response:string)=>void;
   clearCurrentValues:()=>void;
   setActiveChatId:()=>void;
@@ -21,6 +29,8 @@ interface AgentStore{
   predictorTokenName:string;
   setActiveComponent:(value:string)=>void;
   setPredictorTokenName:(value:string)=>void;
+  predictionChat:PredictionChat[],
+  setPredictionChat:(chat:PredictionChat)=>void;
 }
 
 export const useAgentStore=create<AgentStore>((set,get)=>({
@@ -32,6 +42,7 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
       query:"",
       activeTransactionHash:""
     },
+    predictionChat:[],
     disable:false,
     sendingTransaction:false,
     showTransactionHash:false,
@@ -61,8 +72,6 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
     setActiveResponse:(response:string)=>{
         set((state)=>({
               activeResponse:response,
-              //agentResponses:response!==undefined && response.quote==="" && response.outputString==="" ? [...state.agentResponses,response] : state.agentResponses,
-              agentResponse:[...state.agentResponses,response]
         }))
     },
       setActiveChatId:()=>{
@@ -86,6 +95,15 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
         set((state)=>({
           predictorTokenName:value
         }))
+      },
+      setPredictionChat:(chat:PredictionChat)=>{
+        set((state)=>({
+          predictionChat:[...state.predictionChat,chat]
+        }))
+      },
+      setAgentResponses:(value:AgentChat)=>{
+        set((state)=>({
+          agentResponses:[...state.agentResponses,value]
+        }))
       }
-      
 }))

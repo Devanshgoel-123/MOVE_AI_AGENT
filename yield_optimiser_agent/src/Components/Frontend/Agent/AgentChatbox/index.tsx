@@ -33,21 +33,28 @@ export const ChatBox=()=>{
       };
     
     const handleEnterClick=async ()=>{
+      if (userInputRef.current?.value) {
         userInputRef.current?.value!==null && useAgentStore.getState().setActiveChat( userInputRef.current?.value as string)
         useAgentStore.getState().setActiveResponse("")
         useAgentStore.getState().handleOpenArena()
-        try{
+        try {
           const {data}=await axios.post("/api/Agent",{
             message:userInputRef.current?.value,
             chatId:chatId
           })
-          console.log(data.agentResponse)
-          const response:string=data.agentResponse;
+          console.log(data.data)
+          const response:string=data.data.agentResponse;
           useAgentStore.getState().setActiveResponse(response)
+          useAgentStore.getState().setAgentResponses({
+            query:activeChat,
+            outputString:response,
+            chatId:chatId
+          })
         } catch (error) {
           console.error("Error processing agent response:", error);
         }
-        
+      }
+      return
     }  
 
     const ButtonContent:Props[]=[

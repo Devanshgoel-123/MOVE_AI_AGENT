@@ -15,7 +15,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 6,
     "type": "stablecoin",
-    "name": "usdt"
+    "name": "usdt",
+    "image":"https://coin-images.coingecko.com/coins/images/39751/large/USDT.png?1723784789"
   },
   {
     "id": 2,
@@ -24,7 +25,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 8,
     "type": "native",
-    "name": "apt"
+    "name": "apt",
+    "image":"https://coin-images.coingecko.com/coins/images/26455/large/aptos_round.png?1696525528"
   },
   {
     "id": 3,
@@ -42,7 +44,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 6,
     "type": "native",
-    "name": "weth"
+    "name": "weth",
+    "image":"https://coin-images.coingecko.com/coins/images/35261/large/USDC_Icon.png?1708008542"
   },
   {
     "id": 5,
@@ -51,7 +54,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 8,
     "type": "other",
-    "name": "thl"
+    "name": "thl",
+    "image":"https://coin-images.coingecko.com/coins/images/29697/large/THL_Logomark.png?1728418092"
   },
   {
     "id": 6,
@@ -60,7 +64,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 8,
     "type": "other",
-    "name": "lsd"
+    "name": "lsd",
+    "image":"https://s2.coinmarketcap.com/static/img/coins/64x64/17798.png"
   }
 ]
         return tokenData|| [];

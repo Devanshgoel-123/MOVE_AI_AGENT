@@ -8,6 +8,9 @@ import { UserAllocations } from '@/Components/Backend/Types';
 import { CustomTextLoader } from '@/Components/Backend/Common/CustomTextLoader';
 import { PortfolioRebalancer } from './Rebalancer';
 import { fetchSupportedTokens } from '@/Components/Backend/Common/Token';
+import { CustomSpinner } from '@/Components/Backend/Common/CustomSpinner';
+import dynamic from 'next/dynamic';
+
 export const Portfolio = () => {
   const [portfolio, setPortfolio] = useState<UserPortfolio | null>(null);
   const [allocations] = useState<UserAllocations>({
@@ -29,7 +32,7 @@ export const Portfolio = () => {
 
   if (!portfolio) {
     return <div className='PortfolioLoader'>
-      <CustomTextLoader text='Loading your portfolio'/>
+     <CustomSpinner color='#1e1e1e1' size='50'/>
     </div>; 
   }
 
@@ -91,7 +94,7 @@ export const Portfolio = () => {
               <div>
                 <div className="portfolio-token-name">{token.symbol.replace(":", "")}</div>
                 <div className="portfolio-token-balance">
-                  {(token.amount / Math.pow(10, token.decimals)).toFixed(2)} {token.symbol.replace(":", "")}
+                  {(token.amount / Math.pow(10, token.decimals)).toFixed(4)} {token.name.toUpperCase()}
                 </div>
               </div>
             </div>

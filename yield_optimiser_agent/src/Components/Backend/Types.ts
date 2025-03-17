@@ -66,3 +66,8 @@ export interface UserAllocations {
   native: number;
   other: number;
 }
+
+export interface Response{
+  response:string;
+  toolCalled:string | null
+}

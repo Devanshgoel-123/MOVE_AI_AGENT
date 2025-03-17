@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Slider, TextField } from "@mui/material";
+import { Button, Slider, TextField, useMediaQuery } from "@mui/material";
 import { RefreshCw } from "lucide-react";
 import "./styles.scss";
 import { Token } from "@/Components/Backend/Types";
@@ -34,7 +34,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
   otherAllocation,
   nativeAllocation,
 }) => {
-  // Calculate current category allocations based on tokens
+  const isXxlDevice=useMediaQuery("(min-width: 1300px)");
+  const isXlDevice = useMediaQuery("(min-width: 1024px) and (max-width: 1279px)")
   const calculateCategoryValues = (tokenList: Token[]) => {
     const categoryValues = {
       stable: 0,
@@ -80,7 +81,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
   const handleAllocationChange = (index: number, newValue: number | number[]) => {
     const updatedCategories = [...categories];
     const value = Array.isArray(newValue) ? newValue[0] : newValue;
-    const difference = value - updatedCategories[index].targetAllocation;
+    const difference = Math.floor(value) - updatedCategories[index].targetAllocation;
 
     updatedCategories[index].targetAllocation = value;
 
@@ -93,7 +94,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
           if (i !== index && category.targetAllocation > 0) {
             const proportion = category.targetAllocation / otherTotalAllocation;
             const reduction = Math.round(difference * proportion);
-            updatedCategories[i].targetAllocation = Math.max(0, category.targetAllocation - reduction);
+            updatedCategories[i].targetAllocation = Math.max(0, Math.floor(category.targetAllocation - reduction));
           }
         });
       }
@@ -106,13 +107,12 @@ export const PortfolioRebalancer: React.FC<Props> = ({
           if (i !== index) {
             const proportion = category.targetAllocation / otherTotalAllocation;
             const addition = Math.round(Math.abs(difference) * proportion);
-            updatedCategories[i].targetAllocation += addition;
+            updatedCategories[i].targetAllocation += Math.floor(addition);
           }
         });
       }
     }
 
-    // Make sure total is always 100%
     const newTotal = updatedCategories.reduce((sum, category) => sum + category.targetAllocation, 0);
     if (newTotal !== 100) {
       const largestIndex = updatedCategories
@@ -187,7 +187,6 @@ export const PortfolioRebalancer: React.FC<Props> = ({
                     variant="outlined"
                     value={category.targetAllocation}
                     onChange={(e) => handleDirectInput(index, e.target.value)}
-                    inputProps={{ min: 0, max: 100 }}
                     sx={{
                       width: 60,
                       marginLeft: 1,
@@ -215,6 +214,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
                   color: category.color,
                   "& .MuiSlider-track": {
                     backgroundColor: category.color,
+                    fontSize:"10px"
                   },
                   "& .MuiSlider-rail": {
                     backgroundColor: "#1e1e1e",
@@ -251,7 +251,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
           ],
           innerRadius:15,
           cx:45,
-          cy:125,
+          cy:isXxlDevice ? 185 : 125,
           paddingAngle: 4,
           cornerRadius: 2,
           highlightScope: { fade: 'global', highlight: 'item' },
@@ -272,8 +272,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
           }
         }
       }}
-      width={300}
-      height={300}
+      width={isXxlDevice ? 400:280}
+      height={isXxlDevice ? 400: 280}
     />
       </div>
     </div>

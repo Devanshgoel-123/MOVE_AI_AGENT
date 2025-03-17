@@ -7,7 +7,7 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool } from "move-agent-kit"
+import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool, ThalaStakeTokenTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
@@ -22,6 +22,8 @@ import { PricePredictionTool } from "@/Components/Backend/Tools/PricePredictionT
 import { getPoolDetails } from "@/Components/Backend/Agents/PoolDetailsAgent"
 import { AptosBalanceTool, AptosAccountAddressTool } from "move-agent-kit"
 import { GetBestYieldingOppurtunityTool } from "@/Components/Backend/Tools/BestYieldAgent"
+import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenPriceTool"
+import { Find24HChangeTool } from "@/Components/Backend/Tools/VolatilityTool"
 config()
 
 export const InitializeAgent = async () => {
@@ -49,7 +51,7 @@ export const InitializeAgent = async () => {
 			llm,
 			tools:[
 				PortfolioRebalancerTool,
-				// new PanoraSwapTool(agentRuntime),
+				new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
 				GetUserDiversificationPreferenceTool,
@@ -58,8 +60,11 @@ export const InitializeAgent = async () => {
 				new JouleGetPoolDetails(agentRuntime),
 				GetBestYieldingOppurtunityTool,
 				new AptosAccountAddressTool(agentRuntime),
-				new AptosBalanceTool(agentRuntime),
-				new LiquidSwapSwapTool(agentRuntime)
+				FetchTokenPriceInUsdTool,
+				new LiquidSwapSwapTool(agentRuntime),
+				new JouleGetUserAllPositions(agentRuntime),
+				new ThalaStakeTokenTool(agentRuntime),
+				Find24HChangeTool
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
@@ -68,7 +73,9 @@ export const InitializeAgent = async () => {
   - If no tool exists for a requested action, inform the user and suggest creating it with the Aptos Agent Kit.
   - For internal (5XX) HTTP errors, advise the user to retry later.
   - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
-  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token
+  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
+  - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
+  - If user asks for 24Change or % change of a token call the  Find24HChangeTool.
   Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
   {
     "agentResponse":"Your simplified response as a string",
@@ -133,9 +140,9 @@ export async function POST(request: NextRequest) {
 	  }
       const finalLength=response.length;
 	  console.log(response)
+	  console.log(JSON.parse(response[finalLength-1].content))
 	  return NextResponse.json({
-		agentResponse: JSON.stringify(response[finalLength-1].content),
-		accountAddress: account.accountAddress.toString()
+		data:JSON.parse(response[finalLength-1].content),
 	  });
 	} catch (error) {
 	  console.error("Agent execution error:", error);

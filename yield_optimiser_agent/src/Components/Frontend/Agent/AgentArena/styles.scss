@@ -166,12 +166,15 @@
             display: flex;
             flex-direction: column;
             padding: 10px;
-            // overflow: auto;
             @include md{
                 font-size: 12px;
             }
             @include xl{
                 font-size: 14px;
+            }
+            .itemResponse{
+                display: block;
+                width: 100%;
             }
         }
     }

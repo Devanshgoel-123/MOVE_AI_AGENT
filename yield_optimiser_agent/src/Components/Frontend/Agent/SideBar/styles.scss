@@ -16,10 +16,11 @@ $transition-duration: 200ms;
     background-color: #111111;
     padding: 16px;
     border: 1px solid #1e1e1e;
-    
     @include lg{
-        max-width: 15%;
+        max-width: 17%;
+        padding: 10px;
     }
+
     @include xxl{
         max-width: 10%;
     }
@@ -192,6 +193,12 @@ $transition-duration: 200ms;
   
     .sidebar-menu-label {
       font-size: 16px;
+      @include md{
+        font-size: 12px;
+      }
+      @include xl{
+        font-size: 14px;
+      }
       color: #ffffff;
     }
   }
