@@ -22,7 +22,7 @@ interface Props {
 }
 
 const CATEGORY_COLORS = {
-  stable: "#7b1799",
+  stable: "#7bf179",
   native: "#4a3e85",
   other: "#5a4b9a"
 };
@@ -35,7 +35,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
   nativeAllocation,
 }) => {
   const isXxlDevice=useMediaQuery("(min-width: 1300px)");
-  const isXlDevice = useMediaQuery("(min-width: 1024px) and (max-width: 1279px)")
+  const isXlDevice = useMediaQuery("(min-width: 1020px) and (max-width: 1279px)")
   const calculateCategoryValues = (tokenList: Token[]) => {
     const categoryValues = {
       stable: 0,
@@ -211,7 +211,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
                 sx={{
                   width: "80%",
                   margin: "0 auto",
-                  color: category.color,
+                  fill: category.color,
                   "& .MuiSlider-track": {
                     backgroundColor: category.color,
                     fontSize:"10px"
@@ -220,7 +220,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
                     backgroundColor: "#1e1e1e",
                   },
                   "& .MuiSlider-thumb": {
-                    backgroundColor: category.color,
+                    fill:category.color,
                   },
                 }}
               />
@@ -250,8 +250,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
             { id: 2, value: otherAllocation, label: 'Other' },
           ],
           innerRadius:15,
-          cx:45,
-          cy:isXxlDevice ? 185 : 125,
+          cx:isXlDevice ? 20:45,
+          cy:isXxlDevice ? 185 : isXlDevice ? 110:125,
           paddingAngle: 4,
           cornerRadius: 2,
           highlightScope: { fade: 'global', highlight: 'item' },
@@ -272,8 +272,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
           }
         }
       }}
-      width={isXxlDevice ? 400:280}
-      height={isXxlDevice ? 400: 280}
+      width={isXxlDevice ? 400: isXlDevice ? 220:280}
+      height={isXxlDevice ? 400: isXlDevice ? 220:280}
     />
       </div>
     </div>

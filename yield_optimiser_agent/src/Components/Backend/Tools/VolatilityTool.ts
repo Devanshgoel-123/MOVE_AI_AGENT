@@ -17,11 +17,9 @@ export const fetch24HChangeForTokens=async()=>{
         console.log(response.data.coins)
         const extractedData = Object.entries(response.data.coins).map(([key, change]) => {
             const tokenAddress = key.split(':')[1];
-            const tokenDetails=tokensArray.filter((item)=>item.token_address===tokenAddress)
             return { 
                 tokenAddress:tokenAddress,
                 change24H:change,
-                name:tokenDetails[0].name,
             };
           });
           return extractedData;

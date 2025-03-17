@@ -54,6 +54,7 @@ export const InitializeAgent = async () => {
 				new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
+				new AptosBalanceTool(agentRuntime),
 				GetUserDiversificationPreferenceTool,
 				ArbitrageFinderTool,
 				PricePredictionTool,
@@ -76,6 +77,7 @@ export const InitializeAgent = async () => {
   - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
   - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
   - If user asks for 24Change or % change of a token call the  Find24HChangeTool.
+  - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
   Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
   {
     "agentResponse":"Your simplified response as a string",

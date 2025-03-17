@@ -121,21 +121,8 @@ export const Sidebar=()=>{
                 <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
                 </div>
            
-            <span className="HeadingTextSidebar">The Assistant</span>
+            <span className="HeadingTextSidebar">The Defiant</span>
         </div>
-        {/* <div className="OptionContainer">
-            <div className="OptionElement">
-                <div className="optionElementLeft">
-                <div className="sidebar-menu-icon">
-                
-            </div>
-            <span className="sidebar-menu-label">Chat</span>
-                </div>
-                
-                
-            </div>
-            
-        </div> */}
         {renderChatSummary()}
         <div className="sidebar-menu">
         <div key={"chat"} className="sidebar-menu-item" onClick={()=>{

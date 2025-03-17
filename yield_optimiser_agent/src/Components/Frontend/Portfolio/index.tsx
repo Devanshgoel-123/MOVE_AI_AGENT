@@ -13,8 +13,8 @@ import dynamic from 'next/dynamic';
 
 export const Portfolio = () => {
   const [portfolio, setPortfolio] = useState<UserPortfolio | null>(null);
-  const [allocations] = useState<UserAllocations>({
-    stablecoin: 44.19,
+  const [allocations,setAllocation] = useState<UserAllocations>({
+    stablecoin: 49,
     native: 51.08,
     other: 4.74,
   });
@@ -22,6 +22,19 @@ export const Portfolio = () => {
     const fetchPortfolio = async () => {
       try {
         const response = await axios.get("/api/Portfolio");
+        const Tokens:Token[]=response.data.userPortfolio.tokens;
+        const stableTokens=Tokens.filter((item)=>item.category==="stablecoin");
+        const nativeTokens=Tokens.filter((item)=>item.category==="native");
+        const otherTokens=Tokens.filter((item)=>item.category==="other");
+        const stableSum = stableTokens.reduce((sum, token) => sum + token.value_usd, 0);
+        const nativeSum = nativeTokens.reduce((sum, token) => sum + token.value_usd, 0);
+        const otherSum = otherTokens.reduce((sum, token) => sum + token.value_usd, 0);
+        const totalSum=response.data.userPortfolio.total_value_usd;
+        setAllocation({
+          stablecoin:Number(((stableSum/totalSum)*100).toFixed(2)),
+          native:Number(((nativeSum/totalSum)*100).toFixed(2)),
+          other:Number(((otherSum/totalSum)*100).toFixed(2))
+        })
         setPortfolio(response.data.userPortfolio);
       } catch (error) {
         console.error("Error fetching portfolio:", error);
