@@ -49,11 +49,8 @@ export async function PredictNextDayPrice(tokenName:string): Promise<number> {
      tokenId=CoinGeckoId['usdt']
   }else if(tokenName.toLowerCase()==="weth"){
     tokenId=CoinGeckoId["weth"]
-  }else if(tokenName.toLowerCase()==="thl"){
+  }else{
     tokenId=CoinGeckoId['thala']
-  }
-  if(tokenId===undefined){
-    throw new Error("We currently dont support this token")
   }
    console.log(tokenId)
    const priceData = await getHistoricalPrice(tokenId);

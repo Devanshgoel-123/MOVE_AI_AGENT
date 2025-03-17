@@ -57,16 +57,6 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "name": "thl",
     "image":"https://coin-images.coingecko.com/coins/images/29697/large/THL_Logomark.png?1728418092"
   },
-  {
-    "id": 6,
-    "token_id": 6,
-    "token_address": "0x53a30a6e5936c0a4c5140daed34de39d17ca7fcae08f947c02e979cef98a3719::coin::LSD",
-    "chain_id": 12,
-    "decimals": 8,
-    "type": "other",
-    "name": "lsd",
-    "image":"https://s2.coinmarketcap.com/static/img/coins/64x64/17798.png"
-  }
 ]
         return tokenData|| [];
     }catch(error){
