@@ -97,10 +97,15 @@ export const fetchJouleFinanceYields = async (tokenName:string) => {
           });
         }
       }
-      
-      // Parse the response to extract JSON data
-      const jsonData = extractJsonFromResponse(response);
-      return jsonData || response;
+      let answer;
+      const finalLength=response.length-1
+      try {
+        answer = JSON.parse(response[finalLength - 1].content);
+      } catch (error) {
+        console.error("JSON parsing error:", error);
+        answer = response[finalLength - 1].content; 
+      }
+      return answer
     } catch (error) {
       console.error("Error fetching Joule Finance yields:", error);
       return null;

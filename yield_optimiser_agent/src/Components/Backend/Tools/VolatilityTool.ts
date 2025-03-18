@@ -35,8 +35,9 @@ export const fetch24HChangeForTokens=async()=>{
       try {
         console.log(`Fetching the 24h change of ${tokenName}...`);
         const result=await fetch24HChangeForTokens();
-        console.log("the 24change response is:",result)
-        return result
+        const tokenAddress=(await fetchSupportedTokens()).filter((item)=>(item.name===tokenName.toLowerCase() || item.name.includes(tokenName.toLowerCase())))[0].token_address
+        console.log("the 24change response is:",result.filter((item)=>item.tokenAddress===tokenAddress)[0]);
+        return result.filter((item)=>item.tokenAddress===tokenAddress)[0].change24H
       } catch (error) {
         console.error("Error in Predicting the price of token:", error);
         return {

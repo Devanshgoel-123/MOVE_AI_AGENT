@@ -56,8 +56,15 @@ export async function POST(request: NextRequest) {
 	  }
       const finalLength=response.length;
 	  console.log(response)
+	  let answer;
+try {
+  answer = JSON.parse(response[finalLength - 1].content);
+} catch (error) {
+  console.error("JSON parsing error:", error);
+  answer = response[finalLength - 1].content; // Fallback to raw content
+}
 	  return NextResponse.json({
-		data:JSON.parse(response[response.length-1].content),
+		data:answer,
 	  });
 	} catch (error) {
 	  console.error("Agent execution error:", error);

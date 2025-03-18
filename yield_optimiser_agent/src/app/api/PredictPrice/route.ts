@@ -105,8 +105,17 @@ When responding:
 				  });
 				}
 			  }
+			  
+			  let answer;
+			  const finalLength=response.length;
+       try {
+         answer = JSON.parse(response[finalLength - 1].content);
+       } catch (error) {
+         console.error("JSON parsing error:", error);
+         answer = response[finalLength - 1].content; 
+       }
 		   return NextResponse.json({
-			data:response[response.length-1].content,
+			data:answer,
 			agentResponse:true
 		   })
 		 }

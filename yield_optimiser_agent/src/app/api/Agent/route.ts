@@ -79,7 +79,7 @@ export const InitializeAgent = async () => {
   - If no tool exists for a requested action, inform the user and suggest creating it with the Aptos Agent Kit.
   - For internal (5XX) HTTP errors, advise the user to retry later.
   - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
-  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
+  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that particular token only using the . If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
   - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
   - If user asks for 24Change or % change of a token call the  Find24HChangeTool.
   - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
@@ -146,11 +146,20 @@ export async function POST(request: NextRequest) {
 		}
 	  }
       const finalLength=response.length;
-	  console.log(response)
-	  console.log(JSON.parse(response[finalLength-1].content))
-	  return NextResponse.json({
-		data:JSON.parse(response[finalLength-1].content),
-	  });
+	  
+	  let answer;
+       try {
+         answer = JSON.parse(response[finalLength - 1].content);
+		 console.log(answer)
+       } catch (error) {
+         console.error("JSON parsing error:", error);
+         answer = response[finalLength - 1].content; 
+		 console.log(answer)
+       }
+	   return NextResponse.json({
+		data:answer || "I am really sorry we couldn't process your request at the moment. \n Please Try Again Later",
+		agentResponse:true
+	   })
 	} catch (error) {
 	  console.error("Agent execution error:", error);
 	  return NextResponse.json(

@@ -51,6 +51,12 @@ export const ChatBox=()=>{
             chatId:chatId
           })
         } catch (error) {
+          useAgentStore.getState().setActiveResponse("I am sorry, We couldn't process your request at the moment.")
+          useAgentStore.getState().setAgentResponses({
+            query:activeChat,
+            outputString:"I am sorry, We couldn't process your request at the moment.",
+            chatId:chatId
+          })
           console.error("Error processing agent response:", error);
         }
       }

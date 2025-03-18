@@ -53,11 +53,19 @@ export async function POST(request: NextRequest) {
 		  });
 		}
 	  }
-      const finalLength=response.length;
 	  console.log(response)
+	  const finalLength=response.length;
+	  let answer;
+	  try {
+		answer = JSON.parse(response[finalLength - 1].content);
+	  } catch (error) {
+		console.error("JSON parsing error:", error);
+		answer = response[finalLength - 1].content; 
+	  }
 	  return NextResponse.json({
-		data:response[response.length-1].content,
-	  });
+		data:answer,
+		agentResponse:true
+	   })
 	} catch (error) {
 	  console.error("Agent execution error:", error);
 	  return NextResponse.json(

@@ -290,10 +290,15 @@ async function executeSwap(swap: SwapAction): Promise<string> {
 		  });
 		}
 	  }
-	  console.log({
-		agentResponse: response,
-	  });
-    return response[-1].content
+	  let answer;
+      const finalLength=response.length-1
+      try {
+        answer = JSON.parse(response[finalLength - 1].content);
+      } catch (error) {
+        console.error("JSON parsing error:", error);
+        answer = response[finalLength - 1].content; 
+      }
+    return answer
   } 
     return "Error Initialzing the Agent"
   } catch (error) {

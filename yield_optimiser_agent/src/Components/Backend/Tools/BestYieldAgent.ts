@@ -135,12 +135,16 @@ Provide:
           });
         }
       }
-      
-      // Try to extract structured data, but keep full analysis text as well
-      const structuredData = extractJsonFromResponse(response);
-      
+      let answer;
+      const finalLength=response.length-1
+      try {
+        answer = JSON.parse(response[finalLength - 1].content);
+      } catch (error) {
+        console.error("JSON parsing error:", error);
+        answer = response[finalLength - 1].content; 
+      }
       return {
-        structuredRecommendation: structuredData,
+        structuredRecommendation: answer,
         fullAnalysis: response.map(item => item.content).join("\n")
       };
     } catch (error) {
