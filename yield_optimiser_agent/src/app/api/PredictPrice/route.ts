@@ -23,7 +23,10 @@ config()
 export async function GET(request: NextRequest) {
 	try {
          const tokenName = request.nextUrl.searchParams.get("tokenName");
+		 console.log(tokenName)
+		 console.log(await fetchSupportedTokens())
 		 const token=(await fetchSupportedTokens()).filter((item)=>item.name.toLowerCase()===tokenName?.toLowerCase())[0]
+		 console.log(token)
          const predictedPrice=await PredictNextDayPrice(tokenName?.toLowerCase() || "usdc")
 		 const initializedAgent=await InitializeAgent();
 		 const tokenPriceUsd = await fetchTokenPriceInUsd(token.token_address);

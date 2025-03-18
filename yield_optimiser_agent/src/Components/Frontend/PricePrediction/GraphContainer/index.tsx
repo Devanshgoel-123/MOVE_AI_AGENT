@@ -11,18 +11,23 @@ import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
-
-export const TvlGraphContainer = () => {
+import { useMediaQuery } from "@mui/material";
+export const TvlGraphContainer = ({
+  tokenName
+}:{
+  tokenName:string
+}) => {
+  const isXxlDevice=useMediaQuery("(min-width: 1280px)");
 const [tvlDataArray, setTvlDataArray] = useState<{ timestamp: number; price: number }[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState<string | null>(null);
 const [activeId, setActiveId] = useState<number>(-1);
 let tokenId:string;
-   const {
-    tokenName
-   }=useAgentStore(useShallow((state)=>({
-    tokenName:state.predictorTokenName
-   })))
+  //  const {
+  //   tokenName
+  //  }=useAgentStore(useShallow((state)=>({
+  //   tokenName:state.predictorTokenName
+  //  })))
 if(tokenName.toLowerCase()==="usdc"){
   tokenId=CoinGeckoId["usdc"]
 }else if(tokenName.toLowerCase()==="aptos" || tokenName.toLowerCase()==="apt"){
@@ -77,8 +82,8 @@ useEffect(() => {
     <div className="GraphContainer">
         <div className="GraphDetails">
           <div className="GraphInfo">
-            <span className="GraphName">Historical Price</span>
-            <span className="ActiveValue">${tvlDataArray[tvlDataArray.length-1]?.price}</span>
+            <span className="GraphName">Price Analysis of {tokenName.toUpperCase()}</span>
+            <span className="ActiveValue">Current Price :  ${tvlDataArray[tvlDataArray.length-1]?.price}</span>
           </div>
         </div>
         {!loading ? <div className="GraphCanvas">
@@ -123,7 +128,7 @@ useEffect(() => {
          tickNumber:3,
          tickLabelPlacement:"tick"
          }}
-         height={250}
+         height={isXxlDevice? 200 :150}
          margin={{
           top:30,
           left:15,

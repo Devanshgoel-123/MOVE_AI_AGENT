@@ -5,7 +5,8 @@ import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
-
+import { TvlGraphContainer } from "../GraphContainer";
+import { TokenSelectionTab } from "../TokenSelectionTab";
 export const PredictionChatArea=()=>{
     const [loading,setLoading]=useState<boolean>(false);
     const [response,setResponse]=useState<string>("");
@@ -54,6 +55,10 @@ export const PredictionChatArea=()=>{
                       <span>{item.query}</span>
                     </div>
                     <div className="ResponseRow">
+                    <div className="TopContainer">
+        <TvlGraphContainer tokenName={tokenName}/>
+        <TokenSelectionTab/>
+        </div>
                     {item.answer.split('\n').map((item,index)=>{
         console.log(item)
         return <div key={index} className="itemResponse">
@@ -70,7 +75,10 @@ export const PredictionChatArea=()=>{
                       <span>Welcome to the Price Predictor! Select a token and ask me about price predictions!</span>
                     </div>
                   )}
-                  
+                  <div className="TopContainer">
+        <TvlGraphContainer tokenName={tokenName}/>
+        <TokenSelectionTab/>
+        </div>
                   {response !== "" && loading && (
                     <div className="ResponseRow">
                       <CustomTextLoader text="Loading" />

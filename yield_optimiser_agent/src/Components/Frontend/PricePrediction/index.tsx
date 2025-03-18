@@ -12,10 +12,7 @@ const DynamicTokenTab = dynamic(() =>
 
 export const PredictionPriceWrapperContainer=()=>{
     return <div className="PredictionPriceWrapper">
-        <div className="TopContainer">
-        <TvlGraphContainer/>
-        <DynamicTokenTab/>
-        </div>
+        {/*  */}
        <PredictionChatArea/>
     </div>
 }

@@ -13,7 +13,7 @@ import {
   getTokenAmountOwnedByAccount 
 } from "../Common/Token";
 import { ACCOUNT_ADDRESS } from "../Common/Constants";
-
+import { SupabaseToken } from "../Types";
 // Initialize environment and services
 dotenv.config();
 const prisma = new PrismaClient();
@@ -36,6 +36,7 @@ interface TokenInfo {
   price_usd:string;
   chainId:number;
   name:string;
+  image:string;
 }
 
 interface Portfolio {
@@ -112,8 +113,7 @@ async function saveUserPreference(
 export async function fetchUserPortfolio(accountAddress: string): Promise<Portfolio> {
   //console.log("fetching user protfolio")
   const supportedTokens = await fetchSupportedTokens();
-  
-  //console.log("The supported tokens are:",supportedTokens);
+  console.log("The supported tokens are:",supportedTokens);
   let totalValueUsd = 0;
   const tokens: TokenInfo[] = [];
 
@@ -135,7 +135,8 @@ export async function fetchUserPortfolio(accountAddress: string): Promise<Portfo
       decimals: token.decimals,
       price_usd:tokenPriceUsd,
       chainId:token.chain_id,
-      name:token.name
+      name:token.name,
+      image:token.image
     });
     totalValueUsd += valueUsd;
   }

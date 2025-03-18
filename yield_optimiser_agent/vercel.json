@@ -2,15 +2,15 @@
     "crons": [
   {
     "path": "/api/Cron/portfoliorebalancing",
-    "schedule": "0 */6 * * *"
+   "schedule": "0 0 * * *"
   },
   {
     "path": "/api/Cron/arbritrage",
-    "schedule": "0 */6 * * *"
+    "schedule": "0 0 * * *"
   },
   {
     "path": "/api/Cron/priceprediction",
-    "schedule": "0 */6 * * *"
+    "schedule": "0 0 * * *"
   }
 ]
   }

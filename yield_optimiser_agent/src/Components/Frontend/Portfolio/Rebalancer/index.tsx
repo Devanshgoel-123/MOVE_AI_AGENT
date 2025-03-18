@@ -23,8 +23,8 @@ interface Props {
 
 const CATEGORY_COLORS = {
   stable: "#7bf179",
-  native: "#4a3e85",
-  other: "#5a4b9a"
+  native: "#FC72FF",
+  other: "#DFCC28"
 };
 
 export const PortfolioRebalancer: React.FC<Props> = ({
@@ -220,7 +220,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
                     backgroundColor: "#1e1e1e",
                   },
                   "& .MuiSlider-thumb": {
-                    fill:category.color,
+                    backgroundColor:category.color
                   },
                 }}
               />

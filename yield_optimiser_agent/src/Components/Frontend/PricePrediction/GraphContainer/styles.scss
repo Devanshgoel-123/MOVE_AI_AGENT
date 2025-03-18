@@ -17,14 +17,14 @@
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    min-height: 330px;
     padding-inline: 10px;
-    height: 50%;
     cursor: pointer;
     @include lg{
-        width: 90%;
-        height: 40%;
+        width: 70%;
+        min-height: 200px;
+    }
+    @include xxl{
+        min-height: 300px;
     }
     .GraphDetails {
         width: 100%;
@@ -43,6 +43,9 @@
                 gap: 5px;
             }
 
+            @include lg{
+                gap: 2px;
+            }
             .GraphName {
                 font-family: 'Manrope';
                 font-style: normal;
@@ -51,6 +54,9 @@
                 color: #9D9D9D;
                 @include md {
                     font-size: 16px;
+                }
+                @include lg{
+                    font-size: 12px;
                 }
                 @include xl {
                     font-size: 20px;
@@ -66,6 +72,9 @@
                 @include md {
                     font-size: 18px;
                 }
+                @include lg{
+                    font-size: 14px;
+                }
                 @include xl {
                     font-size: 22px;
                 }
@@ -78,6 +87,11 @@
     .GraphCanvas {
         flex: 1;
         width: 100%;
+        min-height: 150px;
+        max-height: 200px ;
+        @include xxl{
+            min-height: 200px;
+        }
     }
 }
 

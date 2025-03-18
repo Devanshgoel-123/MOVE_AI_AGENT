@@ -16,7 +16,7 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "decimals": 6,
     "type": "stablecoin",
     "name": "usdt",
-    "image":"https://coin-images.coingecko.com/coins/images/39751/large/USDT.png?1723784789"
+    "image":"https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
   },
   {
     "id": 2,
@@ -35,7 +35,8 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "chain_id": 12,
     "decimals": 6,
     "type": "stablecoin",
-    "name": "usdc"
+    "name": "usdc",
+    "image":"https://coin-images.coingecko.com/coins/images/35261/large/USDC_Icon.png?1708008542"
   },
   {
     "id": 4,
@@ -45,7 +46,7 @@ export async function fetchSupportedTokens(): Promise<SupabaseToken[]> {
     "decimals": 6,
     "type": "native",
     "name": "weth",
-    "image":"https://coin-images.coingecko.com/coins/images/35261/large/USDC_Icon.png?1708008542"
+    "image":"https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png"
   },
   {
     "id": 5,

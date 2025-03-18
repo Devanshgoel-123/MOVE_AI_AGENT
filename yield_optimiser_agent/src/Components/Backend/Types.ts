@@ -5,6 +5,7 @@ export interface SupabaseToken {
     type: string;
     chain_id: number;
     name:string;
+    image:string;
 }
 
 // Define interfaces
@@ -54,6 +55,7 @@ export interface Token {
   price_usd: string;
   chainId: number;
   name:string;
+  image:string;
 }
 
 export interface UserPortfolio {

@@ -4,7 +4,6 @@
 .PredictionPriceWrapper{
     background: #111;
     border: 1px solid #1e1e1e;
-    padding: 20px;
     width: 90%;
     height: 95%;
     display: flex;
@@ -12,6 +11,7 @@
     justify-content:space-between;
     align-items: flex-start;
     overflow-y: scroll;
+    border-radius: 8px;
     @include lg{
         flex-direction: row;
     }
@@ -19,14 +19,15 @@
         display: flex;
         flex-direction: row;
         width: 100%;
-        height: 40%;
+        height: 100%;
         justify-content: space-between;
         overflow: auto;
+        margin-bottom: 20px;
         @include lg{
             height: 100%;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 30px;
+            gap: 10px;
         }
     }
 }

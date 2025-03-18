@@ -5,11 +5,9 @@ import axios from "axios";
 import { useState, useEffect } from 'react';
 import { Token, UserPortfolio } from '@/Components/Backend/Types';
 import { UserAllocations } from '@/Components/Backend/Types';
-import { CustomTextLoader } from '@/Components/Backend/Common/CustomTextLoader';
 import { PortfolioRebalancer } from './Rebalancer';
-import { fetchSupportedTokens } from '@/Components/Backend/Common/Token';
 import { CustomSpinner } from '@/Components/Backend/Common/CustomSpinner';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 export const Portfolio = () => {
   const [portfolio, setPortfolio] = useState<UserPortfolio | null>(null);
@@ -23,6 +21,7 @@ export const Portfolio = () => {
       try {
         const response = await axios.get("/api/Portfolio");
         const Tokens:Token[]=response.data.userPortfolio.tokens;
+        console.log(Tokens)
         const stableTokens=Tokens.filter((item)=>item.category==="stablecoin");
         const nativeTokens=Tokens.filter((item)=>item.category==="native");
         const otherTokens=Tokens.filter((item)=>item.category==="other");
@@ -102,10 +101,10 @@ export const Portfolio = () => {
           >
             <div className="portfolio-token-details">
               <div className="portfolio-token-symbol">
-                {token.name} 
+                <Image src={token.image} height={25} width={25} alt='tokenLogo'/>
               </div>
               <div>
-                <div className="portfolio-token-name">{token.symbol.replace(":", "")}</div>
+                <div className="portfolio-token-name">{token.name.toUpperCase()}</div>
                 <div className="portfolio-token-balance">
                   {(token.amount / Math.pow(10, token.decimals)).toFixed(4)} {token.name.toUpperCase()}
                 </div>

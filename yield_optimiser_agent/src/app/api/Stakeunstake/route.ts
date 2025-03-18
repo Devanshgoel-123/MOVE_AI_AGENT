@@ -7,7 +7,7 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AmnisStakeTool, AmnisWithdrawStakeTool, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, EchoStakeTokenTool, EchoUnstakeTokenTool, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool, ThalaStakeTokenTool, ThalaUnstakeTokenTool } from "move-agent-kit"
+import { AgentRuntime, AmnisStakeTool, AmnisWithdrawStakeTool, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, EchoStakeTokenTool, EchoUnstakeTokenTool, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool, ThalaAddLiquidityTool, ThalaRemoveLiquidityTool, ThalaStakeTokenTool, ThalaUnstakeTokenTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
@@ -26,7 +26,7 @@ import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenP
 import { Find24HChangeTool } from "@/Components/Backend/Tools/VolatilityTool"
 config()
 
-export const InitializeAgent = async () => {
+export const StakeUnstakeAgent = async () => {
 	try{
 		const aptosConfig = new AptosConfig({
 			network: Network.MAINNET,
@@ -50,44 +50,39 @@ export const InitializeAgent = async () => {
 		const agent = createReactAgent({
 			llm,
 			tools:[
-				PortfolioRebalancerTool,
-				new PanoraSwapTool(agentRuntime),
-				new AptosGetTokenDetailTool(agentRuntime),
-				new AptosGetTokenPriceTool(agentRuntime),
-				new AptosBalanceTool(agentRuntime),
-				GetUserDiversificationPreferenceTool,
-				ArbitrageFinderTool,
-				PricePredictionTool,
 				new JouleGetPoolDetails(agentRuntime),
-				GetBestYieldingOppurtunityTool,
-				new AptosAccountAddressTool(agentRuntime),
-				FetchTokenPriceInUsdTool,
-				Find24HChangeTool,
-				new LiquidSwapSwapTool(agentRuntime),
 				new JouleGetUserAllPositions(agentRuntime),
 				new EchoStakeTokenTool(agentRuntime),
 				new EchoUnstakeTokenTool(agentRuntime),
 				new ThalaStakeTokenTool(agentRuntime),
 				new ThalaUnstakeTokenTool(agentRuntime),
 				new AmnisStakeTool(agentRuntime),
-			    new AmnisWithdrawStakeTool(agentRuntime)
+			    new AmnisWithdrawStakeTool(agentRuntime),
+                FetchTokenPriceInUsdTool,
+                new ThalaAddLiquidityTool(agentRuntime),
+                new ThalaRemoveLiquidityTool(agentRuntime)
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
-  You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your capabilities include fetching token details, checking prices, identifying arbitrage opportunities, rebalancing portfolios, predicting prices, and retrieving pool details using specialized tools.
-  - Use the appropriate tool for a query when required and specify the tool's name in your response.
-  - If no tool exists for a requested action, inform the user and suggest creating it with the Aptos Agent Kit.
-  - For internal (5XX) HTTP errors, advise the user to retry later.
-  - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
-  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that token. If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
-  - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
-  - If user asks for 24Change or % change of a token call the  Find24HChangeTool.
-  - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
-  Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
-  {
-    "agentResponse":"Your simplified response as a string",
-    "toolCalled": "Tool name or null if none used"
-  }
+  You are AptosStakeAdvisor, an intelligent on-chain agent that helps users stake, unstake, and optimize token allocations across various Aptos-based protocols like Thala, Joule, and Echo. You analyze staking pools in real time, evaluating:
+- Return on Investment (ROI) and Annual Percentage Yield (APY)
+- Risk Factors (protocol reliability, lock-up periods, liquidity constraints)
+- Diversification Strategies (spreading risk across multiple pools)
+- Your Responsibilities:
+- Fetch all available staking pools and their key metrics.
+- Compare and rank pools based on APY, risk, and potential earnings.
+- Suggest an optimized staking strategy, ensuring maximized returns while maintaining a balanced risk-reward ratio.
+- If one pool dominates, recommend full allocation; otherwise, propose diversified staking across multiple pools.
+- Clearly state any lock-up periods, withdrawal restrictions, or risks associated with the staking pools.
+- Guidelines:
+- Concise Responses Only – No unnecessary details, just insights that matter.
+- If staking opportunities change frequently, notify users about real-time fluctuations.
+- If a user already has staked tokens, suggest rebalancing if better opportunities exist.
+- If a pool is risky, warn the user and suggest alternatives.
+- Use appropriate tools when required, specifying the tool's name.
+- Format the response for readability, using line breaks and bullet points where necessary.
+- Always do the complete research dont ask user to research on their own, be precise and concise. Always consider all the proctols like thala, joule, echo and amnis protocol.
+- Always answer in a JSON format with a continous string so that it can be easily parsed
 `,
 		})
 		return { agent, account, agentRuntime };
@@ -100,7 +95,7 @@ export const InitializeAgent = async () => {
 
 export async function POST(request: NextRequest) {
 	try {
-	const agentCache = await InitializeAgent()
+	const agentCache = await StakeUnstakeAgent()
 	
 	  if(agentCache===null){
 		return {
@@ -147,9 +142,8 @@ export async function POST(request: NextRequest) {
 	  }
       const finalLength=response.length;
 	  console.log(response)
-	  console.log(JSON.parse(response[finalLength-1].content))
 	  return NextResponse.json({
-		data:JSON.parse(response[finalLength-1].content),
+		data:response[response.length-1].content,
 	  });
 	} catch (error) {
 	  console.error("Agent execution error:", error);
