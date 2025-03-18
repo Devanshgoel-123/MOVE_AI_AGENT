@@ -10,9 +10,10 @@ export async function POST(request: NextRequest) {
 	const agentCache = await StakeUnstakeAgent()
 	
 	  if(agentCache===null){
-		return {
-			message:"Failed to answer your query"
-		}
+		return NextResponse.json(
+			{ error: "Failed to answer your query" },
+			{ status: 500 }
+		);
 	  }
 	  const { agent, account } = agentCache;
 	  const body = await request.json();
