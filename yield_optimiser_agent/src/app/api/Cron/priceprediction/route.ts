@@ -59,7 +59,8 @@ export async function GET(request: Request) {
             - Fetching token details and current market prices.
             - Predicting future token prices.
             - Calculating percentage changes and identifying significant price drops.
-            - Executing swaps via LiquidSwap if a token's predicted price is expected to drop by more than 20%.
+            - Executing swaps via LiquidSwap if a token's predicted price is expected to drop by more than 20% and the user asks you to perform the swap.
+            - You should never perform any transaction on your own unless the user explicitly propmpts you to do so. Keep this in mind.
             - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
             ### Instructions:
             1. **Predict Future Price:** Use \`PredictNextDayPrice\` for all supported tokens.

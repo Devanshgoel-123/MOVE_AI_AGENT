@@ -51,7 +51,9 @@ export const fetchThalaSwapYields = async (tokenName:string) => {
                 new ThalaUnstakeTokenTool(agentRuntime)
             ],
 			messageModifier:
-            `You are a DeFi data specialist focused on Thala Swap. Provide a structured list of all current yield opportunities on Joule Finance for the token ${tokenName} with the following details:`+
+            `You are a DeFi data specialist focused on Thala Swap. Provide a structured list of all current yield opportunities on Joule Finance for the token ${tokenName} with the following details:
+            - You should never perform any transaction on your own unless the user explicitly propmpts you to do so. Keep this in mind. 
+            `+
             "\n- Pool name" +
             "\n- Current APY/APR" +
             "\n- Token composition" +

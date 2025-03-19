@@ -1,6 +1,6 @@
 import { ACCOUNT_ADDRESS } from "@/Components/Backend/Common/Constants";
 import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend/Common/Token";
-import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend/Tools/ArbritrageFinder";
+// import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend/Tools/ArbritrageFinder";
 
 export async function GET(request: Request) {
     try{
@@ -11,15 +11,16 @@ export async function GET(request: Request) {
                 console.log("the user Wallet Balance for token:",token.name,userWalletBalance,token.decimals)
                 const formattedBalance=Math.floor(userWalletBalance)/10**(token.decimals)
                 console.log("the formatted Balance is:",formattedBalance)
-                if(formattedBalance>0){
-                    const response = await FindAndExecuteArbritrageOppurtunity(
-                        token.name.toLowerCase(),
-                        formattedBalance,
-                        5,
-                        supportedTokens
-                    )
-                return response
-                }
+                return formattedBalance
+                // if(formattedBalance>0){
+                //     const response = await FindAndExecuteArbritrageOppurtunity(
+                //         token.name.toLowerCase(),
+                //         formattedBalance,
+                //         5,
+                //         supportedTokens
+                //     )
+                // return response
+                // }
             })
         );
         return new Response(JSON.stringify({
