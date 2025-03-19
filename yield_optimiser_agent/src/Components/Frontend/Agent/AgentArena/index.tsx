@@ -25,7 +25,7 @@ export const AgentArena = () => {
     chatId:state.activeChatId,
   })));
 
-
+    console.log("the chat id is",chatId)
 
   useEffect(()=>{
     if(chatBoxRef.current){

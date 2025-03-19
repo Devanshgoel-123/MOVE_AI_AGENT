@@ -55,17 +55,37 @@ export async function POST(request: NextRequest) {
 		}
 	  }
       const finalLength=response.length;
-	  console.log(response)
+	  console.log("the response is",response)
 	  let answer;
-try {
-  answer = JSON.parse(response[finalLength - 1].content);
-} catch (error) {
-  console.error("JSON parsing error:", error);
-  answer = response[finalLength - 1].content; // Fallback to raw content
-}
-	  return NextResponse.json({
-		data:answer,
-	  });
+	  let isParsed;
+       try {
+         answer = JSON.parse(response[finalLength - 1].content);
+		 isParsed=true;
+		 console.log(answer)
+		 console.log("case 1",typeof answer)
+       } catch (error) {
+		console.error("JSON parsing error:", error);
+		isParsed = false;
+		let tempString = response[finalLength - 1].content;
+		const match = tempString.match(/\{.*\}/s); 
+		if (match) {
+			try {
+				const extractedJSON = JSON.parse(match[0]); 
+				console.log("the new answer is:", extractedJSON.agentResponse);
+				answer = extractedJSON;
+			} catch (error) {
+				console.error("Invalid JSON:", error);
+				answer = { agentResponse: tempString }; 
+			}
+		} else {
+			answer = { agentResponse: tempString }; 
+		}
+		console.log("case 2", typeof answer);
+		console.log("the answer is:", answer);
+       }
+	   return NextResponse.json({
+		data:answer || "I am really sorry we couldn't process your request at the moment. \n Please Try Again Later",
+	   })
 	} catch (error) {
 	  console.error("Agent execution error:", error);
 	  return NextResponse.json(
@@ -75,21 +95,3 @@ try {
 	}
   }
   
-
-  function extractAndParseJSON(response:string) {
-   
-    const jsonMatch = response.match(/```json\n([\s\S]*?)\n```/);
-    
-    if (jsonMatch && jsonMatch[1]) {
-        try {
-            const cleanedJSON = JSON.parse(jsonMatch[1]);
-            return cleanedJSON;
-        } catch (error) {
-            console.error("Error parsing JSON:", error);
-            return null;
-        }
-    } else {
-        console.error("No JSON block found in the response");
-        return null;
-    }
-}

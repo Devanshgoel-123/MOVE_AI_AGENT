@@ -14,12 +14,11 @@ import {
 } from "../Common/Token";
 import { ACCOUNT_ADDRESS } from "../Common/Constants";
 import { SupabaseToken } from "../Types";
-// Initialize environment and services
 dotenv.config();
 const prisma = new PrismaClient();
 const client = new Panora(panoraConfig);
 
-// Define key types and enums
+
 enum TokenCategory {
   STABLECOIN = "stablecoin",
   NATIVE = "native",
@@ -218,8 +217,6 @@ function calculateRequiredSwaps(
       const valueToIncrease = targetValues[increaseCategory] - currentValues[increaseCategory];
       
       if (valueToIncrease <= 0) continue;
-
-      // Find a suitable token to swap to in the target category
       const tokensToIncrease = portfolio.tokens.filter(t => t.category === increaseCategory);
 
       const toTokenAddress = tokensToIncrease.length > 0 ? tokensToIncrease[0].tokenAddress : (
@@ -227,12 +224,9 @@ function calculateRequiredSwaps(
         increaseCategory === TokenCategory.NATIVE ? "0x1::aptos_coin::AptosCoin" : // APT
         "0x7fd500c11216f0fe3095d0c4b8aa4d64a4e2e04f83758462f2b127255643615::thl_coin::THL" // THL
       );
-      
-      // Calculate swap amount based on the minimum of what we need to reduce and increase
       const swapValue = Math.min(valueToReduce, valueToIncrease);
       let remainingSwapValue = swapValue;
       
-      // Create swaps for each source token until we've reached the total needed
       for (const fromToken of tokensToReduce) {
         if (remainingSwapValue <= 0) break;
         
@@ -245,7 +239,7 @@ function calculateRequiredSwaps(
           from_token_address: fromToken.tokenAddress,
           to_token_address: toTokenAddress,
           amount: tokenAmount,
-          chainId: 12, // Adjust as needed for the chain,
+          chainId: 12,
           fromTokenDecimals:fromToken.decimals
         });
         
@@ -387,7 +381,7 @@ export const PortfolioRebalancerTool = tool(
         targetAllocation
       );
       if (requiredSwaps.length === 0) {
-        // Still save the user preference
+
         await saveUserPreference(accountAddress, targetAllocation);
         
         return {

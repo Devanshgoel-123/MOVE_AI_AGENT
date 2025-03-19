@@ -28,7 +28,8 @@ export const ReadyToClickActionButton=({
                 message:query,
                 chatId:chatId
               })
-              const response:string=data.agentResponse;
+              const response:string=data.data.agentResponse;
+              console.log("the response from button click is:",data)
               useAgentStore.getState().setActiveResponse(response)
         } catch (error) {
               console.error("Error processing agent response:", error);

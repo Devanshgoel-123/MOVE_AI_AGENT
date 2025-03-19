@@ -13,6 +13,9 @@
         justify-content: center;
         flex-direction: row;
         align-items: flex-start;
+        @include xxl{
+            align-items: center;
+        }
     }
     .AgentArenaWrapper{
         height: 100%;

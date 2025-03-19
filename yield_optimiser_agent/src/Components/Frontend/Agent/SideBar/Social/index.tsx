@@ -10,9 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { TiDocumentText } from "react-icons/ti";
-export const TWITTER_LINK = "https://twitter.com/eddy_protocol";
-export const DISCORD_LINK = "https://discord.gg/37zcAqscEv";
-export const DOCS_LINK = "https://docs.eddy.finance/";
+export const TWITTER_LINK = "https://x.com/DeFiZen_2025";
+
 
 export const SocialComponent = () => {
   /**
@@ -35,28 +34,7 @@ export const SocialComponent = () => {
               </Box>
               <span>Twitter</span>
             </Box>
-            <Box
-              className="SocialLink"
-              onClick={() => {
-                handleOpenLink(DISCORD_LINK);
-              }}
-            >
-              <Box className="Icon">
-                <FaDiscord />
-              </Box>
-              <span>Discord</span>
-            </Box>
-            <Box
-              className="SocialLink"
-              onClick={() => {
-                handleOpenLink(DOCS_LINK);
-              }}
-            >
-              <Box className="Icon">
-                <TiDocumentText />
-              </Box>
-              <span>Documentation</span>
-            </Box>
+
           </Box>
         </Box>
   );

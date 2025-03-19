@@ -17,13 +17,12 @@ import { MemorySaver } from "@langchain/langgraph"
 import { HumanMessage } from "@langchain/core/messages"
 import { NextRequest, NextResponse } from "next/server"
 import { GetUserDiversificationPreferenceTool } from "@/Components/Backend/Tools/PortfolioDiversificationTool"
-import { ArbitrageFinderTool } from "@/Components/Backend/Tools/ArbritrageFinder"
 import { PricePredictionTool } from "@/Components/Backend/Tools/PricePredictionTool"
-import { getPoolDetails } from "@/Components/Backend/Agents/PoolDetailsAgent"
 import { AptosBalanceTool, AptosAccountAddressTool } from "move-agent-kit"
 import { GetBestYieldingOppurtunityTool } from "@/Components/Backend/Tools/BestYieldAgent"
 import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenPriceTool"
 import { Find24HChangeTool } from "@/Components/Backend/Tools/VolatilityTool"
+import { GetLatestTransactionsTool, GetTransactionDetailTool } from "@/Components/Backend/Tools/GetTransactionTool"
 config()
 
 export const InitializeAgent = async () => {
@@ -51,18 +50,19 @@ export const InitializeAgent = async () => {
 			llm,
 			tools:[
 				PortfolioRebalancerTool,
+				GetUserDiversificationPreferenceTool,
+				PricePredictionTool,
+				FetchTokenPriceInUsdTool,
+				Find24HChangeTool,
+				GetLatestTransactionsTool,
+				GetTransactionDetailTool,
+				GetBestYieldingOppurtunityTool,
 				new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
 				new AptosBalanceTool(agentRuntime),
-				GetUserDiversificationPreferenceTool,
-				ArbitrageFinderTool,
-				PricePredictionTool,
 				new JouleGetPoolDetails(agentRuntime),
-				GetBestYieldingOppurtunityTool,
 				new AptosAccountAddressTool(agentRuntime),
-				FetchTokenPriceInUsdTool,
-				Find24HChangeTool,
 				new LiquidSwapSwapTool(agentRuntime),
 				new JouleGetUserAllPositions(agentRuntime),
 				new EchoStakeTokenTool(agentRuntime),
@@ -75,20 +75,24 @@ export const InitializeAgent = async () => {
 			checkpointSaver: memory5,
 			messageModifier: `
   You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your capabilities include fetching token details, checking prices, identifying arbitrage opportunities, rebalancing portfolios, predicting prices, and retrieving pool details using specialized tools.
-  - Use the appropriate tool for a query when required and specify the tool's name in your response.
+   - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that particular token only using the . If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
+  - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
+  - Only and Only If user asks for 24Change or % change of a token call the  \Find24HChangeTool\.
+  - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
+  - Always give complete answer by taking your time be it 30 sec but complete it don't let user hangin with incomplete response
+  - Strictly use the \getLatestTransactionsTool\ When the user asks for latest transactions on the Aptos Blockchain
+  - Use the \GetTransactionDetailTool\ When the user wants the details of a specific transaction on the Aptos Blockchain.
   - If no tool exists for a requested action, inform the user and suggest creating it with the Aptos Agent Kit.
+  - Use the appropriate tool for a query when required and specify the tool's name in your response.
   - For internal (5XX) HTTP errors, advise the user to retry later.
   - Provide concise, accurate, and helpful responses, avoiding tool details unless asked.
-  - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that particular token only using the . If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
-  - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
-  - If user asks for 24Change or % change of a token call the  Find24HChangeTool.
-  - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
-  Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
-  {
-    "agentResponse":"Your simplified response as a string",
-    "toolCalled": "Tool name or null if none used"
-  }
+ 
 `,
+// Response Format:Strictly follow this response format dont add any other component to this response  but inside the response string add proper \n characters for better visibility
+// {
+//   "agentResponse":"Your simplified response as a string",
+//   "toolCalled": "Tool name or null if none used"
+// }
 		})
 		return { agent, account, agentRuntime };
 	}catch(err){
@@ -146,19 +150,38 @@ export async function POST(request: NextRequest) {
 		}
 	  }
       const finalLength=response.length;
-	  
+	  console.log("the response is",response)
 	  let answer;
+	  let isParsed;
        try {
          answer = JSON.parse(response[finalLength - 1].content);
+		 isParsed=true;
 		 console.log(answer)
+		 console.log("case 1",typeof answer)
        } catch (error) {
-         console.error("JSON parsing error:", error);
-         answer = response[finalLength - 1].content; 
-		 console.log(answer)
+		console.error("JSON parsing error:", error);
+		isParsed = false;
+		let tempString = response[finalLength - 1].content;
+		const match = tempString.match(/\{.*\}/s); 
+		if (match) {
+			try {
+				const extractedJSON = JSON.parse(match[0]); 
+				console.log("the new answer is:", extractedJSON.agentResponse);
+				answer = extractedJSON;
+			} catch (error) {
+				console.error("Invalid JSON:", error);
+				answer = { agentResponse: tempString }; 
+			}
+		} else {
+			answer = { agentResponse: tempString }; 
+		}
+		console.log("case 2", typeof answer);
+		console.log("the answer is:", answer);
        }
 	   return NextResponse.json({
 		data:answer || "I am really sorry we couldn't process your request at the moment. \n Please Try Again Later",
-		agentResponse:true
+		agentResponse:true,
+		isParsed:isParsed
 	   })
 	} catch (error) {
 	  console.error("Agent execution error:", error);

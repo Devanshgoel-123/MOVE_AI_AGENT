@@ -73,3 +73,40 @@ export interface Response{
   response:string;
   toolCalled:string | null
 }
+
+export interface Tx {
+  version: string;
+  hash: string;
+  state_change_hash: string;
+  event_root_hash: string;
+  state_checkpoint_hash: string | null;
+  gas_used: string;
+  success: boolean;
+  vm_status: string;
+  accumulator_root_hash: string;
+  changes: any[]; 
+  sender: string;
+  sequence_number: string;
+  max_gas_amount: string;
+  gas_unit_price: string;
+  expiration_timestamp_secs: string;
+  payload: {
+      function: string;
+      type_arguments: string[];
+      arguments: string[];
+      type: string;
+  };
+  signature: any; 
+  events: any[]; 
+  timestamp: string;
+  type: string;
+}
+
+export interface FilteredTx {
+  time: string;
+  value: number;
+  coin_name: string;
+  gas_used: number;
+  from_sender: string;
+  to_sender: string;
+}

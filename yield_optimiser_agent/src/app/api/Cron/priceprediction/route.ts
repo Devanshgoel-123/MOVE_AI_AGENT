@@ -1,6 +1,4 @@
-import { ACCOUNT_ADDRESS } from "@/Components/Backend/Common/Constants";
 import { fetchSupportedTokens, getTokenAmountOwnedByAccount } from "@/Components/Backend/Common/Token";
-import { FindAndExecuteArbritrageOppurtunity } from "@/Components/Backend/Tools/ArbritrageFinder";
 import { PredictNextDayPrice } from "@/Components/Backend/Tools/PricePredictionTool";
 import { HumanMessage } from "@langchain/core/messages";
 import {
@@ -12,12 +10,11 @@ import {
 	PrivateKey,
 	PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk"
-import { AgentRuntime, AptosGetTokenDetailTool, AptosGetTokenPriceTool, createAptosTools, JouleGetPoolDetails, JouleGetUserAllPositions, LiquidSwapSwapTool, PanoraSwapTool, ThalaStakeTokenTool } from "move-agent-kit"
+import { AgentRuntime, LiquidSwapSwapTool, PanoraSwapTool } from "move-agent-kit"
 import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { LocalSigner } from "move-agent-kit"
-import { PortfolioRebalancerTool } from "@/Components/Backend/Tools/PortfolioManager"
 import { MemorySaver } from "@langchain/langgraph"
 import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenPriceTool"
 config()
@@ -58,7 +55,7 @@ export async function GET(request: Request) {
 			checkpointSaver: memory5,
                
             messageModifier: `
-                        You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your key capabilities include:
+              You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your key capabilities include:
             - Fetching token details and current market prices.
             - Predicting future token prices.
             - Calculating percentage changes and identifying significant price drops.

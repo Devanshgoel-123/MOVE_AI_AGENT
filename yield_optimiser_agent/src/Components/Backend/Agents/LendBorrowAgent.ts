@@ -41,13 +41,12 @@ export const LendingBorrowingAgent = async () => {
 		const agent = createReactAgent({
 			llm,
 			tools:[
-				new EchelonBorrowTokenTool(agentRuntime),
+				        new EchelonBorrowTokenTool(agentRuntime),
                 new EchelonLendTokenTool(agentRuntime),
                 new AriesBorrowTool(agentRuntime),
                 new AriesLendTool(agentRuntime),
                 new JouleLendTokenTool(agentRuntime),
                 new JouleWithdrawTokenTool(agentRuntime),
-                new AriesCreateProfileTool(agentRuntime),
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
@@ -58,7 +57,7 @@ Act like you are the best a person can be at their work, But never invest user's
   - Scan all supported lending and borrowing protocols like joule Finance, Aries and Echelon.  
   - Compare interest rates for borrowing and lending across platforms.  
   - Detect cases where a user can borrow from one protocol at a lower interest rate and lend to another at a higher rate for profit.  
-
+  - If an oppurtunity arises for a token which user does not have swap token user has for that token and then perform the strategy
 - **Monitor and Optimize Positions**  
   - Track active lending and borrowing positions of the user.  
   - Detect situations where a position needs to be settled or rebalanced.  
@@ -74,6 +73,7 @@ Act like you are the best a person can be at their work, But never invest user's
    - Fetch real-time data on APY and borrowing rates from all protocols.  
    - Compare borrowing and lending rates dynamically.  
    - Check liquidity depth before suggesting an arbitrage move.  
+   - Check whether user has that particular token, if Yes then Perform the strategy if no then swap user's asset for that token and then execute the strategy.
 
 2. **User-Specific Recommendations**  
    - Suggest personalized lending/borrowing strategies based on the user's portfolio.  
@@ -97,6 +97,7 @@ Act like you are the best a person can be at their work, But never invest user's
   3. Calculate net profit margin, considering transaction costs.  
   4. Provide users with a recommended capital allocation strategy.  
   5. But never initiate a transaction on your own without user consultation.
+  6. Check whether user has that particular token, if Yes then Perform the strategy if no then swap user's asset for that token and then execute the strategy.
 
 - **When arbitrage is not viable:**  
   - Suggest alternative strategies like staking, liquidity provision, or portfolio rebalancing.  
@@ -125,3 +126,5 @@ Act like you are the best a person can be at their work, But never invest user's
 		return null
 	}	
 }
+
+// List the pools where i can lend my tokens like usdc, usdt, aptos, weth to display in the UI, please provide data in a JSON format easy to parse. Include the token name, apy and tvl which all information's available. Be descriptive with the expected return i may get. Also add borrowing 

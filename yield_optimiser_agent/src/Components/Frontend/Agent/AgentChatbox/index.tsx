@@ -42,7 +42,7 @@ export const ChatBox=()=>{
             message:userInputRef.current?.value,
             chatId:chatId
           })
-          console.log(data.data)
+          console.log("the respinse from the agent is",data)
           const response:string=data.data.agentResponse;
           useAgentStore.getState().setActiveResponse(response)
           useAgentStore.getState().setAgentResponses({
@@ -83,6 +83,16 @@ export const ChatBox=()=>{
         heading:"Swap",
         content:"Swap one token to Another",
         query:"Swap token"
+      },
+      {
+        heading:"Fetch Latest Transactions",
+        content:"Fetches the Latest Transactions on the Aptos Blockchain",
+        query:"Fetch the latest 5 transactions on the blockchain and provide me a summary of those transaction highlighting the one with highest value"
+      },
+      {
+        heading:"Fetch Transaction by Hash",
+        content:"Fetches the Details of a particular Transaction.",
+        query:"Fetches the Details of the Transaction with Hash"
       }
     ]
     return (
@@ -101,7 +111,14 @@ export const ChatBox=()=>{
         </div>
         <div className="ButtonsWrapper">
           {
-            ButtonContent.slice(2).map((item:Props,index:number)=>{
+            ButtonContent.slice(2,4).map((item:Props,index:number)=>{
+              return <ReadyToClickActionButton content={item.content} heading={item.heading} key={index} query={item.query}/>
+            })
+          }
+        </div>
+        <div className="ButtonsWrapper">
+          {
+            ButtonContent.slice(4).map((item:Props,index:number)=>{
               return <ReadyToClickActionButton content={item.content} heading={item.heading} key={index} query={item.query}/>
             })
           }
