@@ -14,8 +14,10 @@ import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { LocalSigner } from "move-agent-kit"
+import { tool } from "@langchain/core/tools"
+import { z as Zod } from "zod";
 config()
-export const StakeUnstakeAgent = async () => {
+export const StakeUnstakeAgent = async (tokenName:string) => {
 	try{
 		const aptosConfig = new AptosConfig({
 			network: Network.MAINNET,
@@ -53,7 +55,7 @@ export const StakeUnstakeAgent = async () => {
 			],
 			checkpointSaver: memory5,
 			messageModifier: `
-  You are AptosStakeAdvisor, an intelligent on-chain agent that helps users stake, unstake, and optimize token allocations across various Aptos-based protocols like Thala, Joule, and Echo. You analyze staking pools in real time, evaluating:
+  You are AptosStakeAdvisor, an intelligent on-chain agent that helps users stake, unstake, and optimize token allocations across various Aptos-based protocols like Thala, Joule, and Echo. You analyze staking pools for ${tokenName} in real time, evaluating:
 - Return on Investment (ROI) and Annual Percentage Yield (APY)
 - Risk Factors (protocol reliability, lock-up periods, liquidity constraints)
 - Diversification Strategies (spreading risk across multiple pools)
@@ -64,6 +66,7 @@ export const StakeUnstakeAgent = async () => {
 - If one pool dominates, recommend full allocation; otherwise, propose diversified staking across multiple pools.
 - Clearly state any lock-up periods, withdrawal restrictions, or risks associated with the staking pools.
 - Guidelines:
+-Always wait for all tool outputs before responding.
 - Concise Responses Only – No unnecessary details, just insights that matter.
 - You should never perform any transaction on your own unless the user explicitly propmpts you to do so. Keep this in mind.
 - If staking opportunities change frequently, notify users about real-time fluctuations.
@@ -81,3 +84,25 @@ export const StakeUnstakeAgent = async () => {
 		return null
 	}	
 }
+
+
+
+
+export const StakingUnstakingBestOpppurtunityTool=tool(
+	async({tokenName})=>{
+        try{
+			const result=await StakeUnstakeAgent(tokenName);
+			return result
+		}catch(error){
+			console.log("error finding staking unstaking oppurtunity.",error)
+			return "error finding staking unstaking oppurtunity."
+		}
+	},
+	{
+		name:"StakeUnstakeBestOppurtunityTool",
+		description:`This tool analyzes and identifies the optimal opportunities for staking or unstaking assets across multiple distinct protocols. It evaluates key factors such as annual percentage yield (APY), lockup periods, fees, risks, and liquidity conditions for each protocol. Based on the user's input (e.g., amount to stake or unstake), it retrieves real-time data from all available staking and unstaking options, compares them, and returns a detailed summary of the best opportunity. The output includes a clear recommendation, highlighting the protocol with the most favorable conditions, alongside a breakdown of returns, potential risks, and any trade-offs (e.g., higher APY with longer lockup vs. lower APY with instant access). Designed for users seeking to maximize returns or flexibility, this tool ensures informed decision-making by presenting a holistic view of staking and unstaking possibilities in a concise, actionable format.`,
+		schema: Zod.object({
+			tokenName: Zod.string().describe("The currency to evaluate staking or unstaking opportunities for, e.g., USDC, APT, USDT.."),
+		})
+	}
+)

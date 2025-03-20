@@ -23,6 +23,9 @@ import { GetBestYieldingOppurtunityTool } from "@/Components/Backend/Tools/BestY
 import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenPriceTool"
 import { Find24HChangeTool } from "@/Components/Backend/Tools/VolatilityTool"
 import { GetLatestTransactionsTool, GetTransactionDetailTool } from "@/Components/Backend/Tools/GetTransactionTool"
+import { YieldOptimizationTool } from "@/Components/Backend/Agents/BestYieldOptimisingAgent"
+import { LendingBorrowingBestOpppurtunityTool } from "@/Components/Backend/Agents/LendBorrowAgent"
+import { StakingUnstakingBestOpppurtunityTool } from "@/Components/Backend/Agents/StakeUnstakeAgent"
 config()
 
 export const InitializeAgent = async () => {
@@ -56,21 +59,15 @@ export const InitializeAgent = async () => {
 				Find24HChangeTool,
 				GetLatestTransactionsTool,
 				GetTransactionDetailTool,
-				GetBestYieldingOppurtunityTool,
+				YieldOptimizationTool,
+				LendingBorrowingBestOpppurtunityTool,
+				StakingUnstakingBestOpppurtunityTool,
 				new PanoraSwapTool(agentRuntime),
 				new AptosGetTokenDetailTool(agentRuntime),
 				new AptosGetTokenPriceTool(agentRuntime),
 				new AptosBalanceTool(agentRuntime),
 				new JouleGetPoolDetails(agentRuntime),
 				new AptosAccountAddressTool(agentRuntime),
-				new LiquidSwapSwapTool(agentRuntime),
-				new JouleGetUserAllPositions(agentRuntime),
-				new EchoStakeTokenTool(agentRuntime),
-				new EchoUnstakeTokenTool(agentRuntime),
-				new ThalaStakeTokenTool(agentRuntime),
-				new ThalaUnstakeTokenTool(agentRuntime),
-				new AmnisStakeTool(agentRuntime),
-			    new AmnisWithdrawStakeTool(agentRuntime)
 			],
 			checkpointSaver: memory5,
 			messageModifier: `

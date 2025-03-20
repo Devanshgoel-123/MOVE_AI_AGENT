@@ -19,7 +19,7 @@ export const FetchTokenPriceInUsdTool = tool(
     },
     {
       name: "fetchTokenPriceInUsdTool",
-      description: "Fetches the price of a token in usd ",
+      description: "Retrieves the current price of a specified cryptocurrency token in USD. The tool first checks if the token is supported and then fetches its latest price using the name of the cryptocurrency.",
       schema: Zod.object({
        tokenName: Zod.string().describe("The name of the token to find price of")
       })

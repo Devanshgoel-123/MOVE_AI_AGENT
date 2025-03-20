@@ -233,7 +233,6 @@ function calculateRequiredSwaps(
         const swapAmountFromThisToken = Math.min(fromToken.value_usd, remainingSwapValue);
         console.log(swapAmountFromThisToken)
         const tokenAmount = (swapAmountFromThisToken / Number(fromToken.price_usd));
-        // *(10**Number(fromToken.decimals));
         
         swaps.push({
           from_token_address: fromToken.tokenAddress,
@@ -393,37 +392,14 @@ export const PortfolioRebalancerTool = tool(
         };
       }
       const swapResults = [];
-      let allSwapsSuccessful = true;
-      
-      for (const swap of requiredSwaps) {
-        const response= await executeSwap(swap);
-        const ParsedResponse=JSON.parse(response);
-        console.log("the parsed response is:",ParsedResponse)
-        swapResults.push({
-          from: swap.from_token_address,
-          to: swap.to_token_address,
-          amount: swap.amount,
-        });
-        
-        if (!response) {
-          allSwapsSuccessful = false;
-        }
-      }
-
-      if (allSwapsSuccessful) {
         await saveUserPreference(accountAddress, targetAllocation);
-      }
-  
+
       return {
         success: true,
-        message: allSwapsSuccessful 
-          ? "Portfolio rebalancing complete" 
-          : "Portfolio rebalancing partially complete with some failed swaps",
+        message: `Please perform the required Swaps ${requiredSwaps} or instruct the agent to do these swap individually on your behalf.`,
         currentAllocation,
         targetAllocation,
-        swapsExecuted: swapResults,
         userPortfolio,
-        preferencesUpdated: allSwapsSuccessful
       };
     } catch (error) {
       console.error("Portfolio rebalancing failed:", error);

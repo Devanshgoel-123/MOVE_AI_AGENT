@@ -12,10 +12,12 @@ import { ChatAnthropic } from "@langchain/anthropic"
 import { config } from "dotenv"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { LocalSigner } from "move-agent-kit"
+import { tool } from "@langchain/core/tools"
+import { z as Zod } from "zod";
 import { fetchSupportedTokens } from "../Common/Token"
 
 config()
-export const LendingBorrowingAgent = async () => {
+export const LendingBorrowingAgent = async (tokenName:string) => {
 	try{
 		const aptosConfig = new AptosConfig({
 			network: Network.MAINNET,
@@ -133,3 +135,24 @@ Act like you are the best a person can be at their work, But never invest user's
 }
 
 // List the pools where i can lend my tokens like usdc, usdt, aptos, weth to display in the UI, please provide data in a JSON format easy to parse. Include the token name, apy and tvl which all information's available. Be descriptive with the expected return i may get. Also add borrowing 
+
+
+
+export const LendingBorrowingBestOpppurtunityTool=tool(
+	async({tokenName})=>{
+        try{
+			const result=await LendingBorrowingAgent(tokenName);
+			return result
+		}catch(error){
+			console.log("error finding staking unstaking oppurtunity.",error)
+			return "error finding staking unstaking oppurtunity."
+		}
+	},
+	{
+		name:"LendingBorrowingBestOppurtunityTool",
+		description:`This tool evaluates and identifies the best opportunities for lending or borrowing assets across multiple protocols on the Aptos blockchain. It assesses critical metrics including interest rates (for lending APY or borrowing APR), collateral requirements, loan-to-value (LTV) ratios, repayment terms, fees, liquidity availability, and associated risks (e.g., liquidation thresholds, protocol stability). Based on the user's input (e.g., token name and desired action—lend or borrow), it fetches real-time data from all supported lending and borrowing options, compares them, and delivers a detailed yet concise summary of the optimal choice. The output includes a clear recommendation pinpointing the protocol with the most advantageous terms, alongside a breakdown of potential earnings (for lending) or costs (for borrowing), key risks, and trade-offs (e.g., higher interest rates with stricter collateral vs. lower rates with more flexibility). Tailored for users aiming to optimize yield or access liquidity efficiently, this tool provides a comprehensive overview of lending and borrowing possibilities, enabling informed decisions in a structured, actionable format.`,
+		schema: Zod.object({
+			tokenName: Zod.string().describe("The currency to evaluate lending or borrowing opportunities for, e.g., USDC, APT, USDT."),
+		})
+	}
+)

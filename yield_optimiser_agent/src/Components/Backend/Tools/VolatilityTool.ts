@@ -2,6 +2,7 @@ import axios from "axios";
 import { fetchSupportedTokens } from "../Common/Token";
 import { z as Zod } from "zod";
 import { tool } from "@langchain/core/tools";
+import { SupabaseToken } from "../Types";
 export const fetch24HChangeForTokens=async()=>{
     try{
         const tokensArray=await fetchSupportedTokens();
@@ -35,7 +36,8 @@ export const fetch24HChangeForTokens=async()=>{
       try {
         console.log(`Fetching the 24h change of ${tokenName}...`);
         const result=await fetch24HChangeForTokens();
-        const tokenAddress=(await fetchSupportedTokens()).filter((item)=>(item.name===tokenName.toLowerCase() || item.name.includes(tokenName.toLowerCase())))[0].token_address
+        const tokenAddress=(await fetchSupportedTokens()).filter((item:SupabaseToken)=>(item.name===tokenName.toLowerCase() || item.name.includes(tokenName.toLowerCase())))[0].token_address;
+        console.log(result,tokenAddress,await fetchSupportedTokens())
         console.log("the 24change response is:",result.filter((item)=>item.tokenAddress===tokenAddress)[0]);
         return result.filter((item)=>item.tokenAddress===tokenAddress)[0].change24H
       } catch (error) {

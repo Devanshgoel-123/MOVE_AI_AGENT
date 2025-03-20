@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import { getHistoricalPrice } from './PriceHistory';
+import { getHistoricalPrice } from '../Functions/PriceHistory';
 import { CoinGeckoId } from '../Types';
 import { tool } from '@langchain/core/tools';
 import { z as Zod } from "zod";

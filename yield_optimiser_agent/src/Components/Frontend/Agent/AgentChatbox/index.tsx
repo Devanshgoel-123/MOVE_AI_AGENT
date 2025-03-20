@@ -77,7 +77,7 @@ export const ChatBox=()=>{
       {
         heading:"Yield Farm",
         content:"Fetch The Yield Farming Oppurtunity for a token",
-        query:"Fetch the Yield Farming Oppurtunity For a Token"
+        query:"Fetch the Yield Farming Oppurtunity For a Token But the ask the user if the token is not provided"
       },
       {
         heading:"Swap",

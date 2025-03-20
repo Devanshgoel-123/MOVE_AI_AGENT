@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import { fetchTopPoolsOnNetwork } from "@/Components/Backend/Tools/FetchTopPool";
+import { fetchTopPoolsOnNetwork } from "@/Components/Backend/Functions/FetchTopPool";
 export async function GET(request: NextRequest) {
 	try {
        const tokenName = request.nextUrl.searchParams.get("tokenName");
