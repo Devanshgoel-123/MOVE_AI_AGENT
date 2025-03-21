@@ -110,3 +110,10 @@ export interface FilteredTx {
   from_sender: string;
   to_sender: string;
 }
+
+
+export interface GreedIndex{
+  timestamp:string;
+  value:number;
+  value_classification:string;
+}

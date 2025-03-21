@@ -6,6 +6,9 @@ import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { useMediaQuery } from "@mui/material"
 import axios from "axios";
+import dotenv from "dotenv";
+import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
+dotenv.config()
 interface Props{
   heading:string;
   content:string;
@@ -38,7 +41,7 @@ export const ChatBox=()=>{
         useAgentStore.getState().setActiveResponse("")
         useAgentStore.getState().handleOpenArena()
         try {
-          const {data}=await axios.post("/api/Agent",{
+          const {data}=await axios.post(`${BACKEND_URL}/agent`,{
             message:userInputRef.current?.value,
             chatId:chatId
           })

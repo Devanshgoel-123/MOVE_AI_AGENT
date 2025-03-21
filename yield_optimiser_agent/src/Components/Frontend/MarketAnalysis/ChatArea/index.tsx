@@ -7,6 +7,7 @@ import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
 import { TvlGraphContainer } from "../GraphContainer";
 import { TokenSelectionTab } from "../TokenSelectionTab";
+import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 export const PredictionChatArea=()=>{
     const [loading,setLoading]=useState<boolean>(false);
     const [response,setResponse]=useState<string>("");
@@ -21,7 +22,7 @@ export const PredictionChatArea=()=>{
      const handleClick=async()=>{
         try{
             setLoading(true)
-            const response=await axios.get(`http://localhost:3002/MarketAnalysis/${tokenName}`);
+            const response=await axios.get(`${BACKEND_URL}/marketAnalysis/${tokenName}`);
             console.log(response.data.data.agentResponse)
             useAgentStore.getState().setPredictionChat({
                 query:`Perform InDepth Market Analysis of ${tokenName} token`,

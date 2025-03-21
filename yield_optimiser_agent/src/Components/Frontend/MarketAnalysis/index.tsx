@@ -1,8 +1,6 @@
 
 import { PredictionChatArea } from "./ChatArea"
-import { TvlGraphContainer } from "./GraphContainer"
 import "./styles.scss"
-import { TokenSelectionTab } from "./TokenSelectionTab"
 import dynamic from "next/dynamic"
 
 const DynamicTokenTab = dynamic(() =>

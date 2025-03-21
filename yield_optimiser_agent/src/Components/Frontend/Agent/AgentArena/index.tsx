@@ -3,13 +3,14 @@ import "./styles.scss";
 import { useRef } from "react";
 import { AiOutlineEnter } from "react-icons/ai";
 import { useShallow } from "zustand/react/shallow";
-//import { convertBigIntToUIFormat } from "@/utils/number";
 import axios from "axios"
 import { useAgentStore } from "@/store/agent-store";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import Image from "next/image";
-import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
+import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { AgentChat } from "@/store/agent-store";
+import dotenv from "dotenv";
+dotenv.config()
 export const AgentArena = () => {
   const chatBoxRef=useRef<HTMLDivElement>(null);
  
@@ -51,7 +52,7 @@ export const AgentArena = () => {
       useAgentStore.getState().setActiveChat(userInputRef.current.value);
       useAgentStore.getState().setActiveResponse("")
       try {
-        const {data}=await axios.post("/api/Agent",{
+        const {data}=await axios.post(`${BACKEND_URL}/agent`,{
           message:userInputRef.current?.value,
           chatId:chatId
         })

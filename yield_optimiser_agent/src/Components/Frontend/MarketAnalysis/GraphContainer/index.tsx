@@ -12,6 +12,7 @@ import { useShallow } from "zustand/react/shallow";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
 import { useMediaQuery } from "@mui/material";
+import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 export const TvlGraphContainer = ({
   tokenName
 }:{
@@ -54,10 +55,7 @@ useEffect(() => {
     setLoading(true)
     try {
       
-      const response = await axios.get("/api/HistoricalPrice", {
-        params: { tokenId },
-      });
-
+      const response = await axios.get(`${BACKEND_URL}/historicalPrice/${tokenId}`);
       if (response.data?.data?.prices) {
         const formattedData = response.data.data.prices.map(([timestamp, price]: [number, number]) => ({
           timestamp,
