@@ -16,7 +16,7 @@ interface Props{
 }
 
 export const ChatBox=()=>{
-  const isMdDevice= useMediaQuery("(max-width:768px)");
+  const MobileDevice= useMediaQuery("(max-width:600px)");
     const {
       activeChat,
       chatId
@@ -77,15 +77,16 @@ export const ChatBox=()=>{
         content:"Fetch Token Price of a token in USD",
         query:"Fetch the token price"
       },
-      {
-        heading:"Yield Farm",
-        content:"Fetch The Yield Farming Oppurtunity for a token",
-        query:"Fetch the Yield Farming Oppurtunity For a Token But the ask the user if the token is not provided"
-      },
+      
       {
         heading:"Swap",
         content:"Swap one token to Another",
         query:"Swap token"
+      },
+      {
+        heading:"Fetch Transaction by Hash",
+        content:"Fetches the Details of a particular Transaction.",
+        query:"Fetches the Details of the Transaction with Hash"
       },
       {
         heading:"Fetch Latest Transactions",
@@ -93,9 +94,9 @@ export const ChatBox=()=>{
         query:"Fetch the latest 5 transactions on the blockchain"
       },
       {
-        heading:"Fetch Transaction by Hash",
-        content:"Fetches the Details of a particular Transaction.",
-        query:"Fetches the Details of the Transaction with Hash"
+        heading:"Yield Farm",
+        content:"Fetch The Yield Farming Oppurtunity for a token",
+        query:"Fetch the Yield Farming Oppurtunity For a Token But the ask the user if the token is not provided"
       }
     ]
     return (
@@ -104,7 +105,7 @@ export const ChatBox=()=>{
             <span>How can we help you today ?</span>
             <span>We are here to help you out in every step of the way</span>
         </div> 
-        <div className="AllButton">
+       {!MobileDevice && <div className="AllButton">
         <div className="ButtonsWrapper">
           {
             ButtonContent.slice(0,2).map((item:Props,index:number)=>{
@@ -126,7 +127,19 @@ export const ChatBox=()=>{
             })
           }
         </div>
+        </div>}
+        {
+          MobileDevice && 
+          <div className="AllButton">
+        <div className="ButtonsWrapper">
+          {
+            ButtonContent.slice(0,4).map((item:Props,index:number)=>{
+              return <ReadyToClickActionButton content={item.content} heading={item.heading} key={index} query={item.query}/>
+            })
+          }
         </div>
+        </div>
+        }
        
         <div className="AgentInputContainer">
         <input

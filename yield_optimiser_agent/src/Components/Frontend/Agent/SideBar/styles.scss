@@ -6,17 +6,69 @@ $border-color: #2d3748;
 $gray-text: #a0aec0;
 $transition-duration: 200ms;
 
-.SideBarWrapper{
+.css-cyqh1t-MuiPaper-root-MuiDrawer-paper{
     display: flex;
+    justify-content: center;
+}
+
+.crossIcon{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+    width: 35px;
+    height: 35px;
+    background: var(--paper-black-medium);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transform: scale(1);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    color: var(--text-white);
+
+    @include md {}
+
+    @include lg {
+        width: 30px;
+        height: 30px;
+    }
+
+    @include xl {
+        width: 35px;
+        height: 35px;
+    }
+
+    @include xxl {
+        width: 40px;
+        height: 40px;
+    }
+
+    &:hover {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+
+    &:active {
+        transform: scale(0.8);
+    }
+}
+
+.SideBarWrapper{
     border-radius: 8px;
     flex-direction: column;
     gap: 15px;
     justify-content: space-between;
-    height: 95%;
+    height: 80%;
     background-color: #111111;
     padding: 16px;
     border: 1px solid #1e1e1e;
+    @include md{
+        display: flex;
+    }
     @include lg{
+        
         max-width: 17%;
         padding: 10px;
     }
@@ -36,7 +88,10 @@ $transition-duration: 200ms;
             border-bottom: 1px solid #1e1e1e ;
             padding-block: 20px;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            @include md{
+                justify-content: center;
+            }
             .HeadingTextSidebar{
                 color: #f2f2f2;
                 font-size: 14px;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import Image from "next/image";
 import { SocialComponent } from "./Social";
@@ -9,9 +9,12 @@ import { useShallow } from "zustand/react/shallow";
 import { MessageSquare, BarChart3, PieChart } from 'lucide-react';
 import { useMediaQuery } from "@mui/material"
 import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
-
+import { Drawer } from "@mui/material";
+import { RxCross1 } from "react-icons/rx";
 export const Sidebar=()=>{
+    const [open,setOpen]=useState<boolean>(false);
     const isXxlDevice=useMediaQuery("(min-width: 1280px)");
+    const MobileDevice=useMediaQuery("(max-width: 600px)");
     const isXlDevice = useMediaQuery("(min-width: 1024px) and (max-width: 1279px)")
     const {
         openArena
@@ -111,6 +114,58 @@ export const Sidebar=()=>{
         { id: 'portfolio', label: 'Portfolio', icon: <PieChart size={18} /> },
         // { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
       ];
+
+      if (MobileDevice) {
+        return (
+            <Drawer open={open} >
+             <div className="SideBarWrapper">
+             <div className="TopContainer">
+            <div className="SideBarHeader">
+            <RxCross1 className="crossIcon GradientText" onClick={()=>{
+              setOpen(false)
+            }}/>
+                <div>
+                <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
+                </div>
+           
+            <span className="HeadingTextSidebar">DeFiZen</span>
+        </div>
+        {renderChatSummary()}
+        <div className="sidebar-menu">
+        <div key={"chat"} className="sidebar-menu-item" onClick={()=>{
+             useAgentStore.getState().setActiveComponent("chat")
+        }}>
+              <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
+              <span className="sidebar-menu-label">Chat</span>
+              <div className="sidebar-menu-icon" onClick={()=>{
+                    useAgentStore.getState().clearCurrentValues()
+                    useAgentStore.getState().setActiveChatId()
+                    if(!openArena){
+                        useAgentStore.getState().handleOpenArena()
+                    }
+                }}>
+                <IoMdAdd />
+                </div>
+        </div>
+          {menuItems.map((item) => (
+            <div key={item.id} className="sidebar-menu-item" onClick={()=>{
+                console.log("setting label as",item.label)
+                useAgentStore.getState().setActiveComponent(item.label)
+            }}>
+              <div className="sidebar-menu-icon">{item.icon}</div>
+              <span className="sidebar-menu-label">{item.label}</span>
+            </div>
+          ))}
+        </div>
+        </div>
+        <SocialComponent />
+              </div>
+          </Drawer>
+           
+         
+        );
+      }
+    
     return (
         <Box className="SideBarWrapper">
             <div className="TopContainer">

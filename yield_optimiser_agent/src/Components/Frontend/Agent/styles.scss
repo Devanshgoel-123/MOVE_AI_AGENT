@@ -12,7 +12,10 @@
         display: flex;
         justify-content: center;
         flex-direction: row;
-        align-items: flex-start;
+       align-items: center;
+        @include md{
+            align-items: flex-start;
+        }
         @include xxl{
             align-items: center;
         }
