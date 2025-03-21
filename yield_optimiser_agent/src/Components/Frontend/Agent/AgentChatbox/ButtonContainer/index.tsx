@@ -5,6 +5,7 @@ import { FaBalanceScale } from "react-icons/fa";
 import axios from "axios"
 import { useAccount } from "wagmi";
 import { useShallow } from "zustand/react/shallow";
+import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 interface Props{
     heading:string;
     content:string;
@@ -24,7 +25,7 @@ export const ReadyToClickActionButton=({
         useAgentStore.getState().handleOpenArena()
         useAgentStore.getState().setActiveChat(query)
         try{
-            const {data}=await axios.post("/api/Agent",{
+            const {data}=await axios.post(`${BACKEND_URL}/agent`,{
                 message:query,
                 chatId:chatId
               })

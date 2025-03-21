@@ -8,6 +8,7 @@ import { UserAllocations } from '@/Components/Backend/Types';
 import { PortfolioRebalancer } from './Rebalancer';
 import { CustomSpinner } from '@/Components/Backend/Common/CustomSpinner';
 import Image from 'next/image';
+import { BACKEND_URL } from '@/Components/Backend/Common/Constants';
 
 export const Portfolio = () => {
   const [portfolio, setPortfolio] = useState<UserPortfolio | null>(null);
@@ -19,7 +20,7 @@ export const Portfolio = () => {
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await axios.get("/api/Portfolio");
+        const response = await axios.get(`${BACKEND_URL}/userPortfolio`);
         const Tokens:Token[]=response.data.userPortfolio.tokens;
         console.log(Tokens)
         const stableTokens=Tokens.filter((item)=>item.category==="stablecoin");
