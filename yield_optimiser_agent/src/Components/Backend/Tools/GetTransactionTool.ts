@@ -43,7 +43,9 @@ export const getLatestTransaction=async ()=>{
         const url=`https://aptos.blockpi.network/aptos/v1/${process.env.BLOCK_API_KEY}/v1/transactions?limit=5`
         const response=await axios.get(url)
         const data=response.data;
+        console.log("the data is:",data[0].changes)
         const finalData=processTransactions(data);
+        console.log("The final data is",finalData)
         return finalData;
     }catch(error){
         console.log(error)
@@ -116,9 +118,9 @@ const processTransactions=(txArray:Tx[]) =>{
 const filterTransaction=(tx:Tx):FilteredTx=>{
     const timestampMicros = parseInt(tx.timestamp);
     const time = new Date(timestampMicros / 1000).toISOString().replace('T', ' ').slice(0, 19);
-    let value = 0;
-    if (tx.payload && tx.payload.arguments && tx.payload.arguments.length > 1) {
-        value = parseInt(tx.payload.arguments[1]) 
+    let value = "0";
+    if (tx.events && tx.events.length>1) {
+        value = (tx.events[0].data.amount) 
     }
     let coinName = "Unknown";
     if (tx.payload && tx.payload.function) {
@@ -136,7 +138,6 @@ const filterTransaction=(tx:Tx):FilteredTx=>{
     }
 
     const gasUsed = parseInt(tx.gas_used);
-
     const fromSender = tx.sender;
     const toSender = (tx.payload && tx.payload.arguments && tx.payload.arguments.length > 0) 
         ? tx.payload.arguments[0] 
@@ -148,7 +149,7 @@ const filterTransaction=(tx:Tx):FilteredTx=>{
         coin_name: coinName,
         gas_used: gasUsed,
         from_sender: fromSender,
-        to_sender: toSender
+        to_sender: toSender,
     };
 }
 

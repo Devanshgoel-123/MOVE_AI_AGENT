@@ -1,14 +1,12 @@
 import React from "react";
-import { useState,useEffect, } from "react";
 import { Box } from "@mui/material";
 import Image from "next/image";
-import { BsChatDotsFill } from "react-icons/bs";
 import { SocialComponent } from "./Social";
 import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
-import { MessageSquare, BarChart3, PieChart, Compass, Wallet, FileText, Settings, HelpCircle } from 'lucide-react';
+import { MessageSquare, BarChart3, PieChart } from 'lucide-react';
 import { useMediaQuery } from "@mui/material"
 import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 
@@ -109,7 +107,7 @@ export const Sidebar=()=>{
     }
 
     const menuItems = [
-        { id: 'price', label: 'Price Prediction', icon: <BarChart3 size={18} /> },
+        { id: 'price', label: 'Market Analysis', icon: <BarChart3 size={18} /> },
         { id: 'portfolio', label: 'Portfolio', icon: <PieChart size={18} /> },
         // { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
       ];
@@ -121,7 +119,7 @@ export const Sidebar=()=>{
                 <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
                 </div>
            
-            <span className="HeadingTextSidebar">The Defiant</span>
+            <span className="HeadingTextSidebar">DeFiZen</span>
         </div>
         {renderChatSummary()}
         <div className="sidebar-menu">

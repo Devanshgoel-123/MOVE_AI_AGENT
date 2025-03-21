@@ -10,9 +10,8 @@ const DynamicTokenTab = dynamic(() =>
   );
   
 
-export const PredictionPriceWrapperContainer=()=>{
+export const MarketAnalysisWrapperContainer=()=>{
     return <div className="PredictionPriceWrapper">
-        {/*  */}
        <PredictionChatArea/>
     </div>
 }

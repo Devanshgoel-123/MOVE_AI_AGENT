@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "s2.coinmarketcap.com"
       },
+      {
+        protocol: "https",
+        hostname: "media-hosting.imagekit.io"
+      },
       // {
       //   protocol: "https",
       //   hostname: "images.scalebranding.com"

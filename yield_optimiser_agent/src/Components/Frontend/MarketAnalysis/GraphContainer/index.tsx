@@ -82,7 +82,7 @@ useEffect(() => {
     <div className="GraphContainer">
         <div className="GraphDetails">
           <div className="GraphInfo">
-            <span className="GraphName">Price Analysis of {tokenName.toUpperCase()}</span>
+            <span className="GraphName">Historical Price of {tokenName.toUpperCase()}</span>
             <span className="ActiveValue">Current Price :  ${tvlDataArray[tvlDataArray.length-1]?.price}</span>
           </div>
         </div>

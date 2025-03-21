@@ -21,18 +21,17 @@ export const PredictionChatArea=()=>{
      const handleClick=async()=>{
         try{
             setLoading(true)
-            const response=await axios.get("/api/PredictPrice",{
-                params:{
-                    tokenName:tokenName
-                }
-            });
+            const response=await axios.get(`http://localhost:3002/MarketAnalysis/${tokenName}`);
+            console.log(response.data.data.agentResponse)
             useAgentStore.getState().setPredictionChat({
-                query:`Predict the price of ${tokenName}`,
-                answer: !response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse
+                query:`Perform InDepth Market Analysis of ${tokenName} token`,
+                answer: (response.data.data).agentResponse.replace(/#/g, '')   // Remove #
+                .replace(/\*\*/g, '') // Remove bold markers **
+                .replace(/\*/g, '')
+                .replace(/\-/g, '')
+                .replace(/\*/g, '')
             })
-            setResponse(!response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse)
-            console.log(response.data.agentResponse)
-            console.log(!response.data.agentResponse ? `The Predicted Price of ${tokenName} is ${parseFloat(response.data.data).toFixed(4)}` : JSON.parse(response.data.data).agentResponse)
+            setResponse(response.data.data.agentResponse)
             setLoading(false)
         }catch(err){
             setResponse("Sorry We couldn't Process your request at the moment")
@@ -44,8 +43,8 @@ export const PredictionChatArea=()=>{
     return (
         <div className="ChatWrapperPrediction">
             <div className="ChatHeader">
-              <span className="mainHeading">Defiant Price Prediction</span>
-              <span className="subHeading">Chat With out AI Assistant for price predictions</span>
+              <span className="mainHeading">Defiant Market Analysis</span>
+              <span className="subHeading">Chat With out AI Assistant To Perform An In Depth Market Analysis Of A Token</span>
             </div>
             <div className="ChatArea">
                 { predictionChat.length>0 ? 
@@ -59,7 +58,9 @@ export const PredictionChatArea=()=>{
         <TvlGraphContainer tokenName={tokenName}/>
         <TokenSelectionTab/>
         </div>
-                    {item.answer.split('\n').map((item,index)=>{
+                    
+                    <div className="ResponseDiv">
+                    {item.answer.split('\n').slice(0,-15).map((item,index)=>{
         console.log(item)
         return <div key={index} className="itemResponse">
         {item}
@@ -67,12 +68,13 @@ export const PredictionChatArea=()=>{
       </div>
       })}
                     </div>
+                    </div>
                   </div>
                 })
                 :
                 (
                     <div className="ReadyQuery">
-                      <span>Welcome to the Price Predictor! Select a token and ask me about price predictions!</span>
+                      <span>Welcome to the Defiant! Select a token and ask me to perform it's Market Analysis!</span>
                     </div>
                   )}
                   <div className="TopContainer">
@@ -80,14 +82,14 @@ export const PredictionChatArea=()=>{
         <TokenSelectionTab/>
         </div>
                   {response !== "" && loading && (
-                    <div className="ResponseRow">
-                      <CustomTextLoader text="Loading" />
+                    <div className="ResponseRowLoading">
+                      <CustomTextLoader text="Conducting InDepth Market Analysis" />
                     </div>
                 )}
                 </div>
             <div className="ChatFooter">
                 <div className="PredictButton" onClick={handleClick}>
-                    {!loading ? `Predict ${tokenName.toUpperCase()} Price `: <CustomSpinner size="20" color="#000000"/>}
+                    {!loading ? `Perform In Depth Market Analysis of ${tokenName.toUpperCase()} token`: <CustomSpinner size="20" color="#000000"/>}
                 </div>
             </div>
         </div>

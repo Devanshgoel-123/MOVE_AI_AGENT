@@ -98,3 +98,34 @@ export const getTokenAmountOwnedByAccount=async (userAddress:string,token_addres
 
     return userOwnedTokens
 }
+
+export const getFearGreedIndex=async ()=>{
+  try{
+  const url = "https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical?start=1&limit=30";
+  const response = await axios.get(url, {
+    headers: {
+      "X-CMC_PRO_API_KEY": process.env.COINMARKETCAP_API_KEY!,
+      "Accept": "application/json",
+    },
+  });
+  const data = await response.data.data
+  const answer=data.map((item:GreedIndex)=>{
+       return {
+        value_classification:item.value_classification,
+        value:item.value
+       }
+  })
+  console.log("The greed index is",answer)
+  return answer
+  }catch(err){
+    console.log(err)
+    return "Error fetching getFearGreedIndex"
+  }
+}
+
+
+export interface GreedIndex{
+  timestamp:string;
+  value:number;
+  value_classification:string;
+}

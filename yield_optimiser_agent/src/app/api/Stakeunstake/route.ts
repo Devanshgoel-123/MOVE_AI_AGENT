@@ -7,7 +7,7 @@ config()
 
 export async function POST(request: NextRequest) {
 	try {
-	const agentCache = await StakeUnstakeAgent()
+	const agentCache = await StakeUnstakeAgent("usdc")
 	
 	  if(agentCache===null){
 		return NextResponse.json(

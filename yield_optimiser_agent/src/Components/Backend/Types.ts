@@ -104,7 +104,7 @@ export interface Tx {
 
 export interface FilteredTx {
   time: string;
-  value: number;
+  value: string;
   coin_name: string;
   gas_used: number;
   from_sender: string;

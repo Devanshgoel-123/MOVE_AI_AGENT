@@ -17,9 +17,7 @@ import { MemorySaver } from "@langchain/langgraph"
 import { HumanMessage } from "@langchain/core/messages"
 import { NextRequest, NextResponse } from "next/server"
 import { GetUserDiversificationPreferenceTool } from "@/Components/Backend/Tools/PortfolioDiversificationTool"
-import { PricePredictionTool } from "@/Components/Backend/Tools/PricePredictionTool"
 import { AptosBalanceTool, AptosAccountAddressTool } from "move-agent-kit"
-import { GetBestYieldingOppurtunityTool } from "@/Components/Backend/Tools/BestYieldAgent"
 import { FetchTokenPriceInUsdTool } from "@/Components/Backend/Tools/FetchTokenPriceTool"
 import { Find24HChangeTool } from "@/Components/Backend/Tools/VolatilityTool"
 import { GetLatestTransactionsTool, GetTransactionDetailTool } from "@/Components/Backend/Tools/GetTransactionTool"
@@ -54,7 +52,6 @@ export const InitializeAgent = async () => {
 			tools:[
 				PortfolioRebalancerTool,
 				GetUserDiversificationPreferenceTool,
-				PricePredictionTool,
 				FetchTokenPriceInUsdTool,
 				Find24HChangeTool,
 				GetLatestTransactionsTool,
@@ -73,8 +70,6 @@ export const InitializeAgent = async () => {
 			messageModifier: `
   You are an intelligent on-chain agent that interacts with the Aptos blockchain via the Aptos Agent Kit. Your capabilities include fetching token details, checking prices, identifying arbitrage opportunities, rebalancing portfolios, predicting prices, and retrieving pool details using specialized tools.
    - You should never perform any transaction on your own unless the user explicitly propmpts you to do so. Keep this in mind.
-   - When the price prediction tool is used, alos fetch the current price of that token and then give the percentage change also of that particular token only using the . If the change is more than -5% ask the user to swap their token to stable because the token may decrease more and if its positive ask the user to hold the token.
-  - If user specifically tells you to predict the price of a token then only call PricePredictionTool.
   - Only and Only If user asks for 24Change or % change of a token call the  \Find24HChangeTool\.
   - If a Transaction is being sent wait for the transaction to be completed and then return the hash of the transaction.
   - Always give complete answer by taking your time be it 30 sec but complete it don't let user hangin with incomplete response

@@ -41,10 +41,10 @@ export const fetch24HChangeForTokens=async()=>{
         console.log("the 24change response is:",result.filter((item)=>item.tokenAddress===tokenAddress)[0]);
         return result.filter((item)=>item.tokenAddress===tokenAddress)[0].change24H
       } catch (error) {
-        console.error("Error in Predicting the price of token:", error);
+        console.error("Error Fetching the 24h change of token:", error);
         return {
           success: false,
-          message: `Error Predicting price of token : ${error}`
+          message: `Error Fetching the 24h change of token : ${error}`
         };
       }
     },

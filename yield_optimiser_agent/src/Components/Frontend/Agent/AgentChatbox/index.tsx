@@ -65,9 +65,9 @@ export const ChatBox=()=>{
 
     const ButtonContent:Props[]=[
       {
-        heading:"Predict Price",
-        content:"Predict the price of Any Supported Token on Aptos",
-        query:"Predict the price of token"
+        heading:"Market Analysis",
+        content:"Conduct An In Depth Analysis of Any Supported Token on Aptos",
+        query:"Conduct An In Depth Analysis of Aptos Token"
       },
       {
         heading:"Fetch Token Price",
@@ -87,7 +87,7 @@ export const ChatBox=()=>{
       {
         heading:"Fetch Latest Transactions",
         content:"Fetches the Latest Transactions on the Aptos Blockchain",
-        query:"Fetch the latest 5 transactions on the blockchain and provide me a summary of those transaction highlighting the one with highest value"
+        query:"Fetch the latest 5 transactions on the blockchain"
       },
       {
         heading:"Fetch Transaction by Hash",

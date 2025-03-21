@@ -24,10 +24,10 @@
         overflow: auto;
         margin-bottom: 20px;
         @include lg{
-            height: 100%;
             flex-direction: column;
             justify-content: flex-start;
             gap: 10px;
+            height: 60%;
         }
     }
 }

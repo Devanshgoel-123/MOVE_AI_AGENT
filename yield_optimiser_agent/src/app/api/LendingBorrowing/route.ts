@@ -8,7 +8,14 @@ config()
 
 export async function POST(request: NextRequest) {
 	try {
-	const agentCache = await LendingBorrowingAgent()
+	const tokenName = request.nextUrl.searchParams.get("tokenName");
+	if(tokenName===null){
+		return NextResponse.json(
+			{ error: "Please provide a token Name"},
+			{ status: 200 }
+		  );
+	}
+	const agentCache = await LendingBorrowingAgent(tokenName)
 	
 	  if(agentCache===null){
 		return NextResponse.json(

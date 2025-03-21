@@ -34,17 +34,26 @@ $transition-duration: 200ms;
             flex-direction: row;
             gap: 10px;
             border-bottom: 1px solid #1e1e1e ;
-            padding-bottom: 20px;
+            padding-block: 20px;
             align-items: center;
+            justify-content: center;
             .HeadingTextSidebar{
                 color: #f2f2f2;
                 font-size: 14px;
                 font-family: "Manrope";
                 font-weight: 500;
+                @include xxl{
+                    font-weight: 800;
+                    font-size: 22px;
+                }
             }
             .SideBarLogo{
                 display: flex;
                 border-radius: 50%;
+                @include xxl{
+                    height: 30px;
+                    width: 30px;
+                }
             }
            
         }

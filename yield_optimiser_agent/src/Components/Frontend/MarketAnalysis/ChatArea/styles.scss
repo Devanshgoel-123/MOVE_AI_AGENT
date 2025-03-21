@@ -83,6 +83,12 @@
             @include xl{
                 font-size: 14px;
             }
+
+            .ResponseDiv{
+                background-color: #000000;
+                padding: 12px;
+                border-radius:12px;
+            }
         }
     }
     .ChatFooter{
@@ -105,6 +111,10 @@
                 width: 60%;
                 font-size: 12px;
             }
+            @include xxl{
+                font-size: 16px;
+                padding: 16px 22px;
+            }
         }
         @include lg{
             
@@ -114,4 +124,17 @@
 
 .itemResponse{
     background-color: transparent;
+    color: #c1c1c1;
+}
+.ResponseRowLoading{
+    min-width: 25%;
+    min-height: 25px;
+    background-color: #1a1a1a;
+    overflow: auto;
+    padding: 12px;
+    border-radius: 12px;
+    @include xxl{
+        min-height: 50px;
+        min-width: 50px;   
+    }
 }
