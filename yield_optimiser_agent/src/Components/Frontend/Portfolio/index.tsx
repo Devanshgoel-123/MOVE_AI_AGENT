@@ -3,6 +3,7 @@ import { PieChart, BarChart3, TrendingUp, ArrowUpRight, ArrowDownRight } from 'l
 import "./styles.scss";
 import axios from "axios";
 import { useState, useEffect } from 'react';
+import { BsLayoutTextSidebar } from "react-icons/bs";
 import { Token, UserPortfolio } from '@/Components/Backend/Types';
 import { UserAllocations } from '@/Components/Backend/Types';
 import { PortfolioRebalancer } from './Rebalancer';
@@ -10,7 +11,8 @@ import { CustomSpinner } from '@/Components/Backend/Common/CustomSpinner';
 import Image from 'next/image';
 import { BACKEND_URL } from '@/Components/Backend/Common/Constants';
 import { useMediaQuery } from '@mui/material';
-
+import { useAgentStore } from '@/store/agent-store';
+import { useShallow } from 'zustand/react/shallow';
 export const Portfolio = () => {
   const isXlDevice = useMediaQuery("(min-width: 1024px)")
   const [portfolio, setPortfolio] = useState<UserPortfolio | null>(null);
@@ -19,6 +21,14 @@ export const Portfolio = () => {
     native: 51.08,
     other: 4.74,
   });
+  const {
+    openArena,
+    activeComponent
+}=useAgentStore(useShallow((state)=>({
+    openArena:state.openArena,
+    activeComponent:state.activeComponent
+})))
+const MobileDevice= useMediaQuery("(max-width:600px)");
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
@@ -52,25 +62,23 @@ export const Portfolio = () => {
   }
 
   const totalValue = portfolio.total_value_usd;
-  console.log(portfolio.tokens)
+ 
   return (
     <div className="portfolio-wrapper">
       {isXlDevice ?
       <div className='portfolio-card'>
-      
       <div className="portfolio-header">
+      <div className="portfolio-actions">
+      { MobileDevice &&  <div className="SideBarIcon" onClick={()=>{
+            useAgentStore.getState().setOpenSideBar(true)
+        }}>
+        <BsLayoutTextSidebar />
+        </div>}
+      </div>
         <h2 className="portfolio-title">
           <PieChart size={20} className="portfolio-icon" />
           Portfolio Overview
-        </h2>
-        <div className="portfolio-actions">
-          <button className="portfolio-action-btn">
-            <BarChart3 size={16} />
-          </button>
-          <button className="portfolio-action-btn">
-            <TrendingUp size={16} />
-          </button>
-        </div>
+        </h2> 
       </div>
 
       <div className="portfolio-value">
@@ -130,18 +138,18 @@ export const Portfolio = () => {
       :
       <div className='portfolio-card'>
       <div className="portfolio-header">
+      { MobileDevice && <div className="portfolio-actions">
+           <div className="portfolio-action-btn" onClick={()=>{
+            useAgentStore.getState().setOpenSideBar(true)
+        }}>
+        <BsLayoutTextSidebar />
+        </div>
+        </div>}
         <h2 className="portfolio-title">
           <PieChart size={20} className="portfolio-icon" />
           Portfolio Overview
         </h2>
-        <div className="portfolio-actions">
-          <button className="portfolio-action-btn">
-            <BarChart3 size={16} />
-          </button>
-          <button className="portfolio-action-btn">
-            <TrendingUp size={16} />
-          </button>
-        </div>
+       
       </div>
       <div className='midWrapper'>
         <div className='leftSide'>

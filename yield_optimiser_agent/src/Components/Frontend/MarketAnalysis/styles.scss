@@ -4,7 +4,7 @@
 .PredictionPriceWrapper{
     background: #111;
     border: 1px solid #1e1e1e;
-    width: 90%;
+    width: 100%;
     height: 95%;
     display: flex;
     flex-direction: column;
@@ -12,15 +12,19 @@
     align-items: flex-start;
     overflow-y: scroll;
     border-radius: 8px;
+    @include md{
+        width: 90%;
+    }
     @include lg{
+        width: 90%;
         flex-direction: row;
     }
     .TopContainer{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         width: 100%;
         height: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
         overflow: auto;
         margin-bottom: 20px;
         @include md{
@@ -28,9 +32,7 @@
             justify-content: flex-start;
             gap: 10px;
         }
-        @include lg{
-            
-            
+        @include lg{    
             height: 60%;
         }
     }

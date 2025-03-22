@@ -12,7 +12,14 @@ import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { Drawer } from "@mui/material";
 import { RxCross1 } from "react-icons/rx";
 export const Sidebar=()=>{
-    const [open,setOpen]=useState<boolean>(false);
+    const {
+        openSidebar,
+        activeComponent
+    }=useAgentStore(useShallow((state)=>({
+        openSidebar:state.openSideBar,
+        activeComponent:state.activeComponent
+    })))
+    const [active, setActive]=useState<string>("chat");
     const isXxlDevice=useMediaQuery("(min-width: 1280px)");
     const MobileDevice=useMediaQuery("(max-width: 600px)");
     const isXlDevice = useMediaQuery("(min-width: 1024px) and (max-width: 1279px)")
@@ -117,12 +124,12 @@ export const Sidebar=()=>{
 
       if (MobileDevice) {
         return (
-            <Drawer open={open} >
+            <Drawer open={openSidebar} >
              <div className="SideBarWrapper">
              <div className="TopContainer">
             <div className="SideBarHeader">
             <RxCross1 className="crossIcon GradientText" onClick={()=>{
-              setOpen(false)
+              useAgentStore.getState().setOpenSideBar(false)
             }}/>
                 <div>
                 <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
@@ -132,7 +139,7 @@ export const Sidebar=()=>{
         </div>
         {renderChatSummary()}
         <div className="sidebar-menu">
-        <div key={"chat"} className="sidebar-menu-item" onClick={()=>{
+        <div key={"chat"} className={activeComponent==="chat" ? "sidebar-menu-item active" :'sidebar-menu-item'} onClick={()=>{
              useAgentStore.getState().setActiveComponent("chat")
         }}>
               <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
@@ -140,6 +147,7 @@ export const Sidebar=()=>{
               <div className="sidebar-menu-icon" onClick={()=>{
                     useAgentStore.getState().clearCurrentValues()
                     useAgentStore.getState().setActiveChatId()
+                    useAgentStore.getState().setOpenSideBar(false)
                     if(!openArena){
                         useAgentStore.getState().handleOpenArena()
                     }
@@ -148,8 +156,9 @@ export const Sidebar=()=>{
                 </div>
         </div>
           {menuItems.map((item) => (
-            <div key={item.id} className="sidebar-menu-item" onClick={()=>{
+            <div key={item.id} className={activeComponent===item.label ? "sidebar-menu-item active" : 'sidebar-menu-item'} onClick={()=>{
                 console.log("setting label as",item.label)
+                useAgentStore.getState().setOpenSideBar(false)
                 useAgentStore.getState().setActiveComponent(item.label)
             }}>
               <div className="sidebar-menu-icon">{item.icon}</div>
@@ -178,7 +187,7 @@ export const Sidebar=()=>{
         </div>
         {renderChatSummary()}
         <div className="sidebar-menu">
-        <div key={"chat"} className="sidebar-menu-item" onClick={()=>{
+        <div key={"chat"} className={activeComponent==="chat" ? "sidebar-menu-item active" :'sidebar-menu-item'} onClick={()=>{
              useAgentStore.getState().setActiveComponent("chat")
         }}>
               <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
@@ -194,8 +203,9 @@ export const Sidebar=()=>{
                 </div>
         </div>
           {menuItems.map((item) => (
-            <div key={item.id} className="sidebar-menu-item" onClick={()=>{
+            <div key={item.id} className={activeComponent===item.label ? "sidebar-menu-item active" : 'sidebar-menu-item'} onClick={()=>{
                 console.log("setting label as",item.label)
+                useAgentStore.getState().setOpenSideBar(false)
                 useAgentStore.getState().setActiveComponent(item.label)
             }}>
               <div className="sidebar-menu-icon">{item.icon}</div>

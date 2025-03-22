@@ -5,6 +5,7 @@ import { AiOutlineEnter } from "react-icons/ai";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { useMediaQuery } from "@mui/material"
+import { BsLayoutTextSidebar } from "react-icons/bs";
 import axios from "axios";
 import dotenv from "dotenv";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
@@ -103,7 +104,14 @@ export const ChatBox=()=>{
     return (
         <div className="ChatBox">
             <div className="ChatHeader">
-            <span>How can we help you today ?</span>
+            <div className="SideBarIconHeader">
+            { MobileDevice &&  <div className="SideBarIcon" onClick={()=>{
+            useAgentStore.getState().setOpenSideBar(true)
+        }}>
+        <BsLayoutTextSidebar />
+        </div>}
+        <span className="centerHeading">How can we help you today ?</span>
+        </div>
             <span>We are here to help you out in every step of the way</span>
         </div> 
        {!MobileDevice && <div className="AllButton">

@@ -2,13 +2,17 @@
 
 .TokenSelectionTab{
     display: flex;
-    width: 35%;
-    border-radius:16px;
-    flex-direction: column;
+    width: 100%;
     gap: 5px;
     background-color: transparent;
+    border-radius:16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-basis: 10%;
+    margin-top: 10px;
     @include md{
         flex-direction: row;
+        margin-top: 0px;
         flex-wrap: wrap;
         flex-basis: 10%;
         width: 100%;
@@ -21,12 +25,15 @@
         justify-content: flex-start;
     }
     .TokenButton{
-        padding: 12px;
+        padding: 8px;
         border-radius: 16px;
        background-color: #000000;
         border: 1px solid #1e1e1e;
         color: #c1c1c1;
+        width: 18%;
+        font-size: 10px;
         @include md{
+            font-size: 16px;
             width: 19%;
         }
         @include lg{

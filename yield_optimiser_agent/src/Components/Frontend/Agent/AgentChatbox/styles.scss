@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px;
+    padding: 18px;
     gap: 16px;
     background: radial-gradient(63.94% 63.94% at 20% 0, hsla(0, 0%, 100%, .03) 0, hsla(0, 0%, 100%, 0) 100%), #111;
     border: 2px solid var(--border-color);
@@ -38,7 +38,22 @@
             font-size: 16px;
             gap: 16px;
         }
-        :nth-child(1){
+        .SideBarIconHeader{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            .SideBarIcon{
+                font-size: 20px;
+                background-color: #111111;
+                padding: 12px;
+                border-radius: 12px;
+                &:hover{
+                    transform: scale(0.9);
+                }
+            }
+        }
+        .centerHeading{
            font-size: 22px;
             justify-content: center;
             display: flex;

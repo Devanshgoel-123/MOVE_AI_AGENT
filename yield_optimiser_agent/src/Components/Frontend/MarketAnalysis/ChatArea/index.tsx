@@ -5,10 +5,15 @@ import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
+import { BsLayoutTextSidebar } from "react-icons/bs";
 import { TvlGraphContainer } from "../GraphContainer";
 import { TokenSelectionTab } from "../TokenSelectionTab";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
+import { useMediaQuery } from "@mui/material";
+
 export const PredictionChatArea=()=>{
+
+  const MobileDevice= useMediaQuery("(max-width:600px)");
     const [loading,setLoading]=useState<boolean>(false);
     const [response,setResponse]=useState<string>("");
      const {
@@ -44,7 +49,16 @@ export const PredictionChatArea=()=>{
     return (
         <div className="ChatWrapperPrediction">
             <div className="ChatHeader">
-              <span className="mainHeading">Defiant Market Analysis</span>
+              <div className="mainHeading">
+              { MobileDevice &&  <div className="SideBarIcon" onClick={()=>{
+            useAgentStore.getState().setOpenSideBar(true)
+        }}>
+        <BsLayoutTextSidebar />
+        </div>}
+        <span>
+                Defiant Market Analysis
+                </span>
+                </div>
               <span className="subHeading">Chat With out AI Assistant To Perform An In Depth Market Analysis Of A Token</span>
             </div>
             <div className="ChatArea">

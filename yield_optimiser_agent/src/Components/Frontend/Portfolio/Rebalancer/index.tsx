@@ -37,6 +37,7 @@ export const PortfolioRebalancer: React.FC<Props> = ({
 }) => {
   const isXxlDevice=useMediaQuery("(min-width: 1300px)");
   const isXlDevice = useMediaQuery("(min-width: 1020px) and (max-width: 1279px)")
+  const mobileDevide=useMediaQuery("(max-width: 600px)")
   const calculateCategoryValues = (tokenList: Token[]) => {
     const categoryValues = {
       stable: 0,
@@ -251,8 +252,8 @@ export const PortfolioRebalancer: React.FC<Props> = ({
             { id: 2, value: otherAllocation, label: 'Other' },
           ],
           innerRadius:15,
-          cx:isXlDevice ? 20:45,
-          cy:isXxlDevice ? 185 : isXlDevice ? 110:125,
+          cx:isXlDevice ? 20: mobileDevide ? 60 : 45,
+          cy:isXxlDevice ? 185 : isXlDevice ? 110: mobileDevide ? 120 : 125,
           paddingAngle: 4,
           cornerRadius: 2,
           highlightScope: { fade: 'global', highlight: 'item' },

@@ -14,6 +14,7 @@ export interface PredictionChat{
 
 interface AgentStore{
   openArena:boolean;
+  openSideBar:boolean;
   handleCloseArena:()=>void;
   handleOpenArena:()=>void;
   activeChat:string;
@@ -31,6 +32,7 @@ interface AgentStore{
   setPredictorTokenName:(value:string)=>void;
   predictionChat:PredictionChat[],
   setPredictionChat:(chat:PredictionChat)=>void;
+  setOpenSideBar:(value:boolean)=>void;
 }
 
 export const useAgentStore=create<AgentStore>((set,get)=>({
@@ -42,7 +44,9 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
       query:"",
       activeTransactionHash:""
     },
+   
     predictionChat:[],
+    openSideBar:false,
     disable:false,
     sendingTransaction:false,
     showTransactionHash:false,
@@ -105,5 +109,10 @@ export const useAgentStore=create<AgentStore>((set,get)=>({
         set((state)=>({
           agentResponses:[...state.agentResponses,value]
         }))
-      }
+      },
+      setOpenSideBar:(value:boolean)=>{
+        set((state)=>({
+          openSideBar:value
+        }))
+      },
 }))

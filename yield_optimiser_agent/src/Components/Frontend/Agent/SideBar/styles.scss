@@ -60,7 +60,7 @@ $transition-duration: 200ms;
     flex-direction: column;
     gap: 15px;
     justify-content: space-between;
-    
+    height: 95%;
     background-color: #111111;
     padding: 16px;
     border: 1px solid #1e1e1e;
@@ -268,4 +268,9 @@ $transition-duration: 200ms;
       }
       color: #ffffff;
     }
+
+  }
+
+  .active{
+    background-color : rgba(255, 255, 255, 0.1);
   }
