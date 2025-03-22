@@ -9,6 +9,7 @@ import { BsLayoutTextSidebar } from "react-icons/bs";
 import axios from "axios";
 import dotenv from "dotenv";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
+import { FormatDisplayTextForChat } from "@/Utils/function";
 dotenv.config()
 interface Props{
   heading:string;
@@ -48,7 +49,7 @@ export const ChatBox=()=>{
             chatId:chatId
           })
           console.log("the respinse from the agent is",data)
-          const response:string=data.data.agentResponse;
+          const response:string=FormatDisplayTextForChat(data.data.data.agentResponse);
           useAgentStore.getState().setActiveResponse(response)
           useAgentStore.getState().setAgentResponses({
             query:activeChat,

@@ -14,14 +14,16 @@
     backdrop-filter: blur(4px);
     border-radius: 12px;
     box-sizing: border-box;
-    overflow-x: auto;
     @include md{
-        padding: 24px;
+        width: 95%;
+        padding: 18px;
     }
     @include lg{
+        padding: 22px;
         width: 90%;
     }
     @include xl{
+        padding: 24px;
         width: 100%;
     }
     .ArenaChatBox{
@@ -33,6 +35,7 @@
         justify-content: flex-start;
         align-items: center;
         @include md{
+            overflow: auto;
             height: 90%;
         }
         @include lg{
@@ -200,9 +203,8 @@
         word-wrap: break-word;
         white-space: normal;
         flex-direction: row;
-        justify-content: center;
+
         align-items: center;
-        width:90%;
             min-width: 80px;
             right: 20px;
             top: 20px;

@@ -34,3 +34,11 @@ export function formatDisplayText(volume:number,precision:number){
   return `$${Number(formattedVolume).toFixed(precision)}${suffix}`;
 }
 
+
+export const FormatDisplayTextForChat=(response:string):string=>{
+  return response.replace(/#/g, '')   // Remove #
+  .replace(/\*\*/g, '') // Remove bold markers **
+  .replace(/\*/g, '')
+  .replace(/\-/g, '')
+  .replace(/\*/g, '')
+}

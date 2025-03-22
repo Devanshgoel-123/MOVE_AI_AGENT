@@ -10,6 +10,7 @@ import Image from "next/image";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { AgentChat } from "@/store/agent-store";
 import dotenv from "dotenv";
+import { FormatDisplayTextForChat } from "@/Utils/function";
 dotenv.config()
 export const AgentArena = () => {
   const chatBoxRef=useRef<HTMLDivElement>(null);
@@ -88,10 +89,10 @@ export const AgentArena = () => {
       </div>
       <div className="nestedResponse">
       <span className="responseRow">
-      {answer.split('\n').slice(0,-1).map((item,index)=>{
+      {answer.split('\n').map((item,index)=>{
         console.log(item)
         return <div key={index} className="itemResponse">
-        {item}
+        {FormatDisplayTextForChat(item)}
         <br />
       </div>
       })}

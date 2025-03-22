@@ -82,6 +82,7 @@ $transition-duration: 200ms;
     justify-content:flex-start;
   }
   @include xl{
+    padding: 20px;
     justify-content: space-around;
   }
 }
@@ -95,6 +96,9 @@ $transition-duration: 200ms;
     margin-bottom: 10px;
   }
   @include xl{
+    margin-bottom: 0;
+  }
+  @include xxl{
     margin-bottom: 20px;
   }
   .portfolio-title {
@@ -106,6 +110,7 @@ $transition-duration: 200ms;
       font-size: 14px;
     }
     @include xl{
+      font-size: 20px;
     }
     .portfolio-icon {
       margin-right: 8px;
