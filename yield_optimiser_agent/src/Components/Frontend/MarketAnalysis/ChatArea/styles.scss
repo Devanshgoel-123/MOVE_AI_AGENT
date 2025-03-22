@@ -10,6 +10,9 @@
     height: 60%;
     background: transparent;
     margin-top:20px;
+    @include md{
+        height: 95%;
+    }
     @include lg{
         height: 100%;
         margin-top: 10px;
@@ -25,6 +28,7 @@
         align-items: flex-start;
         padding-bottom: 10px;
         border-bottom: 1px solid #1e1e1e;
+        
       .mainHeading{
         font-size: 20px;
       }
@@ -42,6 +46,9 @@
         padding: 12px;
         justify-content:flex-start;
         overflow-y: auto;
+        @include md{
+            height: 100%;
+        }
         @include lg{
             padding-top:0;
             height: 90%;
@@ -52,7 +59,6 @@
             align-items: center;
             justify-content: flex-start;
             display: flex;
-            margin-block: 10px;
             span{
                 width: auto;
                 background-color: #1a1a1a;
@@ -61,6 +67,9 @@
             }
             @include md{
                 font-size: 12px;
+            }
+            @include lg{
+                margin-block: 10px;
             }
             @include xl{
                 font-size: 14px;
@@ -97,6 +106,7 @@
         width: 100%;
         justify-content: center;
         padding: 10px;
+
         .PredictButton{
             display: flex;
             flex-direction: row;
@@ -107,6 +117,11 @@
             color: #000000;
             cursor: pointer;
             background-color: #7bf179;
+            @include md{
+                width: 100%;
+                font-weight: 700;
+                font-size: 15px;
+            }
             @include lg{
                 width: 60%;
                 font-size: 12px;

@@ -7,6 +7,12 @@
     flex-direction: column;
     gap: 5px;
     background-color: transparent;
+    @include md{
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-basis: 10%;
+        width: 100%;
+    }
     @include lg{
         width: 70%;
         flex-wrap: wrap;
@@ -20,6 +26,9 @@
        background-color: #000000;
         border: 1px solid #1e1e1e;
         color: #c1c1c1;
+        @include md{
+            width: 19%;
+        }
         @include lg{
             width: 15%;
             padding: 8px 16px;

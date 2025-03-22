@@ -17,6 +17,7 @@ interface Props{
 
 export const ChatBox=()=>{
   const MobileDevice= useMediaQuery("(max-width:600px)");
+  const MediumDevice=useMediaQuery("(max-width:1028px)");
     const {
       activeChat,
       chatId

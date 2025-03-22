@@ -17,7 +17,7 @@ $transition-duration: 200ms;
 }
 
 .portfolio-rebalancer-card {
-  width: 50%; 
+ 
   padding: 20px;
   background: #111;
   border-radius: 8px;
@@ -27,6 +27,12 @@ $transition-duration: 200ms;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  @include md{
+    width: 100%;
+  }
+  @include lg{
+    width: 50%; 
+  }
 }
 
 .portfolio-rebalancer-header {
@@ -35,11 +41,13 @@ $transition-duration: 200ms;
   justify-content: space-between;
   margin-bottom: 20px;
   .portfolio-rebalancer-title {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 500;
     display: flex;
     align-items: center;
-
+    @include xl{
+      font-size: 20px;
+    }
     .portfolio-rebalancer-icon {
       margin-right: 8px;
       color: $primary-accent;

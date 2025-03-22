@@ -60,19 +60,22 @@ $transition-duration: 200ms;
     flex-direction: column;
     gap: 15px;
     justify-content: space-between;
-    height: 80%;
+    
     background-color: #111111;
     padding: 16px;
     border: 1px solid #1e1e1e;
     @include md{
         display: flex;
+        height: 95%;
+        width: 30%;
     }
     @include lg{
-        
         max-width: 17%;
         padding: 10px;
     }
-
+    @include xl{
+        height: 95%;
+    }
     @include xxl{
         max-width: 10%;
     }

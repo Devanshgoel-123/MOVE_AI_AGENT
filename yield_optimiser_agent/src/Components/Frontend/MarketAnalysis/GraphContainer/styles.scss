@@ -9,6 +9,13 @@
     align-items: center;
     height: 100%;
     width: 100%;
+    
+    @include md{
+        min-height: 100px;
+    }
+    @include lg{
+        min-height: 200px;
+    }
 }
 .GraphContainer {
     width: 60%;
@@ -19,6 +26,9 @@
     flex-direction: column;
     padding-inline: 10px;
     cursor: pointer;
+    @include md{
+        width:100%;
+    }
     @include lg{
         width: 70%;
         min-height: 200px;

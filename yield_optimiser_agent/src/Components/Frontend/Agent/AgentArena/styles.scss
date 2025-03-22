@@ -5,21 +5,33 @@
     position: relative;
     flex-direction:column;
     height: 95%;
-    width: 90%;
     align-items: center;
-    padding: 24px;
+    padding: 14px;
+    width: 100%;
     gap: 16px;
     background: #111111;
     border: 2px solid var(--border-color);
     backdrop-filter: blur(4px);
     border-radius: 12px;
     box-sizing: border-box;
+    overflow-x: auto;
+    @include md{
+        padding: 24px;
+    }
+    @include lg{
+        width: 90%;
+    }
+    @include xl{
+        width: 100%;
+    }
     .ArenaChatBox{
         display: flex;
         width: 100%;
         flex-direction: column;
-        overflow: auto;
-        height: 500px;
+        overflow: hidden;
+        height: 88%;
+        justify-content: flex-start;
+        align-items: center;
         @include md{
             height: 90%;
         }
@@ -34,16 +46,26 @@
         }
         .chatTextQuestion{
             display: flex;
-            flex-direction: row;
-            width: 100%;
-            justify-content: flex-end;
+           flex-direction: row;
+           flex-wrap: wrap;
+           justify-content: flex-end;
+           width: 100%;
+           padding-inline: 12px;
+           margin-block: 10px;
+            @include md{
+                justify-content: flex-end;
+                width: 100%;
+            }
+          
         }
         .chatTextResponse{
             font-size: 12px;
             width: 100%;
             justify-content: flex-start;
-            max-width: auto;
             margin-block: 10px;
+            @include md{
+                max-width: auto;
+            }
         }
        
     }
@@ -87,67 +109,15 @@
         flex-direction: row;
         justify-content: flex-start;
         gap: 10px;
-        .SwapSummary{
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 10px;
-            .ButtonContainerAgentWrapper{
-                display: flex;
-                flex-direction: column;
-                align-items:flex-end;
-                @include md{
-                    gap: 10px;
-                }
-                .YesNoButtonWrapper{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-end;
-                    gap: 10px;
-                }
-                .YesButton{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    border: 1px solid #7bf179;
-                    border-radius: 32px;
-                    padding-inline:20px;
-                    padding-block: 10px;
-                   background-color: #1a1a1a;
-                   min-width: 100px;
-                   color: #cccccc;
-                   cursor: pointer;
-                   font-weight: 400;
-                }
-                .NoButton{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    border-radius: 32px;
-                    padding-inline:20px;
-                    padding-block: 10px;
-                    background-color: #1a1a1a;
-                    min-width: 100px;
-                    color: #cccccc;
-                   font-weight: 400;
-                   cursor: pointer;
-                   border:1px solid white;
-                }
-                .InactiveButton{
-                   opacity: 0.5;
-                }
-                
-            }
-            
-        }
-        
+        width: 100%;  
     }
     .nestedResponse{
         display: flex;
         flex-direction:row;
         gap: 10px;
         justify-content: flex-start;
-        
+        width: 80%;
+        overflow: auto;
         @include md{
             max-width: 70%;
         }
@@ -166,15 +136,23 @@
             display: flex;
             flex-direction: column;
             padding: 10px;
+            width: 80%;
+            overflow: auto;
             @include md{
+                width:100%;
                 font-size: 12px;
             }
             @include xl{
                 font-size: 14px;
             }
             .itemResponse{
-                display: block;
+                overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
                 width: 100%;
+                @include md{
+                    display: block;
+                }
             }
         }
     }
@@ -202,19 +180,35 @@
     }
     .chatText{
         background-color: #1a1a1a;
+    border-radius: 12px;
+    font-size: 12px;
+    padding: 10px;
+    justify-content: flex-end;
+    height: auto; 
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+        @include md{
+            background-color: #1a1a1a;
         border-radius: 12px;
         font-size: 12px;
-        right: 20px;
-        top: 20px;
         padding: 10px;
-        min-width: 80px;
         display: flex;
+        height: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        max-height: 400px;
-        overflow: auto;
-        max-width: 700px;
+        width:90%;
+            min-width: 80px;
+            right: 20px;
+            top: 20px;
+            max-height: 400px;
+            max-width: 700px;
+        }
     }
     
     .AgentArenaInputContainer{
@@ -224,15 +218,18 @@
         left: auto;
         display: flex;
         justify-content: space-between;
-        width: 95%;
         flex-direction: row;
         background-color: #1a1a1a;
         border: 1px solid #1e1e1e;
-        padding-inline: 18px;
-        padding-block: 10px;
+        padding-inline: 16px;
+        width: 96%;
+        padding-block: 8px;
+        height: 8%;
         border-radius: 8px;
         @include md{
             width: 95%;
+        padding-inline: 18px;
+        padding-block: 10px;
         }
         @include xl{
         width: 95%;
@@ -240,12 +237,19 @@
         .AgentInput{
             display: flex;
             width: 90%;
-            font-size: 20px;
-            height: 50px;
+            font-size: 14px;
+            height: auto;
             border-radius: 8px;
             border: 0px;
+            word-break: break-all;
             background-color: transparent;
             outline: none;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            white-space: normal;
+            @include md{
+
+            }
         }
         .EnterButton{
             color: aquamarine;

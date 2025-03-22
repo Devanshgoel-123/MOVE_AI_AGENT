@@ -86,10 +86,9 @@ export const AgentArena = () => {
         <div className="Logo">
        <Image src={DAPP_LOGO} height={30} width={30} alt="chatlogo"/>
       </div>
-      <div className="SwapSummary">
       <div className="nestedResponse">
       <span className="responseRow">
-      {answer.split('\n').map((item,index)=>{
+      {answer.split('\n').slice(0,-1).map((item,index)=>{
         console.log(item)
         return <div key={index} className="itemResponse">
         {item}
@@ -98,8 +97,8 @@ export const AgentArena = () => {
       })}
       </span>
       </div>
-      </div>
-     </div>)
+     </div>
+     )
   }
       return (
       !response || response===undefined ? <div className="nestedResponse">
@@ -132,7 +131,7 @@ export const AgentArena = () => {
         <>
         <div className="chatTextQuestion">
         <div className="chatText">
-          <span>{item.query}</span>
+          {item.query}
         </div>
       </div>
       <div className="chatTextResponse">
@@ -146,7 +145,7 @@ export const AgentArena = () => {
       }
       {activeChat!=="" && <div className="chatTextQuestion">
         <div className="chatText">
-          <span>{activeChat}</span>
+          {activeChat}
         </div>
       </div>}
      { (activeResponse==="" && activeChat==="") ? 
