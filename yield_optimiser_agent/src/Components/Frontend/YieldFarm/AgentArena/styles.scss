@@ -35,20 +35,37 @@
     height: 100%;
     align-items: center;
     justify-content: space-around;
-
-    @include md {
-      overflow: auto;
-      height: 90%;
+    .centerHeading {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      .head {
+        font-size: 1rem;
+      }
+      @include md {
+        .head {
+          font-size: 1rem;
+        }
+      }
+      @include lg {
+        .head {
+          font-size: 1.3rem;
+        }
+      }
+      @include xl {
+        .head {
+          font-size: 1.6rem;
+        }
+      }
     }
-    @include lg {
-      height: 80%;
-    }
-    @include xl {
-      height: 85%;
-    }
-    @include xxl {
-      height: 90%;
-    }
+    // @include xl {
+    //   height: 85%;
+    // }
+    // @include xxl {
+    //   height: 90%;
+    // }
     .YieldAllButton {
       display: flex;
       flex-direction: column;
@@ -64,9 +81,9 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        .head {
-          font-size: 2rem;
-        }
+        // .head {
+        //   font-size: 2rem;
+        // }
       }
 
       .YieldButtonsWrapper {
@@ -74,6 +91,15 @@
         grid-template-rows: repeat(3, 1fr);
         grid-gap: 2rem;
         place-items: center; // Center grid items
+        @include md {
+          grid-gap: 1rem;
+        }
+        @include lg {
+          grid-gap: 0.2rem;
+        }
+        @include xl {
+          grid-gap: 1.5rem;
+        }
       }
     }
 

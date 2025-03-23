@@ -172,7 +172,7 @@ export const AgentArena = () => {
               <span className="head">How can we help you today?</span>
               <Tooltip title="Need help? Get support and guidance here!" arrow>
                 <IconButton className="info-icon">
-                  <InfoIcon fontSize="large" />
+                  <InfoIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </span>
