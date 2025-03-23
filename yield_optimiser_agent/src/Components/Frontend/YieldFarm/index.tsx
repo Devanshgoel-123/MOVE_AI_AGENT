@@ -218,7 +218,7 @@ const YieldFarm = () => {
             </div>
           ) : filteredData.length > 0 ? (
             filteredData.map((item, index) => (
-              <MarketContainer key={index} data={item}/>
+              <MarketContainer key={index} data={item} protcol={protocol}/>
             ))
           ) : (
             <p>No data available</p>
