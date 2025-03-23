@@ -17,26 +17,27 @@ interface Props {
   query: string;
 }
 
-export const ChatBox = () => {
-  const MobileDevice = useMediaQuery("(max-width:600px)");
-  const MediumDevice = useMediaQuery("(max-width:1028px)");
-  const { activeChat, chatId } = useAgentStore(
-    useShallow((state) => ({
-      activeChat: state.activeChat,
-      chatId: state.activeChatId,
-    }))
-  );
-  const userInputRef = useRef<HTMLInputElement>(null);
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && userInputRef.current) {
-      const userInput = userInputRef.current?.value;
-      if (userInput.trim()) {
-        handleEnterClick();
-        userInputRef.current.value = "";
-      }
-    }
-  };
-
+export const ChatBox=()=>{
+  const MobileDevice= useMediaQuery("(max-width:600px)");
+  const MediumDevice=useMediaQuery("(max-width:1028px)");
+    const {
+      activeChat,
+      chatId
+    }=useAgentStore(useShallow((state)=>({
+      activeChat:state.activeChat,
+      chatId:state.activeChatId
+    })))
+    const userInputRef = useRef<HTMLInputElement>(null);
+    const handleKeyPress =  (e:React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && userInputRef.current) {
+          const userInput = userInputRef.current?.value;
+          if (userInput.trim()) {
+             handleEnterClick()
+            userInputRef.current.value = ""; 
+          }
+        }
+      };
+    
   const handleEnterClick = async () => {
     if (userInputRef.current?.value) {
       userInputRef.current?.value !== null &&

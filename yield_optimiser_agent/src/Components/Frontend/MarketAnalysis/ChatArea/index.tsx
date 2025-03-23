@@ -56,7 +56,7 @@ export const PredictionChatArea=()=>{
         <BsLayoutTextSidebar />
         </div>}
         <span>
-                Defiant Market Analysis
+                DeFiZen Market Analysis
                 </span>
                 </div>
               <span className="subHeading">Chat With out AI Assistant To Perform An In Depth Market Analysis Of A Token</span>

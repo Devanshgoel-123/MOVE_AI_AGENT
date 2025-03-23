@@ -1,16 +1,33 @@
 import { useMediaQuery } from "@mui/material";
 import "./styles.scss";
 import React, { useState } from "react";
-import { EchelonMarketData } from "..";
-
+import { EchelonMarketData, jouleMarketData } from "..";
+import axios from "axios";
+import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 type MarketContainerProps = {
-  data: EchelonMarketData;
-};
-const MarketContainer: React.FC<MarketContainerProps> = ({ data }) => {
-  const [amount, setAmount] = useState("");
+  data: EchelonMarketData | jouleMarketData;
+  protcol:string;
+}
+
+const MarketContainer: React.FC<MarketContainerProps> = ({ data,protcol}:MarketContainerProps) => {
+  const [amount, setAmount] = useState<number>(0.00);
   const MobileDevice = useMediaQuery("(max-width:600px)");
   const parts = data.coin.split("::");
   const result = parts[parts.length - 1];
+   
+
+  const handleEnterClick=async (value:string)=>{
+    try{
+     if(amount>0){
+      const response=await axios.post(`${BACKEND_URL}/lendBorrowPost`,{
+        message:`I want to ${value} ${amount} ${result} on the ${protcol}`
+      })}else{
+        return
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <div className={`deposit-form ${MobileDevice ? "mobile" : ""}`}>
@@ -48,13 +65,13 @@ const MarketContainer: React.FC<MarketContainerProps> = ({ data }) => {
           onChange={(e) => {
             const value = e.target.value;
             if (value === "" || (Number(value) > 0 && !value.startsWith("0"))) {
-              setAmount(value);
+              setAmount(Number(value));
             }
           }}
           className="amount-input"
         />
-        <button className="stake-btn">Lend</button>
-        <button className="unstake-btn">Borrow</button>
+        <button className="stake-btn" onClick={()=>{handleEnterClick("lend")}}>Lend</button>
+        <button className="unstake-btn" onClick={()=>{handleEnterClick("borrow")}}>Borrow</button>
       </div>
     </div>
   );

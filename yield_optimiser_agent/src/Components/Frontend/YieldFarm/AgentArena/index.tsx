@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { AiOutlineEnter } from "react-icons/ai";
 import { useShallow } from "zustand/react/shallow";
 import axios from "axios";
-import { useAgentStore } from "@/store/agent-store";
+import { useAgentStore, YieldChat, YieldResponse } from "@/store/agent-store";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import Image from "next/image";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
@@ -27,6 +27,7 @@ export const AgentArena = () => {
   const MobileDevice = useMediaQuery("(max-width:600px)");
   const MediumDevice = useMediaQuery("(max-width:1028px)");
   const chatBoxRef = useRef<HTMLDivElement>(null);
+  const [loader,setLoader]=useState<boolean>(false);
   const ButtonContent: Props[] = [
     {
       heading: "Market Analysis",
@@ -45,16 +46,17 @@ export const AgentArena = () => {
       query: "Swap token",
     },
   ];
-  const { activeChat, activeResponse, agentResponses, chatId } = useAgentStore(
+  const { 
+    activeChat,
+    activeResponse, 
+    agentResponses, 
+  } = useAgentStore(
     useShallow((state) => ({
-      activeChat: state.activeChat,
-      activeResponse: state.activeResponse,
-      agentResponses: state.agentResponses,
-      chatId: state.activeChatId,
+      activeChat: state.activeYieldChat,
+      activeResponse: state.activeYieldResponse,
+      agentResponses: state.yieldChats,
     }))
   );
-
-  console.log("the chat id is", chatId);
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -76,41 +78,54 @@ export const AgentArena = () => {
 
   const handleEnterClick = async () => {
     if (userInputRef.current?.value) {
-      useAgentStore.getState().setActiveChat(userInputRef.current.value);
-      useAgentStore.getState().setActiveResponse("");
+      useAgentStore.getState().setActiveYieldChat(userInputRef.current.value);
+      useAgentStore.getState().setActiveYieldResponse({
+        analysis:"",
+        recommendedAction:"",
+        userQueryResponse:"",
+        swap:""
+      })
       try {
-        const { data } = await axios.post(`${BACKEND_URL}/`, {
+        const { data } = await axios.post(`${BACKEND_URL}/userAnalysis`, {
           message: userInputRef.current?.value,
-          chatId: chatId,
         });
         console.log(data.data);
-        const response: string = data.data.agentResponse;
-        useAgentStore.getState().setActiveResponse(response);
-        useAgentStore.getState().setAgentResponses({
-          query: activeChat,
-          outputString: response,
-          chatId: chatId,
-        });
+        const response:YieldResponse = data.data;
+         useAgentStore.getState().setActiveYieldResponse({
+          analysis:response.analysis,
+          recommendedAction:response.recommendedAction,
+          userQueryResponse:response.userQueryResponse,
+          swap:response.swap
+         });
+        useAgentStore.getState().setYieldChats({
+          query:activeChat,
+          response:{
+            analysis:response.analysis,
+            recommendedAction:response.recommendedAction,
+            userQueryResponse:response.userQueryResponse,
+            swap:response.swap
+           }
+        })
       } catch (error) {
-        useAgentStore
-          .getState()
-          .setActiveResponse(
-            "I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment."
-          );
-        useAgentStore.getState().setAgentResponses({
-          query: activeChat,
-          outputString:
-            "I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment.",
-          chatId: chatId,
-        });
+         useAgentStore.getState().setActiveYieldResponse({
+          analysis:"Sorry We couldn't process your request at the moment",
+          recommendedAction:"",
+         });
+        useAgentStore.getState().setYieldChats({
+          query:activeChat,
+          response:{
+            analysis:"Sorry We couldn't process your request at the moment",
+            recommendedAction:"",
+           }
+        })
         console.error("Error processing agent response:", error);
       }
     }
     return;
   };
 
-  const renderText = (response: string) => {
-    if (response === "") return <CustomTextLoader text="Loading" />;
+  const renderText = (response:YieldResponse) => {
+    if (response.analysis === "") return <CustomTextLoader text="Loading" />;
     const renderGeneralToolResponse = (answer: string) => {
       return (
         <div className="SwapBox">
@@ -119,15 +134,9 @@ export const AgentArena = () => {
           </div>
           <div className="nestedResponse">
             <span className="responseRow">
-              {answer.split("\n").map((item, index) => {
-                console.log(item);
-                return (
-                  <div key={index} className="itemResponse">
-                    {FormatDisplayTextForChat(item)}
-                    <br />
-                  </div>
-                );
-              })}
+              <div  className="itemResponse">
+                {FormatDisplayTextForChat(answer)}
+              </div>
             </span>
           </div>
         </div>
@@ -144,15 +153,14 @@ export const AgentArena = () => {
         </span>
       </div>
     ) : (
-      renderGeneralToolResponse(response)
+      renderGeneralToolResponse(response.analysis)
     );
   };
   const chatArray = agentResponses.length > 0 ? agentResponses : [];
-  console.log(chatArray);
   return (
     <div className="YieldArenaChatArea">
       <div className="YieldArenaChatBox" ref={chatBoxRef}>
-        <div className="ChatHeader">
+      {activeChat==="" &&  <div className="ChatHeader">
           <div className="SideBarIconHeader">
             {MobileDevice && (
               <div
@@ -165,8 +173,8 @@ export const AgentArena = () => {
               </div>
             )}
           </div>
-        </div>
-        {!MobileDevice && (
+        </div>}
+        {!MobileDevice && activeChat==="" && (
           <div className="YieldAllButton">
             <span className="centerHeading">
               <span className="head">How can we help you today?</span>
@@ -195,22 +203,20 @@ export const AgentArena = () => {
           ? chatArray
               .slice(
                 0,
-                activeResponse !== "" ? chatArray.length - 1 : chatArray.length
+                activeResponse.analysis !== "" ? chatArray.length - 1 : chatArray.length
               )
               .map((item, index) => {
-                const agentResponse: AgentChat = {
+                const agentResponse:YieldChat= {
                   query: item.query,
-                  outputString: item.outputString,
-                  toolCalled: item.toolCalled,
-                  chatId: item.chatId,
+                  response:item.response
                 };
                 return (
-                  <div key={index}>
+                  <div key={index} className="PastChatBoxYield">
                     <div className="YieldChatTextQuestion">
                       <div className="YieldChatText">{item.query}</div>
                     </div>
                     <div className="YieldChatTextResponse">
-                      {renderText(agentResponse.outputString)}
+                      {renderText(agentResponse.response)}
                     </div>
                   </div>
                 );
@@ -221,7 +227,7 @@ export const AgentArena = () => {
             <div className="YieldChatText">{activeChat}</div>
           </div>
         )}
-        {activeResponse === "" && activeChat === "" ? null : (
+        {activeResponse.analysis === "" && activeChat === "" ? null : (
           <div className="YieldChatTextResponse">
             {renderText(activeResponse)}
           </div>

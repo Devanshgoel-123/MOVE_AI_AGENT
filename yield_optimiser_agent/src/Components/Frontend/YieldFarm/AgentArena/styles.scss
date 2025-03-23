@@ -34,7 +34,7 @@
     overflow: hidden;
     height: 100%;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
     .centerHeading {
       display: flex;
       flex-direction: row;
@@ -303,4 +303,11 @@
       justify-content: center;
     }
   }
+}
+
+.PastChatBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
 }

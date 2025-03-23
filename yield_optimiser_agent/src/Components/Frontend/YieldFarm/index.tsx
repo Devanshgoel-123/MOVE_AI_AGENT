@@ -19,7 +19,7 @@ import { BsLayoutTextSidebar } from "react-icons/bs";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
 
-type EchelonUserData = {
+export type EchelonUserData = {
   market: string;
   coin: string;
   supply: number;
@@ -37,7 +37,8 @@ export type EchelonMarketData = {
   coinPrice: number;
 };
 
-type PositionData = {
+
+export type PositionData = {
   key: string;
   value: {
     borrow_positions: { data: { key: string; value: string }[] };
@@ -46,7 +47,16 @@ type PositionData = {
   };
 };
 
-type JouleUserData = {
+export type jouleMarketData = {
+  coin: string;
+  supply: number;
+  supplyApr: number;
+  borrowApr: number;
+  coinPrice: number;
+  type: string;
+};
+
+export type JouleUserData = {
   userPositions: {
     positions_map: {
       data: PositionData[];
@@ -59,6 +69,7 @@ export type DataType = {
   echelonUserData: EchelonUserData[];
   echelonMarketData: EchelonMarketData[];
   jouleUserData: JouleUserData;
+  jouleMarketData:jouleMarketData[];
 };
 
 const YieldFarm = () => {
@@ -88,6 +99,9 @@ const YieldFarm = () => {
       setLoading(true);
       try {
         const response = await axios.get(`${BACKEND_URL}/getUserPoolData`);
+        const responseData: DataType = response.data;
+        responseData.echelonMarketData.sort((a, b) => b.supply - a.supply);
+        responseData.jouleMarketData.sort((a, b) => b.supply - a.supply);
         setData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -98,20 +112,30 @@ const YieldFarm = () => {
     };
 
     fetchData();
-  }, [protocol]);
+  }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
     setProtocol(event.target.value);
   };
 
   const MobileDevice = useMediaQuery("(max-width:640px)");
+  let filteredData: (EchelonMarketData | jouleMarketData)[] = [];
 
+  data?.jouleMarketData.forEach((item) => {
+    item.borrowApr /= 100;
+    item.supplyApr /= 100;
+  });
   if (protocol === "All") {
+    filteredData = [
+      ...(data?.echelonMarketData ?? []),
+      ...(data?.jouleMarketData ?? []),
+    ];
+    filteredData.sort((a, b) => b.supply - a.supply);
+  } else if (protocol === "Echelon") {
+    filteredData = data?.echelonMarketData ?? [];
+  } else if (protocol === "Joule") {
+    filteredData = data?.jouleMarketData ?? [];
   }
-  const filteredData =
-    protocol === "All"
-      ? data?.echelonMarketData ?? []
-      : data?.echelonUserData ?? [];
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -194,7 +218,7 @@ const YieldFarm = () => {
             </div>
           ) : filteredData.length > 0 ? (
             filteredData.map((item, index) => (
-              <MarketContainer key={index} data={item} />
+              <MarketContainer key={index} data={item} protcol={protocol}/>
             ))
           ) : (
             <p>No data available</p>

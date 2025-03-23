@@ -24,7 +24,7 @@
     }
     @include xl{
         padding: 24px;
-        width: 100%;
+        width: 90%;
     }
     .ArenaChatBox{
         display: flex;
@@ -47,30 +47,38 @@
         @include xxl{
             height: 90%;
         }
-        .chatTextQuestion{
-            display: flex;
-           flex-direction: row;
-           flex-wrap: wrap;
-           justify-content: flex-end;
-           width: 100%;
-           padding-inline: 12px;
-           margin-block: 10px;
-            @include md{
-                justify-content: flex-end;
-                width: 100%;
-            }
-          
-        }
-        .chatTextResponse{
-            font-size: 12px;
-            width: 100%;
-            justify-content: flex-start;
-            margin-block: 10px;
-            @include md{
-                max-width: auto;
-            }
-        }
+      
        
+    }
+    .chatTextQuestion{
+        display: flex;
+       flex-direction: row;
+       flex-wrap: wrap;
+       justify-content: flex-end;
+       width: 100%;
+       padding-inline: 12px;
+       margin-block: 10px;
+        @include md{
+            justify-content: flex-end;
+            width: 100%;
+        }
+      
+    }
+    .PastChatBox{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    .chatTextResponse{
+        font-size: 12px;
+        width: 100%;
+        justify-content: flex-start;
+        margin-block: 10px;
+        @include md{
+        width: 100%;
+        }
+
     }
     .Logo{
         width: 30px;
@@ -263,3 +271,8 @@
         }
     }
 }
+
+
+.ArenaChatBox::-webkit-scrollbar {
+    display: none;
+  }

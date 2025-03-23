@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.scss";
 
 export const metadata: Metadata = {
-  title: "AgenticAI",
+  title: "DeFiZen",
   description:
-    "Defi Agent to enable cross chain transfers, add liquidity and wahtnot",
+    "Defi Agent to enable cross chain transfers, add liquidity and optimise Your Yield",
 };
 
 export default function RootLayout({
