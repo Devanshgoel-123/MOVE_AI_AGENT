@@ -1,36 +1,34 @@
-@import   "@/app/mixin.scss";
+@import "@/app/mixin.scss";
 
-.AgentUIWrapper{
-    width: 100%;
+.AgentUIWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  .ChatBoxWrapper {
     height: 100%;
+    width: 100%;
     display: flex;
-    padding-inline: 20px;
+    justify-content: center;
     flex-direction: row;
-    position: relative;
-    .ChatBoxWrapper{
-        height: 100%;
-        width:100%;
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-       align-items: center;
-        @include md{
-            align-items: flex-start;
-        }
-        @include xxl{
-            align-items: center;
-        }
+    align-items: center;
+    @include md {
+      align-items: flex-start;
     }
-    .AgentArenaWrapper{
-        height: 100%;
-        width:100%;
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        align-items: center;
-        @include md{
-            align-items:flex-start;
-        }
+    @include xxl {
+      align-items: center;
     }
-   
+  }
+  .AgentArenaWrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    @include md {
+      align-items: flex-start;
+    }
+  }
 }

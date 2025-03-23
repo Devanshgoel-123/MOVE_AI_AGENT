@@ -49,7 +49,7 @@ export const AgentArena = () => {
       useAgentStore.getState().setActiveChat(userInputRef.current.value);
       useAgentStore.getState().setActiveResponse("");
       try {
-        const { data } = await axios.post(`${BACKEND_URL}/agent`, {
+        const { data } = await axios.post(`${BACKEND_URL}/`, {
           message: userInputRef.current?.value,
           chatId: chatId,
         });
@@ -65,12 +65,12 @@ export const AgentArena = () => {
         useAgentStore
           .getState()
           .setActiveResponse(
-            "I am sorry, We couldn't process your request at the moment."
+            "I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment."
           );
         useAgentStore.getState().setAgentResponses({
           query: activeChat,
           outputString:
-            "I am sorry, We couldn't process your request at the moment.",
+            "I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment. I am sorry, We couldn't process your request at the moment.",
           chatId: chatId,
         });
         console.error("Error processing agent response:", error);
@@ -120,8 +120,8 @@ export const AgentArena = () => {
   const chatArray = agentResponses.length > 0 ? agentResponses : [];
   console.log(chatArray);
   return (
-    <div className="ArenaChatArea">
-      <div className="ArenaChatBox" ref={chatBoxRef}>
+    <div className="YieldArenaChatArea">
+      <div className="YieldArenaChatBox" ref={chatBoxRef}>
         {chatArray.length > 1
           ? chatArray
               .slice(
@@ -137,10 +137,10 @@ export const AgentArena = () => {
                 };
                 return (
                   <div key={index}>
-                    <div className="chatTextQuestion">
-                      <div className="chatText">{item.query}</div>
+                    <div className="YieldChatTextQuestion">
+                      <div className="YieldChatText">{item.query}</div>
                     </div>
-                    <div className="chatTextResponse">
+                    <div className="YieldChatTextResponse">
                       {renderText(agentResponse.outputString)}
                     </div>
                   </div>
@@ -148,20 +148,22 @@ export const AgentArena = () => {
               })
           : null}
         {activeChat !== "" && (
-          <div className="chatTextQuestion">
-            <div className="chatText">{activeChat}</div>
+          <div className="YieldChatTextQuestion">
+            <div className="YieldChatText">{activeChat}</div>
           </div>
         )}
         {activeResponse === "" && activeChat === "" ? null : (
-          <div className="chatTextResponse">{renderText(activeResponse)}</div>
+          <div className="YieldChatTextResponse">
+            {renderText(activeResponse)}
+          </div>
         )}
       </div>
-      <div className="AgentArenaInputContainer">
+      <div className="YieldAgentArenaInputContainer">
         <input
           ref={userInputRef}
           onKeyDown={handleKeyPress}
           placeholder="Ask Anything"
-          className="AgentInput"
+          className="YieldAgentInput"
         />
         <div className="EnterButton" onClick={handleEnterClick}>
           <AiOutlineEnter />

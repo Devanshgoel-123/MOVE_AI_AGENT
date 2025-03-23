@@ -1,0 +1,121 @@
+.deposit-form {
+  font-family: "Manrope";
+  background: #1a1a1a;
+  border-radius: 10px;
+  color: #fff;
+  width: 100%;
+  height: fit-content;
+  text-align: center;
+  padding: 1.5rem;
+
+  .market-data-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .market-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .form-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0.5rem;
+    height: 3rem;
+    justify-content: space-evenly;
+    .amount-input {
+      background-color: #222222;
+      margin: 0;
+      padding-inline: 1rem;
+    }
+
+    .stake-btn,
+    .unstake-btn {
+      border-radius: 10px;
+      padding-inline: 1rem;
+      cursor: pointer;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .stake-btn {
+      background: #7bf178;
+      color: black;
+      &:hover {
+        background: #53e751;
+      }
+    }
+
+    .unstake-btn {
+      background: #ff0000;
+      color: black;
+      &:hover {
+        background: #ff3333;
+      }
+    }
+    input {
+      outline: none;
+      background: #111;
+      color: #fff;
+      border-radius: 5px;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+
+    .preview-btn {
+      background: #32cd32;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        background: #28a428;
+      }
+    }
+  }
+}
+
+// Mobile styles
+@media (max-width: 600px) {
+  .deposit-form {
+    padding: 1.5rem;
+
+    .header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .market-data-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .form-container {
+      .stake-options {
+        flex-direction: column;
+        gap: 10px;
+
+        .stake-btn,
+        .unstake-btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

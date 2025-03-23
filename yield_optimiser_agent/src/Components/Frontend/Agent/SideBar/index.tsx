@@ -6,52 +6,53 @@ import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
-import { MessageSquare, BarChart3, PieChart } from 'lucide-react';
-import { useMediaQuery } from "@mui/material"
+import { MessageSquare, BarChart3, PieChart } from "lucide-react";
+import { useMediaQuery } from "@mui/material";
 import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { Drawer } from "@mui/material";
 import { RxCross1 } from "react-icons/rx";
-export const Sidebar=()=>{
-    const {
-        openSidebar,
-        activeComponent
-    }=useAgentStore(useShallow((state)=>({
-        openSidebar:state.openSideBar,
-        activeComponent:state.activeComponent
-    })))
-    const [active, setActive]=useState<string>("chat");
-    const isXxlDevice=useMediaQuery("(min-width: 1280px)");
-    const MobileDevice=useMediaQuery("(max-width: 600px)");
-    const isXlDevice = useMediaQuery("(min-width: 1024px) and (max-width: 1279px)")
-    const {
-        openArena
-    }=useAgentStore(useShallow((state)=>({
-        openArena:state.openArena
-    })))
+export const Sidebar = () => {
+  const { openSidebar, activeComponent } = useAgentStore(
+    useShallow((state) => ({
+      openSidebar: state.openSideBar,
+      activeComponent: state.activeComponent,
+    }))
+  );
+  const [active, setActive] = useState<string>("chat");
+  const isXxlDevice = useMediaQuery("(min-width: 1280px)");
+  const MobileDevice = useMediaQuery("(max-width: 600px)");
+  const isXlDevice = useMediaQuery(
+    "(min-width: 1024px) and (max-width: 1279px)"
+  );
+  const { openArena } = useAgentStore(
+    useShallow((state) => ({
+      openArena: state.openArena,
+    }))
+  );
 
-    const renderChatSummary=()=>{
-        const charLimit = isXxlDevice ? 30 : isXlDevice ? 25 : 20;
-        const now = new Date();
-        const today = new Date(now.setHours(0, 0, 0, 0));
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        const startOfSevenDays = new Date(yesterday);
-        startOfSevenDays.setDate(yesterday.getDate() - 6); 
-        // const todayChats = userChatSummary.filter((item: UserChatSummary) => {
-        //   const chatDate = new Date(item.firstMessageDate * 1000);
-        //   return chatDate >= today;
-        // });
-        // const yesterdayChats = userChatSummary.filter((item: UserChatSummary) => {
-        //   const chatDate = new Date(item.firstMessageDate * 1000);
-        //   return chatDate >= yesterday && chatDate < today;
-        // });
-        // const pastSevenDayChats = userChatSummary.filter((item: UserChatSummary) => {
-        //   const chatDate = new Date(item.firstMessageDate * 1000);
-        //   return chatDate >= startOfSevenDays && chatDate < yesterday;
-        // });
-        return (
-            <div className="ChatHistorySideBar">
-            {/* {todayChats.length > 0 && <div className="PastChats">
+  const renderChatSummary = () => {
+    const charLimit = isXxlDevice ? 30 : isXlDevice ? 25 : 20;
+    const now = new Date();
+    const today = new Date(now.setHours(0, 0, 0, 0));
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const startOfSevenDays = new Date(yesterday);
+    startOfSevenDays.setDate(yesterday.getDate() - 6);
+    // const todayChats = userChatSummary.filter((item: UserChatSummary) => {
+    //   const chatDate = new Date(item.firstMessageDate * 1000);
+    //   return chatDate >= today;
+    // });
+    // const yesterdayChats = userChatSummary.filter((item: UserChatSummary) => {
+    //   const chatDate = new Date(item.firstMessageDate * 1000);
+    //   return chatDate >= yesterday && chatDate < today;
+    // });
+    // const pastSevenDayChats = userChatSummary.filter((item: UserChatSummary) => {
+    //   const chatDate = new Date(item.firstMessageDate * 1000);
+    //   return chatDate >= startOfSevenDays && chatDate < yesterday;
+    // });
+    return (
+      <div className="ChatHistorySideBar">
+        {/* {todayChats.length > 0 && <div className="PastChats">
             <span>Today</span>
                {
                 todayChats.slice(0,4).map((item)=>{
@@ -112,109 +113,164 @@ export const Sidebar=()=>{
                }
             </div>
             } */}
-            </div>
-        )
-    }
+      </div>
+    );
+  };
 
-    const menuItems = [
-        { id: 'price', label: 'Market Analysis', icon: <BarChart3 size={18} /> },
-        { id: 'portfolio', label: 'Portfolio', icon: <PieChart size={18} /> },
-        // { id: 'yield', label: 'Yield Finder', icon: <Compass size={18} /> },
-      ];
+  const menuItems = [
+    { id: "price", label: "Market Analysis", icon: <BarChart3 size={18} /> },
+    { id: "portfolio", label: "Portfolio", icon: <PieChart size={18} /> },
+    { id: "yield", label: "Yield Finder", icon: <PieChart size={18} /> },
+  ];
 
-      if (MobileDevice) {
-        return (
-            <Drawer open={openSidebar} >
-             <div className="SideBarWrapper">
-             <div className="TopContainer">
-            <div className="SideBarHeader">
-            <RxCross1 className="crossIcon GradientText" onClick={()=>{
-              useAgentStore.getState().setOpenSideBar(false)
-            }}/>
-                <div>
-                <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
-                </div>
-           
-            <span className="HeadingTextSidebar">DeFiZen</span>
-        </div>
-        {renderChatSummary()}
-        <div className="sidebar-menu">
-        <div key={"chat"} className={activeComponent==="chat" ? "sidebar-menu-item active" :'sidebar-menu-item'} onClick={()=>{
-             useAgentStore.getState().setActiveComponent("chat")
-        }}>
-              <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
-              <span className="sidebar-menu-label">Chat</span>
-              <div className="sidebar-menu-icon" onClick={()=>{
-                    useAgentStore.getState().clearCurrentValues()
-                    useAgentStore.getState().setActiveChatId()
-                    useAgentStore.getState().setOpenSideBar(false)
-                    if(!openArena){
-                        useAgentStore.getState().handleOpenArena()
-                    }
-                }}>
-                <IoMdAdd />
-                </div>
-        </div>
-          {menuItems.map((item) => (
-            <div key={item.id} className={activeComponent===item.label ? "sidebar-menu-item active" : 'sidebar-menu-item'} onClick={()=>{
-                console.log("setting label as",item.label)
-                useAgentStore.getState().setOpenSideBar(false)
-                useAgentStore.getState().setActiveComponent(item.label)
-            }}>
-              <div className="sidebar-menu-icon">{item.icon}</div>
-              <span className="sidebar-menu-label">{item.label}</span>
-            </div>
-          ))}
-        </div>
-        </div>
-        <SocialComponent />
-              </div>
-          </Drawer>
-           
-         
-        );
-      }
-    
+  if (MobileDevice) {
     return (
-        <Box className="SideBarWrapper">
-            <div className="TopContainer">
+      <Drawer open={openSidebar}>
+        <div className="SideBarWrapper">
+          <div className="TopContainer">
             <div className="SideBarHeader">
-                <div>
-                <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo"/>
+              <RxCross1
+                className="crossIcon GradientText"
+                onClick={() => {
+                  useAgentStore.getState().setOpenSideBar(false);
+                }}
+              />
+              <div>
+                <Image
+                  src={DAPP_LOGO}
+                  height={25}
+                  width={25}
+                  alt="logo"
+                  className="SideBarLogo"
+                />
+              </div>
+
+              <span className="HeadingTextSidebar">DeFiZen</span>
+            </div>
+            {renderChatSummary()}
+            <div className="sidebar-menu">
+              <div
+                key={"chat"}
+                className={
+                  activeComponent === "chat"
+                    ? "sidebar-menu-item active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => {
+                  useAgentStore.getState().setActiveComponent("chat");
+                }}
+              >
+                <div className="sidebar-menu-icon">
+                  <MessageSquare size={18} />{" "}
                 </div>
-           
-            <span className="HeadingTextSidebar">DeFiZen</span>
+                <span className="sidebar-menu-label">Chat</span>
+                <div
+                  className="sidebar-menu-icon"
+                  onClick={() => {
+                    useAgentStore.getState().clearCurrentValues();
+                    useAgentStore.getState().setActiveChatId();
+                    useAgentStore.getState().setOpenSideBar(false);
+                    if (!openArena) {
+                      useAgentStore.getState().handleOpenArena();
+                    }
+                  }}
+                >
+                  <IoMdAdd />
+                </div>
+              </div>
+              {menuItems.map((item) => (
+                <div
+                  key={item.id}
+                  className={
+                    activeComponent === item.label
+                      ? "sidebar-menu-item active"
+                      : "sidebar-menu-item"
+                  }
+                  onClick={() => {
+                    console.log("setting label as", item.label);
+                    useAgentStore.getState().setOpenSideBar(false);
+                    useAgentStore.getState().setActiveComponent(item.label);
+                  }}
+                >
+                  <div className="sidebar-menu-icon">{item.icon}</div>
+                  <span className="sidebar-menu-label">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <SocialComponent />
+        </div>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Box className="SideBarWrapper">
+      <div className="TopContainer">
+        <div className="SideBarHeader">
+          <div>
+            <Image
+              src={DAPP_LOGO}
+              height={25}
+              width={25}
+              alt="logo"
+              className="SideBarLogo"
+            />
+          </div>
+
+          <span className="HeadingTextSidebar">DeFiZen</span>
         </div>
         {renderChatSummary()}
         <div className="sidebar-menu">
-        <div key={"chat"} className={activeComponent==="chat" ? "sidebar-menu-item active" :'sidebar-menu-item'} onClick={()=>{
-             useAgentStore.getState().setActiveComponent("chat")
-        }}>
-              <div className="sidebar-menu-icon"><MessageSquare size={18} /> </div>
-              <span className="sidebar-menu-label">Chat</span>
-              <div className="sidebar-menu-icon" onClick={()=>{
-                    useAgentStore.getState().clearCurrentValues()
-                    useAgentStore.getState().setActiveChatId()
-                    if(!openArena){
-                        useAgentStore.getState().handleOpenArena()
-                    }
-                }}>
-                <IoMdAdd />
-                </div>
-        </div>
+          <div
+            key={"chat"}
+            className={
+              activeComponent === "chat"
+                ? "sidebar-menu-item active"
+                : "sidebar-menu-item"
+            }
+            onClick={() => {
+              useAgentStore.getState().setActiveComponent("chat");
+            }}
+          >
+            <div className="sidebar-menu-icon">
+              <MessageSquare size={18} />{" "}
+            </div>
+            <span className="sidebar-menu-label">Chat</span>
+            <div
+              className="sidebar-menu-icon"
+              onClick={() => {
+                useAgentStore.getState().clearCurrentValues();
+                useAgentStore.getState().setActiveChatId();
+                if (!openArena) {
+                  useAgentStore.getState().handleOpenArena();
+                }
+              }}
+            >
+              <IoMdAdd />
+            </div>
+          </div>
           {menuItems.map((item) => (
-            <div key={item.id} className={activeComponent===item.label ? "sidebar-menu-item active" : 'sidebar-menu-item'} onClick={()=>{
-                console.log("setting label as",item.label)
-                useAgentStore.getState().setOpenSideBar(false)
-                useAgentStore.getState().setActiveComponent(item.label)
-            }}>
+            <div
+              key={item.id}
+              className={
+                activeComponent === item.label
+                  ? "sidebar-menu-item active"
+                  : "sidebar-menu-item"
+              }
+              onClick={() => {
+                console.log("setting label as", item.label);
+                useAgentStore.getState().setOpenSideBar(false);
+                useAgentStore.getState().setActiveComponent(item.label);
+              }}
+            >
               <div className="sidebar-menu-icon">{item.icon}</div>
               <span className="sidebar-menu-label">{item.label}</span>
             </div>
           ))}
         </div>
-        </div>
-        <SocialComponent />
-        </Box>
-    )
-}
+      </div>
+      <SocialComponent />
+    </Box>
+  );
+};

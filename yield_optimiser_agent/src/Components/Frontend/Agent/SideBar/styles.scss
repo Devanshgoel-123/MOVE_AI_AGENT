@@ -1,4 +1,4 @@
-@import    "@/app/mixin.scss";
+@import "@/app/mixin.scss";
 
 $primary-accent: #00d4ff;
 $subtle-bg: rgba(255, 255, 255, 0.05);
@@ -6,271 +6,264 @@ $border-color: #2d3748;
 $gray-text: #a0aec0;
 $transition-duration: 200ms;
 
-.css-cyqh1t-MuiPaper-root-MuiDrawer-paper{
-    display: flex;
-    justify-content: center;
+.css-cyqh1t-MuiPaper-root-MuiDrawer-paper {
+  display: flex;
+  justify-content: center;
 }
 
-.crossIcon{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    gap: 8px;
+.crossIcon {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
+  width: 35px;
+  height: 35px;
+  background: var(--paper-black-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transform: scale(1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  color: var(--text-white);
+
+  @include md {
+  }
+
+  @include lg {
+    width: 30px;
+    height: 30px;
+  }
+
+  @include xl {
     width: 35px;
     height: 35px;
-    background: var(--paper-black-medium);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    transform: scale(1);
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    color: var(--text-white);
+  }
 
-    @include md {}
+  @include xxl {
+    width: 40px;
+    height: 40px;
+  }
 
-    @include lg {
-        width: 30px;
-        height: 30px;
-    }
+  &:hover {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
 
-    @include xl {
-        width: 35px;
-        height: 35px;
-    }
-
-    @include xxl {
-        width: 40px;
-        height: 40px;
-    }
-
-    &:hover {
-        transform: scale(0.9);
-        opacity: 0.8;
-    }
-
-    &:active {
-        transform: scale(0.8);
-    }
+  &:active {
+    transform: scale(0.8);
+  }
 }
 
-.SideBarWrapper{
-    border-radius: 8px;
-    flex-direction: column;
-    gap: 15px;
-    justify-content: space-between;
+.SideBarWrapper {
+  border-radius: 8px;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #111111;
+  padding: 16px;
+  border: 1px solid #1e1e1e;
+  @include md {
+    display: flex;
     height: 95%;
-    background-color: #111111;
-    padding: 16px;
-    border: 1px solid #1e1e1e;
-    @include md{
-        display: flex;
-        height: 95%;
-        width: 30%;
-    }
-    @include lg{
-        max-width: 17%;
-        padding: 10px;
-    }
-    @include xl{
-        height: 95%;
-    }
-    @include xxl{
-        max-width: 10%;
-    }
+    width: 30%;
+  }
+  @include lg {
+    max-width: 17%;
+    padding: 10px;
+  }
+  @include xl {
+    height: 95%;
+  }
+  @include xxl {
+    max-width: 10%;
+  }
 
-    .TopContainer{
+  .TopContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .SideBarHeader {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      border-bottom: 1px solid #1e1e1e;
+      padding-block: 20px;
+      align-items: center;
+      justify-content: flex-start;
+      @include md {
+        justify-content: center;
+      }
+      .HeadingTextSidebar {
+        color: #f2f2f2;
+        font-size: 14px;
+        font-family: "Manrope";
+        font-weight: 500;
+        @include xxl {
+          font-weight: 800;
+          font-size: 22px;
+        }
+      }
+      .SideBarLogo {
+        display: flex;
+        border-radius: 50%;
+        @include xxl {
+          height: 30px;
+          width: 30px;
+        }
+      }
+    }
+    .OptionContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      .OptionElement {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        color: var(--app-green);
+        justify-content: space-between;
+        .optionElementLeft {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 15px;
+          @include lg {
+            gap: 10px;
+          }
+          span {
+            font-size: 18px;
+            font-family: "manrope";
+            @include lg {
+              font-size: 14px;
+            }
+          }
+        }
+        .SideBarIcon {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 8px;
+          gap: 8px;
+          background: var(--paper-black-medium);
+          border: 1px solid #1e1e1e;
+          border-radius: 6px;
+          width: 30px;
+          height: 30px;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          transform: scale(1);
+          font-size: 30px;
+          @include lg {
+            width: 28px;
+            height: 28px;
+          }
+        }
+        .PlusIcon {
+          margin-top: 3px;
+          width: auto;
+          font-size: 16px;
+          color: var(--app-green);
+          display: flex;
+          flex-direction: column;
+          margin-left: 20px;
+          justify-content: center;
+          cursor: pointer;
+          @include lg {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+    .ChatHistorySideBar {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+      @include lg {
+        gap: 10px;
+      }
+      @include xxl {
+        gap: 15px;
+      }
+      .PastChats {
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        .SideBarHeader{
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            border-bottom: 1px solid #1e1e1e ;
-            padding-block: 20px;
-            align-items: center;
-            justify-content: flex-start;
-            @include md{
-                justify-content: center;
-            }
-            .HeadingTextSidebar{
-                color: #f2f2f2;
-                font-size: 14px;
-                font-family: "Manrope";
-                font-weight: 500;
-                @include xxl{
-                    font-weight: 800;
-                    font-size: 22px;
-                }
-            }
-            .SideBarLogo{
-                display: flex;
-                border-radius: 50%;
-                @include xxl{
-                    height: 30px;
-                    width: 30px;
-                }
-            }
-           
+        width: 100%;
+        gap: 5px;
+        @include xxl {
+          margin-top: 20px;
         }
-        .OptionContainer{
-            display: flex;
-            flex-direction: column;
-             gap: 15px;
-            .OptionElement{
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-                align-items: center;
-                color: var(--app-green);
-                justify-content: space-between;
-                .optionElementLeft{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;
-                    align-items: center;
-                    gap: 15px;
-                    @include lg{
-                        gap:10px;
-                    }
-                    span{
-                        font-size: 18px;
-                        font-family: "manrope";
-                        @include lg{
-                            font-size: 14px;
-                        }
-                    }
-                   
-                }
-                .SideBarIcon{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 8px;
-                    gap: 8px;
-                    background: var(--paper-black-medium);
-                    border: 1px solid #1e1e1e;
-                    border-radius: 6px;
-                    width: 30px;
-                    height: 30px;
-                    cursor: pointer;
-                    transition: all 0.2s ease-in-out;
-                    transform: scale(1);
-                    font-size: 30px;
-                    @include lg{
-                        width: 28px;
-                        height: 28px;
-                    }
-                 }
-                 .PlusIcon{
-                    margin-top: 3px;
-                    width: auto;
-                    font-size: 16px;
-                    color: var(--app-green);
-                    display: flex;
-                    flex-direction: column;
-                    margin-left: 20px;
-                    justify-content: center;
-                    cursor: pointer;
-                    @include lg{
-                        margin-left: 10px;
-                    }
-                 }
-            }
-
-            
-            
+        :nth-child(1) {
+          font-size: 14px;
+          color: #e6e6e6;
+          line-height: 18px;
+          @include xxl {
+            font-size: 18px;
+            margin-bottom: 8px;
+          }
         }
-        .ChatHistorySideBar{
-            display: flex;
-            flex-direction: column;
+        .chatSummary {
+          font-size: 10px;
+          color: #757575;
+          cursor: pointer;
+          @include lg {
+            font-size: 10px;
+          }
+          @include xxl {
             font-size: 12px;
-            @include lg{
-                gap: 10px;
-            }
-            @include xxl{
-                gap: 15px;
-            }
-            .PastChats{
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                gap: 5px;
-                @include xxl{
-                    margin-top: 20px;
-                }
-                :nth-child(1){
-                    font-size: 14px;
-                    color: #e6e6e6;
-                    line-height: 18px;
-                    @include xxl{
-                        font-size: 18px;
-                        margin-bottom: 8px;
-                    }
-                }
-                .chatSummary{
-                    font-size: 10px;
-                    color: #757575;
-                    cursor: pointer;
-                    @include lg{
-                        font-size: 10px;
-                    }
-                    @include xxl{
-                        font-size: 12px;
-                    }
-                }
-                
-            }
+          }
         }
+      }
     }
-    
+  }
 }
 
 .sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sidebar-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background $transition-duration;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  @include xl {
+    gap: 24px;
+  }
+  .sidebar-menu-icon {
+    color: #7bf179;
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .sidebar-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background $transition-duration;
-  
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-     @include xl{
-        gap: 24px;
-     }
-    .sidebar-menu-icon {
-      color: #7bf179;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-    }
-  
-    .sidebar-menu-label {
-      font-size: 16px;
-      @include md{
-        font-size: 12px;
-      }
-      @include xl{
-        font-size: 14px;
-      }
-      color: #ffffff;
-    }
-
   }
 
-  .active{
-    background-color : rgba(255, 255, 255, 0.1);
+  .sidebar-menu-label {
+    font-size: 16px;
+    @include md {
+      font-size: 12px;
+    }
+    @include xl {
+      font-size: 14px;
+    }
+    color: #ffffff;
   }
+}
+
+.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
