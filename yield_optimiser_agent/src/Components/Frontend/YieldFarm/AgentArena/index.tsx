@@ -88,8 +88,6 @@ export const AgentArena = () => {
         delete data.data.recommendedAction.actionRequired;
         delete data.data.swap;
         delete data.data.userQueryResponse;
-
-        console.log("the backend data is", data);
         console.log("the parsed data is:", prettyPrintObject(data.data));
         const response: YieldResponse = data.data;
         useAgentStore.getState().setActiveYieldResponse({
