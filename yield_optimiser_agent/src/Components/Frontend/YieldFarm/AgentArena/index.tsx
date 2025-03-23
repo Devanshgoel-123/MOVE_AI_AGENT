@@ -10,7 +10,7 @@ import Image from "next/image";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { AgentChat } from "@/store/agent-store";
 import dotenv from "dotenv";
-import { FormatDisplayTextForChat } from "@/Utils/function";
+import { FormatDisplayTextForChat, objectToStringWithNewlines } from "@/Utils/function";
 import { useMediaQuery } from "@mui/material";
 import { ReadyToClickActionButton } from "../../Agent/AgentChatbox/ButtonContainer";
 import { BsLayoutTextSidebar } from "react-icons/bs";
@@ -89,7 +89,8 @@ export const AgentArena = () => {
         const { data } = await axios.post(`${BACKEND_URL}/userAnalysis`, {
           message: userInputRef.current?.value,
         });
-        console.log(data.data);
+        console.log("the backend data is",data);
+        console.log("the parsed data is:",objectToStringWithNewlines(data));
         const response:YieldResponse = data.data;
          useAgentStore.getState().setActiveYieldResponse({
           analysis:response.analysis,
