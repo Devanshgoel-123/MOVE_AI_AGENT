@@ -42,3 +42,16 @@ export const FormatDisplayTextForChat=(response:string):string=>{
   .replace(/\-/g, '')
   .replace(/\*/g, '')
 }
+
+export const objectToStringWithNewlines=(obj:any, indent = 0)=>{
+  let result = '';
+  const spacing = '  '.repeat(indent);
+  for (const key in obj) {
+    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+      result += `${spacing}${key}: \n${objectToStringWithNewlines(obj[key], indent + 1)}\n`;
+    } else {
+      result += `${spacing}${key}: ${obj[key]}\n`;
+    }
+  }
+  return result;
+}
