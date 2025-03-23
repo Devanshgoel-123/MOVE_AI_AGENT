@@ -5,8 +5,9 @@
   flex-direction: row;
   height: 100%;
   width: 100%;
-  margin-inline: 10px;
-  gap: 10px;
+  margin-left: 30px;
+  margin-right: 70px;
+  gap: 30px;
   .spinner-container {
     display: flex;
     justify-content: center;
@@ -33,8 +34,8 @@
     backdrop-filter: blur(4px);
     border-radius: 12px;
     box-sizing: border-box;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
       display: none;

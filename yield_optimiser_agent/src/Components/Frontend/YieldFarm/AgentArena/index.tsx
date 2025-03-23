@@ -10,7 +10,7 @@ import Image from "next/image";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { AgentChat } from "@/store/agent-store";
 import dotenv from "dotenv";
-import { FormatDisplayTextForChat, objectToStringWithNewlines } from "@/Utils/function";
+import { FormatDisplayTextForChat, prettyPrintObject } from "@/Utils/function";
 import { useMediaQuery } from "@mui/material";
 import { ReadyToClickActionButton } from "../../Agent/AgentChatbox/ButtonContainer";
 import { BsLayoutTextSidebar } from "react-icons/bs";
@@ -27,7 +27,7 @@ export const AgentArena = () => {
   const MobileDevice = useMediaQuery("(max-width:600px)");
   const MediumDevice = useMediaQuery("(max-width:1028px)");
   const chatBoxRef = useRef<HTMLDivElement>(null);
-  const [loader,setLoader]=useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
   const ButtonContent: Props[] = [
     {
       heading: "Market Analysis",
@@ -46,11 +46,7 @@ export const AgentArena = () => {
       query: "Swap token",
     },
   ];
-  const { 
-    activeChat,
-    activeResponse, 
-    agentResponses, 
-  } = useAgentStore(
+  const { activeChat, activeResponse, agentResponses } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeYieldChat,
       activeResponse: state.activeYieldResponse,
@@ -80,52 +76,53 @@ export const AgentArena = () => {
     if (userInputRef.current?.value) {
       useAgentStore.getState().setActiveYieldChat(userInputRef.current.value);
       useAgentStore.getState().setActiveYieldResponse({
-        analysis:"",
-        recommendedAction:"",
-        userQueryResponse:"",
-        swap:""
-      })
+        analysis: "",
+        recommendedAction: "",
+        userQueryResponse: "",
+        swap: "",
+      });
       try {
         const { data } = await axios.post(`${BACKEND_URL}/userAnalysis`, {
           message: userInputRef.current?.value,
         });
-        console.log("the backend data is",data);
-        console.log("the parsed data is:",objectToStringWithNewlines(data));
-        const response:YieldResponse = data.data;
-         useAgentStore.getState().setActiveYieldResponse({
-          analysis:response.analysis,
-          recommendedAction:response.recommendedAction,
-          userQueryResponse:response.userQueryResponse,
-          swap:response.swap
-         });
+        delete data.data.recommendedAction.actionRequired;
+        delete data.data.swap;
+        delete data.data.userQueryResponse;
+
+        console.log("the backend data is", data);
+        console.log("the parsed data is:", prettyPrintObject(data.data));
+        const response: YieldResponse = data.data;
+        useAgentStore.getState().setActiveYieldResponse({
+          analysis: prettyPrintObject(data.data),
+        });
         useAgentStore.getState().setYieldChats({
-          query:activeChat,
-          response:{
-            analysis:response.analysis,
-            recommendedAction:response.recommendedAction,
-            userQueryResponse:response.userQueryResponse,
-            swap:response.swap
-           }
-        })
+          query: activeChat,
+          response: {
+            analysis: response.analysis,
+            recommendedAction: response.recommendedAction,
+            userQueryResponse: response.userQueryResponse,
+            swap: response.swap,
+          },
+        });
       } catch (error) {
-         useAgentStore.getState().setActiveYieldResponse({
-          analysis:"Sorry We couldn't process your request at the moment",
-          recommendedAction:"",
-         });
+        useAgentStore.getState().setActiveYieldResponse({
+          analysis: "Sorry We couldn't process your request at the moment",
+          recommendedAction: "",
+        });
         useAgentStore.getState().setYieldChats({
-          query:activeChat,
-          response:{
-            analysis:"Sorry We couldn't process your request at the moment",
-            recommendedAction:"",
-           }
-        })
+          query: activeChat,
+          response: {
+            analysis: "Sorry We couldn't process your request at the moment",
+            recommendedAction: "",
+          },
+        });
         console.error("Error processing agent response:", error);
       }
     }
     return;
   };
 
-  const renderText = (response:YieldResponse) => {
+  const renderText = (response: YieldResponse) => {
     if (response.analysis === "") return <CustomTextLoader text="Loading" />;
     const renderGeneralToolResponse = (answer: string) => {
       return (
@@ -135,7 +132,7 @@ export const AgentArena = () => {
           </div>
           <div className="nestedResponse">
             <span className="responseRow">
-              <div  className="itemResponse">
+              <div className="itemResponse">
                 {FormatDisplayTextForChat(answer)}
               </div>
             </span>
@@ -161,21 +158,23 @@ export const AgentArena = () => {
   return (
     <div className="YieldArenaChatArea">
       <div className="YieldArenaChatBox" ref={chatBoxRef}>
-      {activeChat==="" &&  <div className="ChatHeader">
-          <div className="SideBarIconHeader">
-            {MobileDevice && (
-              <div
-                className="SideBarIcon"
-                onClick={() => {
-                  useAgentStore.getState().setOpenSideBar(true);
-                }}
-              >
-                <BsLayoutTextSidebar />
-              </div>
-            )}
+        {activeChat === "" && (
+          <div className="ChatHeader">
+            <div className="SideBarIconHeader">
+              {MobileDevice && (
+                <div
+                  className="SideBarIcon"
+                  onClick={() => {
+                    useAgentStore.getState().setOpenSideBar(true);
+                  }}
+                >
+                  <BsLayoutTextSidebar />
+                </div>
+              )}
+            </div>
           </div>
-        </div>}
-        {!MobileDevice && activeChat==="" && (
+        )}
+        {!MobileDevice && activeChat === "" && (
           <div className="YieldAllButton">
             <span className="centerHeading">
               <span className="head">How can we help you today?</span>
@@ -204,12 +203,14 @@ export const AgentArena = () => {
           ? chatArray
               .slice(
                 0,
-                activeResponse.analysis !== "" ? chatArray.length - 1 : chatArray.length
+                activeResponse.analysis !== ""
+                  ? chatArray.length - 1
+                  : chatArray.length
               )
               .map((item, index) => {
-                const agentResponse:YieldChat= {
+                const agentResponse: YieldChat = {
                   query: item.query,
-                  response:item.response
+                  response: item.response,
                 };
                 return (
                   <div key={index} className="PastChatBoxYield">

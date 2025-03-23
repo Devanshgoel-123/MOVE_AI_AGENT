@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import Image from "next/image";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Drawer } from "@mui/material";
- import { RxCross1 } from "react-icons/rx";
+import { RxCross1 } from "react-icons/rx";
 import { SocialComponent } from "./Social";
 import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
@@ -70,66 +70,105 @@ export const Sidebar = () => {
   if (isMobile) {
     return (
       <Drawer open={openSidebar}>
-      <div className="SideBarWrapper">
-        <div className="TopContainer">
-          <div className="SideBarHeader">
-            <RxCross1 className="crossIcon GradientText" onClick={() => useAgentStore.getState().setOpenSideBar(false)} />
-            <Image src={DAPP_LOGO} height={25} width={25} alt="logo" className="SideBarLogo" />
-            <span className="HeadingTextSidebar">DeFiZen</span>
-          </div>
-          <div className="sidebar-menu">
-            <div
-              key={"chat"}
-              className={activeComponent === "chat" ? "sidebar-menu-item active" : "sidebar-menu-item"}
-              onClick={() => useAgentStore.getState().setActiveComponent("chat")}
-            >
-              <div className="sidebar-menu-icon">
-                <MessageSquare size={18} />
-              </div>
-              <span className="sidebar-menu-label">Chat</span>
+        <div className="SideBarWrapper">
+          <div className="TopContainer">
+            <div className="SideBarHeader">
+              <RxCross1
+                className="crossIcon GradientText"
+                onClick={() => useAgentStore.getState().setOpenSideBar(false)}
+              />
+              <Image
+                src={DAPP_LOGO}
+                height={25}
+                width={25}
+                alt="logo"
+                className="SideBarLogo"
+              />
+              <span className="HeadingTextSidebar">DeFiZen</span>
+            </div>
+            <div className="sidebar-menu">
               <div
-                className="sidebar-menu-icon"
-                onClick={() => {
-                  useAgentStore.getState().setActiveChatId();
-                  useAgentStore.getState().setOpenSideBar(false);
-                  if (!openArena) {
-                    useAgentStore.getState().handleOpenArena();
+                key={"chat"}
+                className={
+                  activeComponent === "chat"
+                    ? "sidebar-menu-item active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() =>
+                  useAgentStore.getState().setActiveComponent("chat")
+                }
+              >
+                <div className="sidebar-menu-icon">
+                  <MessageSquare size={18} />
+                </div>
+                <span className="sidebar-menu-label">Chat</span>
+                <div
+                  className="sidebar-menu-icon"
+                  onClick={() => {
+                    useAgentStore.getState().setActiveChatId();
+                    useAgentStore.getState().setOpenSideBar(false);
+                    if (!openArena) {
+                      useAgentStore.getState().handleOpenArena();
+                    }
+                  }}
+                >
+                  <IoMdAdd />
+                </div>
+              </div>
+              {menuItems.map((item) => (
+                <div
+                  key={item.id}
+                  className={
+                    activeComponent === item.label
+                      ? "sidebar-menu-item active"
+                      : "sidebar-menu-item"
                   }
-                }}
-              >
-                <IoMdAdd />
-              </div>
-            </div>
-            {menuItems.map((item) => (
+                  onClick={() => {
+                    console.log("Setting label as", item.label);
+                    useAgentStore.getState().setOpenSideBar(false);
+                    useAgentStore.getState().setActiveComponent(item.label);
+                  }}
+                >
+                  <div className="sidebar-menu-icon">{item.icon}</div>
+                  <span className="sidebar-menu-label">{item.label}</span>
+                </div>
+              ))}
               <div
-                key={item.id}
-                className={activeComponent === item.label ? "sidebar-menu-item active" : "sidebar-menu-item"}
-                onClick={() => {
-                  console.log("Setting label as", item.label);
-                  useAgentStore.getState().setOpenSideBar(false);
-                  useAgentStore.getState().setActiveComponent(item.label);
-                }}
+                className="sidebar-menu-item wallet-connect"
+                onClick={walletAddress ? handleDisconnect : handleConnect}
               >
-                <div className="sidebar-menu-icon">{item.icon}</div>
-                <span className="sidebar-menu-label">{item.label}</span>
+                <div className="sidebar-menu-icon">
+                  <Wallet2 size={18} />
+                </div>
+                {walletAddress ? (
+                  <span className="wallet-address">
+                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  </span>
+                ) : (
+                  <span className="sidebar-menu-label">Connect Wallet</span>
+                )}
               </div>
-            ))}
-            <div className="sidebar-menu-item wallet-connect" onClick={walletAddress ? handleDisconnect : handleConnect}>
-              <div className="sidebar-menu-icon">
-                <Wallet2 size={18} />
+              <div
+                className="sidebar-menu-item wallet-connect"
+                onClick={walletAddress ? handleDisconnect : handleConnect}
+              >
+                <div className="sidebar-menu-icon">
+                  <Wallet2 size={18} />
+                </div>
+                {walletAddress ? (
+                  <span className="wallet-address">
+                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  </span>
+                ) : (
+                  <span className="sidebar-menu-label">Connect Wallet</span>
+                )}
               </div>
-              {walletAddress ? (
-                <span className="wallet-address">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>
-              ) : (
-                <span className="sidebar-menu-label">Connect Wallet</span>
-              )}
             </div>
           </div>
+          <SocialComponent />
         </div>
-        <SocialComponent />
-      </div>
-    </Drawer>
-    )
+      </Drawer>
+    );
   }
 
   return (
@@ -203,9 +242,30 @@ export const Sidebar = () => {
               <Wallet2 size={18} />
             </div>
             {walletAddress ? (
-              <span className="wallet-address">
-                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-              </span>
+              <div className="wallet">
+                <h3>Agent</h3>
+                <span className="wallet-address">
+                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-2)}
+                </span>
+              </div>
+            ) : (
+              <span className="sidebar-menu-label">Connect Wallet</span>
+            )}
+          </div>
+          <div
+            className="sidebar-menu-item wallet-connect"
+            onClick={walletAddress ? handleDisconnect : handleConnect}
+          >
+            <div className="sidebar-menu-icon">
+              <Wallet2 size={18} />
+            </div>
+            {walletAddress ? (
+              <div className="wallet">
+                <h3>Wallet</h3>
+                <span className="wallet-address">
+                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-2)}
+                </span>
+              </div>
             ) : (
               <span className="sidebar-menu-label">Connect Wallet</span>
             )}
