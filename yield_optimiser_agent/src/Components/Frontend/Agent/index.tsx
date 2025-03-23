@@ -29,16 +29,10 @@ export const ChatAgent = () => {
   return (
     <div className="AgentUIWrapper">
       <Sidebar />
-      {/* { MobileDevice &&  <div className="SideBarIcon" onClick={()=>{
-            useAgentStore.getState().setOpenSideBar(true)
-        }}>
-        <BsLayoutTextSidebar />
-        </div>} */}
       {!openArena ? (
         <div className="ChatBoxWrapper">
           {
-            //  activeComponent==="chat" ? <ChatBox/> : activeComponent==="Market Analysis" ? <MarketAnalysisWrapperContainer/>:<Portfolio/>
-            <YieldFarm />
+             activeComponent==="chat" ? <ChatBox/> : activeComponent==="Market Analysis" ? <MarketAnalysisWrapperContainer/>: activeComponent==="Portfolio" ?<Portfolio/> : <YieldFarm />
           }
         </div>
       ) : (
@@ -47,9 +41,8 @@ export const ChatAgent = () => {
             <AgentArena />
           ) : activeComponent === "Market Analysis" ? (
             <MarketAnalysisWrapperContainer />
-          ) : (
-            <Portfolio />
-          )}
+          ) :  activeComponent==="Portfolio" ?<Portfolio/> : <YieldFarm />
+          }
         </div>
       )}
     </div>

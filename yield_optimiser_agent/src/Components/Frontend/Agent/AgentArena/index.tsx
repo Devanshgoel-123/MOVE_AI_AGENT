@@ -89,8 +89,7 @@ export const AgentArena = () => {
           </div>
           <div className="nestedResponse">
             <span className="responseRow">
-              {answer.split("\n").map((item, index) => {
-                console.log(item);
+              {answer.split("\n").filter((item)=>item!=="").map((item, index) => {
                 return (
                   <div key={index} className="itemResponse">
                     {FormatDisplayTextForChat(item)}
@@ -136,7 +135,7 @@ export const AgentArena = () => {
                   chatId: item.chatId,
                 };
                 return (
-                  <div key={index}>
+                  <div key={index} className="PastChatBox">
                     <div className="chatTextQuestion">
                       <div className="chatText">{item.query}</div>
                     </div>

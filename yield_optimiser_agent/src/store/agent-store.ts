@@ -11,14 +11,15 @@ export interface PredictionChat {
   answer: string;
 }
 
+export interface YieldResponse{
+  analysis: string;
+  recommendedAction?: any;
+  userQueryResponse?: string;
+  swap?: any;
+}
 export interface YieldChat {
   query: string;
-  response: {
-    analysis: string;
-    recommendedAction: any;
-    userQueryResponse: string;
-    swap: any;
-  };
+  response:YieldResponse
 }
 
 interface AgentStore {
@@ -30,6 +31,8 @@ interface AgentStore {
   activeChat: string;
   setActiveChat: (chat: string) => void;
   activeChatId: number;
+  activeYieldChat:string;
+  activeYieldResponse:YieldResponse;
   activeResponse: string;
   agentResponses: AgentChat[];
   setAgentResponses: (value: AgentChat) => void;
@@ -46,6 +49,8 @@ interface AgentStore {
   setYieldChats: (chat: YieldChat) => void;
   setOpenSideBar: (value: boolean) => void;
   setWalletAddress: (value: string) => void;
+  setActiveYieldChat:(value:string)=>void;
+  setActiveYieldResponse:(value:YieldResponse)=>void;
 }
 
 export const useAgentStore = create<AgentStore>((set, get) => ({
@@ -68,6 +73,11 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   userChatSummary: [],
   agentResponses: [],
   userChats: [],
+  activeYieldResponse:{
+    analysis:"",
+    recommendedAction:""
+  } as YieldResponse,
+  activeYieldChat:"",
   predictorTokenName: "apt",
   handleOpenArena: () => {
     set((state) => ({
@@ -79,6 +89,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       openArena: true,
     }));
   },
+
   activeChat: "",
   setActiveChat: (chat: string) => {
     set((state) => {
@@ -139,4 +150,12 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       walletAddress: value,
     }));
   },
+  setActiveYieldChat: (value: string) => {
+    set({ activeYieldChat: value });
+  },
+  setActiveYieldResponse:(response:YieldResponse)=>{
+    set({
+      activeYieldResponse:response
+  })
+  }
 }));
