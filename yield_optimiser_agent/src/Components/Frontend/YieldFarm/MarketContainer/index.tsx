@@ -1,10 +1,10 @@
 import { useMediaQuery } from "@mui/material";
 import "./styles.scss";
 import React, { useState } from "react";
-import { EchelonMarketData } from "..";
+import { EchelonMarketData, jouleMarketData } from "..";
 
 type MarketContainerProps = {
-  data: EchelonMarketData;
+  data: EchelonMarketData | jouleMarketData;
 };
 const MarketContainer: React.FC<MarketContainerProps> = ({ data }) => {
   const [amount, setAmount] = useState("");
