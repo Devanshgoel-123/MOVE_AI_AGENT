@@ -1,120 +1,64 @@
 import React, { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Image from "next/image";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { SocialComponent } from "./Social";
 import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
-import { MessageSquare, BarChart3, PieChart } from "lucide-react";
+import { MessageSquare, BarChart3, PieChart, Wallet2 } from "lucide-react";
 import { useMediaQuery } from "@mui/material";
 import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
-import { Drawer } from "@mui/material";
-import { RxCross1 } from "react-icons/rx";
+
 export const Sidebar = () => {
-  const { openSidebar, activeComponent } = useAgentStore(
+  const { disconnect } = useWallet();
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const { openSidebar, activeComponent, walletAddress } = useAgentStore(
     useShallow((state) => ({
       openSidebar: state.openSideBar,
       activeComponent: state.activeComponent,
+      walletAddress: state.walletAddress,
     }))
   );
+
   const [active, setActive] = useState<string>("chat");
-  const isXxlDevice = useMediaQuery("(min-width: 1280px)");
-  const MobileDevice = useMediaQuery("(max-width: 600px)");
-  const isXlDevice = useMediaQuery(
-    "(min-width: 1024px) and (max-width: 1279px)"
-  );
+
   const { openArena } = useAgentStore(
     useShallow((state) => ({
       openArena: state.openArena,
     }))
   );
 
-  const renderChatSummary = () => {
-    const charLimit = isXxlDevice ? 30 : isXlDevice ? 25 : 20;
-    const now = new Date();
-    const today = new Date(now.setHours(0, 0, 0, 0));
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const startOfSevenDays = new Date(yesterday);
-    startOfSevenDays.setDate(yesterday.getDate() - 6);
-    // const todayChats = userChatSummary.filter((item: UserChatSummary) => {
-    //   const chatDate = new Date(item.firstMessageDate * 1000);
-    //   return chatDate >= today;
-    // });
-    // const yesterdayChats = userChatSummary.filter((item: UserChatSummary) => {
-    //   const chatDate = new Date(item.firstMessageDate * 1000);
-    //   return chatDate >= yesterday && chatDate < today;
-    // });
-    // const pastSevenDayChats = userChatSummary.filter((item: UserChatSummary) => {
-    //   const chatDate = new Date(item.firstMessageDate * 1000);
-    //   return chatDate >= startOfSevenDays && chatDate < yesterday;
-    // });
-    return (
-      <div className="ChatHistorySideBar">
-        {/* {todayChats.length > 0 && <div className="PastChats">
-            <span>Today</span>
-               {
-                todayChats.slice(0,4).map((item)=>{
-                    return (
-                        <span key={item.firstMessageDate} className="chatSummary" onClick={()=>{
-                            useAgentStore.getState().handleOpenArena();
-                            useAgentStore.setState({
-                                activeChatId:item.chatId
-                            })
-                        }}>
-                            {item.user_query.slice(0, 1).toUpperCase() +
-                item.user_query.slice(1, charLimit).toLowerCase() +
-                (item.user_query.length > charLimit ? "..." : "")}
-                        </span>
-                    )
-                })
-               }
-            </div>}
-           { yesterdayChats.length>0 && 
-            <div className="PastChats">
-            <span>Yesterday</span>
-               {
-                yesterdayChats.slice(0,4).map((item)=>{
-                    return (
-                        <span key={item.firstMessageDate} className="chatSummary" onClick={()=>{
-                            useAgentStore.getState().handleOpenArena();
-                            useAgentStore.setState({
-                                activeChatId:item.chatId
-                            })
-                        }}>
-                            {item.user_query.slice(0, 1).toUpperCase() +
-                  item.user_query.slice(1, charLimit).toLowerCase() +
-                  (item.user_query.length > charLimit ? "..." : "")}
-                        </span>
-                    )
-                })
-               }
-            </div>
-            }
-            {pastSevenDayChats.length>0 &&
-            <div className="PastChats">
-            <span>Past 7 Days</span>
-               {
-                pastSevenDayChats.slice(0,4).map((item)=>{
-                    return (
-                        <span key={item.firstMessageDate} className="chatSummary" onClick={()=>{
-                            useAgentStore.getState().handleOpenArena();
-                            useAgentStore.setState({
-                                activeChatId:item.chatId
-                            })
-                        }}>
-                            {item.user_query.slice(0, 1).toUpperCase() +
-                  item.user_query.slice(1, charLimit).toLowerCase() +
-                  (item.user_query.length > charLimit ? "..." : "")}
-                        </span>
-                    )
-                })
-               }
-            </div>
-            } */}
-      </div>
-    );
+  // Wallet connection logic
+  const getAptosWallet = () => {
+    if ("aptos" in window) {
+      return window.aptos;
+    } else {
+      window.open("https://petra.app/", `_blank`);
+    }
+  };
+
+  const handleConnect = async () => {
+    const wallet = getAptosWallet();
+    try {
+      console.log("Attempting to connect to Petra...");
+      const response = await wallet.connect();
+      const account = await wallet.account();
+      useAgentStore.getState().setWalletAddress(account.address.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    const wallet = getAptosWallet();
+    try {
+      await wallet.disconnect();
+      useAgentStore.getState().setWalletAddress("");
+    } catch (error) {
+      console.error("Error disconnecting wallet:", error);
+    }
   };
 
   const menuItems = [
@@ -123,104 +67,20 @@ export const Sidebar = () => {
     { id: "yield", label: "Yield Finder", icon: <PieChart size={18} /> },
   ];
 
-  if (MobileDevice) {
-    return (
-      <Drawer open={openSidebar}>
-        <div className="SideBarWrapper">
-          <div className="TopContainer">
-            <div className="SideBarHeader">
-              <RxCross1
-                className="crossIcon GradientText"
-                onClick={() => {
-                  useAgentStore.getState().setOpenSideBar(false);
-                }}
-              />
-              <div>
-                <Image
-                  src={DAPP_LOGO}
-                  height={25}
-                  width={25}
-                  alt="logo"
-                  className="SideBarLogo"
-                />
-              </div>
-
-              <span className="HeadingTextSidebar">DeFiZen</span>
-            </div>
-            {renderChatSummary()}
-            <div className="sidebar-menu">
-              <div
-                key={"chat"}
-                className={
-                  activeComponent === "chat"
-                    ? "sidebar-menu-item active"
-                    : "sidebar-menu-item"
-                }
-                onClick={() => {
-                  useAgentStore.getState().setActiveComponent("chat");
-                }}
-              >
-                <div className="sidebar-menu-icon">
-                  <MessageSquare size={18} />{" "}
-                </div>
-                <span className="sidebar-menu-label">Chat</span>
-                <div
-                  className="sidebar-menu-icon"
-                  onClick={() => {
-                    useAgentStore.getState().clearCurrentValues();
-                    useAgentStore.getState().setActiveChatId();
-                    useAgentStore.getState().setOpenSideBar(false);
-                    if (!openArena) {
-                      useAgentStore.getState().handleOpenArena();
-                    }
-                  }}
-                >
-                  <IoMdAdd />
-                </div>
-              </div>
-              {menuItems.map((item) => (
-                <div
-                  key={item.id}
-                  className={
-                    activeComponent === item.label
-                      ? "sidebar-menu-item active"
-                      : "sidebar-menu-item"
-                  }
-                  onClick={() => {
-                    console.log("setting label as", item.label);
-                    useAgentStore.getState().setOpenSideBar(false);
-                    useAgentStore.getState().setActiveComponent(item.label);
-                  }}
-                >
-                  <div className="sidebar-menu-icon">{item.icon}</div>
-                  <span className="sidebar-menu-label">{item.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <SocialComponent />
-        </div>
-      </Drawer>
-    );
-  }
-
   return (
     <Box className="SideBarWrapper">
       <div className="TopContainer">
         <div className="SideBarHeader">
-          <div>
-            <Image
-              src={DAPP_LOGO}
-              height={25}
-              width={25}
-              alt="logo"
-              className="SideBarLogo"
-            />
-          </div>
-
+          <Image
+            src={DAPP_LOGO}
+            height={25}
+            width={25}
+            alt="logo"
+            className="SideBarLogo"
+          />
           <span className="HeadingTextSidebar">DeFiZen</span>
         </div>
-        {renderChatSummary()}
+
         <div className="sidebar-menu">
           <div
             key={"chat"}
@@ -234,7 +94,7 @@ export const Sidebar = () => {
             }}
           >
             <div className="sidebar-menu-icon">
-              <MessageSquare size={18} />{" "}
+              <MessageSquare size={18} />
             </div>
             <span className="sidebar-menu-label">Chat</span>
             <div
@@ -250,6 +110,7 @@ export const Sidebar = () => {
               <IoMdAdd />
             </div>
           </div>
+
           {menuItems.map((item) => (
             <div
               key={item.id}
@@ -268,8 +129,26 @@ export const Sidebar = () => {
               <span className="sidebar-menu-label">{item.label}</span>
             </div>
           ))}
+
+          {/* Wallet Connect Section */}
+          <div
+            className="sidebar-menu-item wallet-connect"
+            onClick={walletAddress ? handleDisconnect : handleConnect}
+          >
+            <div className="sidebar-menu-icon">
+              <Wallet2 size={18} />
+            </div>
+            {walletAddress ? (
+              <span className="wallet-address">
+                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+              </span>
+            ) : (
+              <span className="sidebar-menu-label">Connect Wallet</span>
+            )}
+          </div>
         </div>
       </div>
+
       <SocialComponent />
     </Box>
   );

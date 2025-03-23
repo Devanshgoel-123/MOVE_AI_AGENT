@@ -11,6 +11,12 @@ import { Portfolio } from "../Portfolio";
 import { MarketAnalysisWrapperContainer } from "../MarketAnalysis";
 import { useMediaQuery } from "@mui/material";
 import YieldFarm from "../YieldFarm";
+declare global {
+  interface Window {
+    aptos?: any;
+  }
+}
+
 export const ChatAgent = () => {
   const { openArena, activeComponent } = useAgentStore(
     useShallow((state) => ({

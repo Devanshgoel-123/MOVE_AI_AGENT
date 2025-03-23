@@ -11,10 +11,40 @@ import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import { AgentChat } from "@/store/agent-store";
 import dotenv from "dotenv";
 import { FormatDisplayTextForChat } from "@/Utils/function";
-dotenv.config();
-export const AgentArena = () => {
-  const chatBoxRef = useRef<HTMLDivElement>(null);
+import { useMediaQuery } from "@mui/material";
+import { ReadyToClickActionButton } from "../../Agent/AgentChatbox/ButtonContainer";
+import { BsLayoutTextSidebar } from "react-icons/bs";
+import { Tooltip, IconButton } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 
+dotenv.config();
+interface Props {
+  heading: string;
+  content: string;
+  query: string;
+}
+export const AgentArena = () => {
+  const MobileDevice = useMediaQuery("(max-width:600px)");
+  const MediumDevice = useMediaQuery("(max-width:1028px)");
+  const chatBoxRef = useRef<HTMLDivElement>(null);
+  const ButtonContent: Props[] = [
+    {
+      heading: "Market Analysis",
+      content: "Conduct An In Depth Analysis of Any Supported Token on Aptos",
+      query: "Conduct An In Depth Analysis of Aptos Token",
+    },
+    {
+      heading: "Fetch Token Price",
+      content: "Fetch Token Price of a token in USD",
+      query: "Fetch the token price",
+    },
+
+    {
+      heading: "Swap",
+      content: "Swap one token to Another",
+      query: "Swap token",
+    },
+  ];
   const { activeChat, activeResponse, agentResponses, chatId } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeChat,
@@ -122,6 +152,45 @@ export const AgentArena = () => {
   return (
     <div className="YieldArenaChatArea">
       <div className="YieldArenaChatBox" ref={chatBoxRef}>
+        <div className="ChatHeader">
+          <div className="SideBarIconHeader">
+            {MobileDevice && (
+              <div
+                className="SideBarIcon"
+                onClick={() => {
+                  useAgentStore.getState().setOpenSideBar(true);
+                }}
+              >
+                <BsLayoutTextSidebar />
+              </div>
+            )}
+          </div>
+        </div>
+        {!MobileDevice && (
+          <div className="YieldAllButton">
+            <span className="centerHeading">
+              <span className="head">How can we help you today?</span>
+              <Tooltip title="Need help? Get support and guidance here!" arrow>
+                <IconButton className="info-icon">
+                  <InfoIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            </span>
+            <div className="YieldButtonsWrapper">
+              {ButtonContent.map((item: Props, index: number) => {
+                return (
+                  <ReadyToClickActionButton
+                    content={item.content}
+                    heading={item.heading}
+                    key={index}
+                    query={item.query}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {chatArray.length > 1
           ? chatArray
               .slice(

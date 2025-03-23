@@ -80,6 +80,15 @@ $transition-duration: 200ms;
   @include xxl {
     max-width: 10%;
   }
+  .wallet-connect {
+    .wallet-address {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px; /* Adjust width as needed */
+      display: block;
+    }
+  }
 
   .TopContainer {
     display: flex;

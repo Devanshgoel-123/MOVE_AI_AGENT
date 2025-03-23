@@ -24,6 +24,7 @@ export interface YieldChat {
 interface AgentStore {
   openArena: boolean;
   openSideBar: boolean;
+  walletAddress: string;
   handleCloseArena: () => void;
   handleOpenArena: () => void;
   activeChat: string;
@@ -44,6 +45,7 @@ interface AgentStore {
   yieldChats: YieldChat[];
   setYieldChats: (chat: YieldChat) => void;
   setOpenSideBar: (value: boolean) => void;
+  setWalletAddress: (value: string) => void;
 }
 
 export const useAgentStore = create<AgentStore>((set, get) => ({
@@ -55,6 +57,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     query: "",
     activeTransactionHash: "",
   },
+  walletAddress: "",
   yieldChats: [],
   predictionChat: [],
   openSideBar: false,
@@ -129,6 +132,11 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   setYieldChats: (value: YieldChat) => {
     set((state) => ({
       yieldChats: [...state.yieldChats, value],
+    }));
+  },
+  setWalletAddress: (value: string) => {
+    set((state) => ({
+      walletAddress: value,
     }));
   },
 }));
