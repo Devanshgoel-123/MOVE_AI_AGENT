@@ -9,7 +9,7 @@ import "./styles.scss";
 import { IoMdAdd } from "react-icons/io";
 import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
-import { MessageSquare, BarChart3, PieChart, Wallet2 } from "lucide-react";
+import { MessageSquare, BarChart3, PieChart, Wallet2, Copy } from "lucide-react";
 import { useMediaQuery } from "@mui/material";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import axios from "axios";
@@ -31,7 +31,7 @@ export const Sidebar = () => {
   );
 
   const [active, setActive] = useState<string>("chat");
-
+  const [copied, setCopied] = useState(false);
   const { 
     openArena
    } = useAgentStore(
@@ -63,6 +63,14 @@ export const Sidebar = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  
+
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(agentWalletAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); 
   };
 
   const handleDisconnect = async () => {
@@ -150,7 +158,7 @@ export const Sidebar = () => {
                 </div>
               ))}
               <div className="WalletContainer">
-              4
+             <span className="walletName">User Wallet</span>
               <div
                 className="sidebar-menu-item wallet-connect"
                 onClick={walletAddress ? handleDisconnect : handleConnect}
@@ -167,7 +175,7 @@ export const Sidebar = () => {
                   <span className="sidebar-menu-label">Connect Wallet</span>
                 )}
               </div>
-              <span>Agent Wallet:</span>
+              <span className="walletName">Agent Wallet</span>
               <div
                 className="sidebar-menu-item wallet-connect"
               >
@@ -182,6 +190,14 @@ export const Sidebar = () => {
                   <span className="sidebar-menu-label">0x0000...0000</span>
                 )}
               </div>
+              {agentWalletAddress && (
+                <div
+                  className="copy-button"
+                  onClick={handleCopyAddress}
+                >
+                 <Copy size={16} /> {copied ? "Copied!" : "Copy Address"}
+                </div>
+              )}
               </div>
              
             </div>
@@ -265,11 +281,10 @@ export const Sidebar = () => {
             <div className="sidebar-menu-icon">
               <Wallet2 size={18} />
             </div>
-            {agentWalletAddress ? (
+            {walletAddress ? (
               <div className="wallet">
-                <h3>Agent</h3>
                 <span className="wallet-address">
-                  {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-2)}
+                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-2)}
                 </span>
               </div>
             ) : (
@@ -285,7 +300,6 @@ export const Sidebar = () => {
             </div>
             {agentWalletAddress ? (
               <div className="wallet">
-                <h3>Wallet</h3>
                 <span className="wallet-address">
                   {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-2)}
                 </span>
@@ -294,6 +308,14 @@ export const Sidebar = () => {
               <span className="sidebar-menu-label">0x0000...0000</span>
             )}
           </div>
+          {agentWalletAddress && (
+                <div
+                  className="copy-button"
+                  onClick={handleCopyAddress}
+                >
+                 <Copy size={16} /> {copied ? "Copied!" : "Copy Address"}
+                </div>
+              )}
          </div>
           
         </div>
