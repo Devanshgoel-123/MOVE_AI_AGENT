@@ -46,11 +46,13 @@ export const AgentArena = () => {
       query: "Swap token",
     },
   ];
-  const { activeChat, activeResponse, agentResponses } = useAgentStore(
+  const { activeChat, activeResponse, agentResponses, agentKey, agentWalletAddress } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeYieldChat,
       activeResponse: state.activeYieldResponse,
       agentResponses: state.yieldChats,
+      agentKey:state.agentKey,
+      agentWalletAddress:state.agentWalletAddress
     }))
   );
 
@@ -84,6 +86,8 @@ export const AgentArena = () => {
       try {
         const { data } = await axios.post(`${BACKEND_URL}/userAnalysis`, {
           message: userInputRef.current?.value,
+          agentKey:agentKey,
+          agentWalletAddress:agentWalletAddress
         });
         delete data.data.recommendedAction.actionRequired;
         delete data.data.swap;
@@ -96,10 +100,7 @@ export const AgentArena = () => {
         useAgentStore.getState().setYieldChats({
           query: activeChat,
           response: {
-            analysis: response.analysis,
-            recommendedAction: response.recommendedAction,
-            userQueryResponse: response.userQueryResponse,
-            swap: response.swap,
+            analysis: prettyPrintObject(data.data),
           },
         });
       } catch (error) {

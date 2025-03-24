@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { EchelonMarketData, jouleMarketData } from "..";
 import axios from "axios";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
+import { useAgentStore } from "@/store/agent-store";
 type MarketContainerProps = {
   data: EchelonMarketData | jouleMarketData;
   protcol:string;
@@ -19,12 +20,33 @@ const MarketContainer: React.FC<MarketContainerProps> = ({ data,protcol}:MarketC
   const handleEnterClick=async (value:string)=>{
     try{
      if(amount>0){
+      console.log(`I want to ${value} ${amount} ${result} on the ${protcol}`)
+      useAgentStore.getState().setActiveYieldChat(`I want to ${value} ${amount} ${result} on the ${protcol}`)
       const response=await axios.post(`${BACKEND_URL}/lendBorrowPost`,{
         message:`I want to ${value} ${amount} ${result} on the ${protcol}`
-      })}else{
-        return
+      })
+      useAgentStore.getState().setActiveYieldResponse({
+        analysis:response.data.data
+      })
+      useAgentStore.getState().setYieldChats({
+        query:`I want to ${value} ${amount} ${result} on the ${protcol}`,
+        response:{
+          analysis:response.data.data
+        }
+      })
       }
     }catch(err){
+      useAgentStore.getState().setActiveYieldResponse({
+        analysis: "Sorry We couldn't process your request at the moment",
+        recommendedAction: "",
+      });
+      useAgentStore.getState().setYieldChats({
+        query: `I want to ${value} ${amount} ${result} on the ${protcol}`,
+        response: {
+          analysis: "Sorry We couldn't process your request at the moment",
+          recommendedAction: "",
+        },
+      });
       console.log(err)
     }
   }
@@ -61,10 +83,10 @@ const MarketContainer: React.FC<MarketContainerProps> = ({ data,protcol}:MarketC
         <input
           type="number"
           placeholder="Amount"
-          value={amount}
+          value={amount === 0 ? "" : amount}
           onChange={(e) => {
             const value = e.target.value;
-            if (value === "" || (Number(value) > 0 && !value.startsWith("0"))) {
+            if (value === "" || Number(value) >= 0) {
               setAmount(Number(value));
             }
           }}

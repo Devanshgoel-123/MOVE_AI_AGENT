@@ -18,16 +18,25 @@ export const PredictionChatArea=()=>{
     const [response,setResponse]=useState<string>("");
      const {
         tokenName,
-        predictionChat
+        predictionChat,
+        agentWalletAddress,
+        agentKey
      }=useAgentStore(useShallow((state)=>({
         tokenName:state.predictorTokenName,
-        predictionChat:state.predictionChat
+        predictionChat:state.predictionChat,
+        agentWalletAddress:state.agentWalletAddress,
+        agentKey:state.agentKey
      })))
   
      const handleClick=async()=>{
         try{
             setLoading(true)
-            const response=await axios.get(`${BACKEND_URL}/marketAnalysis/${tokenName}`);
+            const response=await axios.get(`${BACKEND_URL}/marketAnalysis/${tokenName}`,{
+              params:{
+                agentWalletAddress:agentWalletAddress,
+                agentKey:agentKey
+              }
+            });
             console.log(response.data.data.agentResponse)
             useAgentStore.getState().setPredictionChat({
                 query:`Perform InDepth Market Analysis of ${tokenName} token`,

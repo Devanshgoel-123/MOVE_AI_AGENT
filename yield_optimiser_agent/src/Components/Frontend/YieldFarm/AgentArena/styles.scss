@@ -245,9 +245,7 @@
       word-wrap: break-word;
       white-space: normal;
       flex-direction: row;
-
       align-items: center;
-      min-width: 80px;
       right: 20px;
       top: 20px;
       max-height: 400px;
@@ -305,7 +303,7 @@
   }
 }
 
-.PastChatBox{
+.PastChatBoxYield{
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

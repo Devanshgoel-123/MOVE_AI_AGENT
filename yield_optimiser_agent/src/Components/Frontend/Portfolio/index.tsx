@@ -23,16 +23,25 @@ export const Portfolio = () => {
   });
   const {
     openArena,
-    activeComponent
+    activeComponent,
+    agentWalletAddress,
+    agentKey
 }=useAgentStore(useShallow((state)=>({
     openArena:state.openArena,
-    activeComponent:state.activeComponent
+    activeComponent:state.activeComponent,
+    agentWalletAddress:state.agentWalletAddress,
+    agentKey:state.agentKey
 })))
 const MobileDevice= useMediaQuery("(max-width:600px)");
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/userPortfolio`);
+        const response = await axios.get(`${BACKEND_URL}/userPortfolio`,{
+         params:{
+          agentWalletAddress:agentWalletAddress,
+          key:agentKey
+         }
+        });
         const Tokens:Token[]=response.data.userPortfolio.tokens;
         console.log(Tokens)
         const stableTokens=Tokens.filter((item)=>item.category==="stablecoin");
@@ -42,11 +51,19 @@ const MobileDevice= useMediaQuery("(max-width:600px)");
         const nativeSum = nativeTokens.reduce((sum, token) => sum + token.value_usd, 0);
         const otherSum = otherTokens.reduce((sum, token) => sum + token.value_usd, 0);
         const totalSum=response.data.userPortfolio.total_value_usd;
-        setAllocation({
-          stablecoin:Number(((stableSum/totalSum)*100).toFixed(2)),
-          native:Number(((nativeSum/totalSum)*100).toFixed(2)),
-          other:Number(((otherSum/totalSum)*100).toFixed(2))
-        })
+        if(totalSum===0){
+          setAllocation({
+            stablecoin:0,
+            native:0,
+            other:0
+          })
+        }else{
+          setAllocation({
+            stablecoin:Number(((stableSum/totalSum)*100).toFixed(2)),
+            native:Number(((nativeSum/totalSum)*100).toFixed(2)),
+            other:Number(((otherSum/totalSum)*100).toFixed(2))
+          })
+        }
         setPortfolio(response.data.userPortfolio);
       } catch (error) {
         console.error("Error fetching portfolio:", error);

@@ -11,22 +11,30 @@ import { useAgentStore } from "@/store/agent-store";
 import { useShallow } from "zustand/react/shallow";
 import { MessageSquare, BarChart3, PieChart, Wallet2 } from "lucide-react";
 import { useMediaQuery } from "@mui/material";
-import { DAPP_LOGO } from "@/Components/Backend/Common/Constants";
-
+import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
+import axios from "axios";
 export const Sidebar = () => {
   const { disconnect } = useWallet();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const { openSidebar, activeComponent, walletAddress } = useAgentStore(
+  const {
+     openSidebar, 
+     activeComponent, 
+     walletAddress,
+     agentWalletAddress
+    } = useAgentStore(
     useShallow((state) => ({
       openSidebar: state.openSideBar,
       activeComponent: state.activeComponent,
       walletAddress: state.walletAddress,
+      agentWalletAddress:state.agentWalletAddress
     }))
   );
 
   const [active, setActive] = useState<string>("chat");
 
-  const { openArena } = useAgentStore(
+  const { 
+    openArena
+   } = useAgentStore(
     useShallow((state) => ({
       openArena: state.openArena,
     }))
@@ -47,6 +55,11 @@ export const Sidebar = () => {
       const response = await wallet.connect();
       const account = await wallet.account();
       useAgentStore.getState().setWalletAddress(account.address.toString());
+      const agentResponse=await axios.post(`${BACKEND_URL}/walletRouter`,{
+          walletAddress:account.address.toString()
+      })
+      useAgentStore.getState().setAgentWalletAddress(agentResponse.data.agentWalletAddress)
+      useAgentStore.getState().setAgentKey(agentResponse.data.key)
     } catch (error) {
       console.log(error);
     }
@@ -126,13 +139,35 @@ export const Sidebar = () => {
                   onClick={() => {
                     console.log("Setting label as", item.label);
                     useAgentStore.getState().setOpenSideBar(false);
-                    useAgentStore.getState().setActiveComponent(item.label);
+                    if(agentWalletAddress!==""){
+                      useAgentStore.getState().setActiveComponent(item.label);
+                    }
+                   
                   }}
                 >
                   <div className="sidebar-menu-icon">{item.icon}</div>
                   <span className="sidebar-menu-label">{item.label}</span>
                 </div>
               ))}
+              <div className="WalletContainer">
+              4
+              <div
+                className="sidebar-menu-item wallet-connect"
+                onClick={walletAddress ? handleDisconnect : handleConnect}
+              >
+                <div className="sidebar-menu-icon">
+                  <Wallet2 size={18} />
+                </div>
+
+                {walletAddress ? (
+                  <span className="wallet-address">
+                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  </span>
+                ) : (
+                  <span className="sidebar-menu-label">Connect Wallet</span>
+                )}
+              </div>
+              <span>Agent Wallet:</span>
               <div
                 className="sidebar-menu-item wallet-connect"
                 onClick={walletAddress ? handleDisconnect : handleConnect}
@@ -142,27 +177,14 @@ export const Sidebar = () => {
                 </div>
                 {walletAddress ? (
                   <span className="wallet-address">
-                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                    {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-4)}
                   </span>
                 ) : (
                   <span className="sidebar-menu-label">Connect Wallet</span>
                 )}
               </div>
-              <div
-                className="sidebar-menu-item wallet-connect"
-                onClick={walletAddress ? handleDisconnect : handleConnect}
-              >
-                <div className="sidebar-menu-icon">
-                  <Wallet2 size={18} />
-                </div>
-                {walletAddress ? (
-                  <span className="wallet-address">
-                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-                  </span>
-                ) : (
-                  <span className="sidebar-menu-label">Connect Wallet</span>
-                )}
               </div>
+             
             </div>
           </div>
           <SocialComponent />
@@ -224,9 +246,10 @@ export const Sidebar = () => {
                   : "sidebar-menu-item"
               }
               onClick={() => {
-                console.log("setting label as", item.label);
                 useAgentStore.getState().setOpenSideBar(false);
-                useAgentStore.getState().setActiveComponent(item.label);
+                if(agentWalletAddress!==""){
+                  useAgentStore.getState().setActiveComponent(item.label);
+                }
               }}
             >
               <div className="sidebar-menu-icon">{item.icon}</div>
@@ -234,24 +257,27 @@ export const Sidebar = () => {
             </div>
           ))}
 
-          <div
+         <div className="WalletContainer">
+         <span className="walletName">User  Wallet</span>
+         <div
             className="sidebar-menu-item wallet-connect"
             onClick={walletAddress ? handleDisconnect : handleConnect}
           >
             <div className="sidebar-menu-icon">
               <Wallet2 size={18} />
             </div>
-            {walletAddress ? (
+            {agentWalletAddress ? (
               <div className="wallet">
                 <h3>Agent</h3>
                 <span className="wallet-address">
-                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-2)}
+                  {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-2)}
                 </span>
               </div>
             ) : (
               <span className="sidebar-menu-label">Connect Wallet</span>
             )}
           </div>
+          <span className="walletName">Agent  Wallet</span>
           <div
             className="sidebar-menu-item wallet-connect"
             onClick={walletAddress ? handleDisconnect : handleConnect}
@@ -267,9 +293,11 @@ export const Sidebar = () => {
                 </span>
               </div>
             ) : (
-              <span className="sidebar-menu-label">Connect Wallet</span>
+              <span className="sidebar-menu-label">Connect  Wallet</span>
             )}
           </div>
+         </div>
+          
         </div>
       </div>
 

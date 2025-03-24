@@ -18,22 +18,38 @@ export const ReadyToClickActionButton=({
    query
 }:Props)=>{
     const {
-        chatId
+        chatId,
+        agentWalletAddress,
+        agentKey
     }=useAgentStore(useShallow((state)=>({
-        chatId:state.activeChatId
+        chatId:state.activeChatId,
+        agentWalletAddress:state.agentWalletAddress,
+        agentKey:state.agentKey
     })))
     const handleClick=async()=>{
         useAgentStore.getState().handleOpenArena()
         useAgentStore.getState().setActiveChat(query)
         try{
-            const {data}=await axios.post(`${BACKEND_URL}/lendingBorrow/usdc`,{
+            const {data}=await axios.post(`${BACKEND_URL}/agent`,{
                 message:query,
-                chatId:chatId
+                chatId:chatId,
+                agentWalletAddress:agentWalletAddress,
+                agentKey:agentKey
               })
               const response:string=FormatDisplayTextForChat(data.data.agentResponse);
-
               useAgentStore.getState().setActiveResponse(response)
-        } catch (error) {
+              useAgentStore.getState().setAgentResponses({
+                query: query,
+                outputString:data.data.agentResponse,
+                chatId: chatId,
+              });
+        } catch (error:any) {
+            useAgentStore.getState().setActiveResponse("We couldn't Process your request at the moment. Please Fund Your Wallet to proceed")
+            useAgentStore.getState().setAgentResponses({
+                query: query,
+                outputString:"We couldn't Process your request at the moment. Please Fund Your Wallet to proceed",
+                chatId: chatId,
+              });
               console.error("Error processing agent response:", error);
         }
     }

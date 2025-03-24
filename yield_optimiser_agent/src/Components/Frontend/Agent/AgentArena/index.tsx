@@ -15,12 +15,18 @@ dotenv.config();
 export const AgentArena = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  const { activeChat, activeResponse, agentResponses, chatId } = useAgentStore(
+  const { activeChat, 
+    activeResponse, 
+    agentResponses, 
+    chatId ,
+    agentKey
+  } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeChat,
       activeResponse: state.activeResponse,
       agentResponses: state.agentResponses,
       chatId: state.activeChatId,
+      agentKey:state.agentKey
     }))
   );
 
@@ -52,6 +58,7 @@ export const AgentArena = () => {
         const { data } = await axios.post(`${BACKEND_URL}/agent`, {
           message: userInputRef.current?.value,
           chatId: chatId,
+          agentKey:agentKey
         });
         console.log(data.data);
         const response: string = data.data.agentResponse;

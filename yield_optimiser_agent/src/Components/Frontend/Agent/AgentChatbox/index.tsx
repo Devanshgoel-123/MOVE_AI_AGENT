@@ -53,7 +53,7 @@ export const ChatBox=()=>{
         });
         console.log("the response from the agent is", data);
         const response: string = FormatDisplayTextForChat(
-          data.data.data.agentResponse
+          data.data.agentResponse
         );
         useAgentStore.getState().setActiveResponse(response);
         useAgentStore.getState().setAgentResponses({

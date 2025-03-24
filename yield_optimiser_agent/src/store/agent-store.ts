@@ -46,11 +46,15 @@ interface AgentStore {
   predictionChat: PredictionChat[];
   setPredictionChat: (chat: PredictionChat) => void;
   yieldChats: YieldChat[];
+  agentKey:string;
   setYieldChats: (chat: YieldChat) => void;
   setOpenSideBar: (value: boolean) => void;
   setWalletAddress: (value: string) => void;
   setActiveYieldChat:(value:string)=>void;
   setActiveYieldResponse:(value:YieldResponse)=>void;
+  agentWalletAddress:string;
+  setAgentWalletAddress:(value:string)=>void;
+  setAgentKey:(value:string)=>void;
 }
 
 export const useAgentStore = create<AgentStore>((set, get) => ({
@@ -62,6 +66,8 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     query: "",
     activeTransactionHash: "",
   },
+  agentWalletAddress:"",
+  agentKey:"",
   walletAddress: "",
   yieldChats: [],
   predictionChat: [],
@@ -157,5 +163,15 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     set({
       activeYieldResponse:response
   })
+  },
+  setAgentWalletAddress:(value:string)=>{
+    set({
+      agentWalletAddress:value
+    })
+  },
+  setAgentKey:(value:string)=>{
+    set({
+    agentKey:value
+    })
   }
 }));

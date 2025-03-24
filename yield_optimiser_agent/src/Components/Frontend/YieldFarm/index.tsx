@@ -18,6 +18,7 @@ import { useAgentStore } from "@/store/agent-store";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 import { CustomSpinner } from "@/Components/Backend/Common/CustomSpinner";
+import { useShallow } from "zustand/react/shallow";
 
 export type EchelonUserData = {
   market: string;
@@ -77,7 +78,11 @@ const YieldFarm = () => {
   const [data, setData] = useState<DataType | null>(null);
 
   const [loading, setLoading] = useState(true);
-
+  const {
+    agentWalletAddress
+  }=useAgentStore(useShallow((state)=>({
+    agentWalletAddress:state.agentWalletAddress,
+  })))
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
@@ -98,7 +103,11 @@ const YieldFarm = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BACKEND_URL}/getUserPoolData`);
+        const response = await axios.get(`${BACKEND_URL}/getUserPoolData`,{
+          params:{
+            agentWalletAddress:agentWalletAddress
+          }
+        });
         const responseData: DataType = response.data;
         responseData.echelonMarketData.sort((a, b) => b.supply - a.supply);
         responseData.jouleMarketData.sort((a, b) => b.supply - a.supply);
