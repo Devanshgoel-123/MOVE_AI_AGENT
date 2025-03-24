@@ -170,17 +170,16 @@ export const Sidebar = () => {
               <span>Agent Wallet:</span>
               <div
                 className="sidebar-menu-item wallet-connect"
-                onClick={walletAddress ? handleDisconnect : handleConnect}
               >
                 <div className="sidebar-menu-icon">
                   <Wallet2 size={18} />
                 </div>
-                {walletAddress ? (
+                {agentWalletAddress ? (
                   <span className="wallet-address">
                     {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-4)}
                   </span>
                 ) : (
-                  <span className="sidebar-menu-label">Connect Wallet</span>
+                  <span className="sidebar-menu-label">0x0000...0000</span>
                 )}
               </div>
               </div>
@@ -280,20 +279,19 @@ export const Sidebar = () => {
           <span className="walletName">Agent  Wallet</span>
           <div
             className="sidebar-menu-item wallet-connect"
-            onClick={walletAddress ? handleDisconnect : handleConnect}
           >
             <div className="sidebar-menu-icon">
               <Wallet2 size={18} />
             </div>
-            {walletAddress ? (
+            {agentWalletAddress ? (
               <div className="wallet">
                 <h3>Wallet</h3>
                 <span className="wallet-address">
-                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-2)}
+                  {agentWalletAddress.slice(0, 6)}...{agentWalletAddress.slice(-2)}
                 </span>
               </div>
             ) : (
-              <span className="sidebar-menu-label">Connect  Wallet</span>
+              <span className="sidebar-menu-label">0x0000...0000</span>
             )}
           </div>
          </div>

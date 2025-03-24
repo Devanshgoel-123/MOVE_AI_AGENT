@@ -22,10 +22,14 @@ export const ChatBox=()=>{
   const MediumDevice=useMediaQuery("(max-width:1028px)");
     const {
       activeChat,
-      chatId
+      chatId,
+      agentKey,
+      agentWalletAddress
     }=useAgentStore(useShallow((state)=>({
       activeChat:state.activeChat,
-      chatId:state.activeChatId
+      chatId:state.activeChatId,
+      agentKey:state.agentKey,
+      agentWalletAddress:state.agentWalletAddress
     })))
     const userInputRef = useRef<HTMLInputElement>(null);
     const handleKeyPress =  (e:React.KeyboardEvent<HTMLInputElement>) => {
@@ -50,6 +54,8 @@ export const ChatBox=()=>{
         const { data } = await axios.post(`${BACKEND_URL}/agent`, {
           message: userInputRef.current?.value,
           chatId: chatId,
+          agentKey:agentKey,
+          agentWalletAddress:agentWalletAddress
         });
         console.log("the response from the agent is", data);
         const response: string = FormatDisplayTextForChat(

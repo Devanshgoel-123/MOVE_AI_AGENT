@@ -31,8 +31,8 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    overflow: hidden;
-    height: 100%;
+    overflow: auto;
+    height: 90%;
     align-items: center;
     justify-content: flex-start;
     .centerHeading {

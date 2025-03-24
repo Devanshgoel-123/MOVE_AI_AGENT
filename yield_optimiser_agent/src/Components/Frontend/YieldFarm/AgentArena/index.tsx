@@ -30,20 +30,14 @@ export const AgentArena = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const ButtonContent: Props[] = [
     {
-      heading: "Market Analysis",
-      content: "Conduct An In Depth Analysis of Any Supported Token on Aptos",
-      query: "Conduct An In Depth Analysis of Aptos Token",
+      heading: "Analyse Portfolio",
+      content: "Conduct An In Depth Analysis of my portfolio",
+      query: "Conduct An In Depth Analysis of my portfolio",
     },
     {
-      heading: "Fetch Token Price",
-      content: "Fetch Token Price of a token in USD",
-      query: "Fetch the token price",
-    },
-
-    {
-      heading: "Swap",
-      content: "Swap one token to Another",
-      query: "Swap token",
+      heading: "Lend Token",
+      content: "Lend token on Joule Finance and Echelon Markets",
+      query: "Give me the details to lend token on joule Finance",
     },
   ];
   const { activeChat, activeResponse, agentResponses, agentKey, agentWalletAddress } = useAgentStore(
