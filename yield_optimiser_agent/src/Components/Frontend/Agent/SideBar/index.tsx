@@ -13,6 +13,31 @@ import { MessageSquare, BarChart3, PieChart, Wallet2, Copy } from "lucide-react"
 import { useMediaQuery } from "@mui/material";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
 import axios from "axios";
+
+export const handleConnect = async () => {
+  const getAptosWallet = () => {
+    if ("aptos" in window) {
+      return window.aptos;
+    } else {
+      window.open("https://petra.app/", `_blank`);
+    }
+  };
+  const wallet = getAptosWallet();
+  try {
+    console.log("Attempting to connect to Petra...");
+    const response = await wallet.connect();
+    const account = await wallet.account();
+    useAgentStore.getState().setWalletAddress(account.address.toString());
+    const agentResponse=await axios.post(`${BACKEND_URL}/walletRouter`,{
+        walletAddress:account.address.toString()
+    })
+    useAgentStore.getState().setAgentWalletAddress(agentResponse.data.agentWalletAddress)
+    useAgentStore.getState().setAgentKey(agentResponse.data.key)
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const Sidebar = () => {
   const { disconnect } = useWallet();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -40,6 +65,9 @@ export const Sidebar = () => {
     }))
   );
 
+ 
+
+  
   const getAptosWallet = () => {
     if ("aptos" in window) {
       return window.aptos;
@@ -47,24 +75,6 @@ export const Sidebar = () => {
       window.open("https://petra.app/", `_blank`);
     }
   };
-
-  const handleConnect = async () => {
-    const wallet = getAptosWallet();
-    try {
-      console.log("Attempting to connect to Petra...");
-      const response = await wallet.connect();
-      const account = await wallet.account();
-      useAgentStore.getState().setWalletAddress(account.address.toString());
-      const agentResponse=await axios.post(`${BACKEND_URL}/walletRouter`,{
-          walletAddress:account.address.toString()
-      })
-      useAgentStore.getState().setAgentWalletAddress(agentResponse.data.agentWalletAddress)
-      useAgentStore.getState().setAgentKey(agentResponse.data.key)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   
 
   const handleCopyAddress = () => {

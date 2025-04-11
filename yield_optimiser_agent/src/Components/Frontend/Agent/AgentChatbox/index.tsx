@@ -10,6 +10,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { BACKEND_URL } from "@/Components/Backend/Common/Constants";
 import { FormatDisplayTextForChat } from "@/Utils/function";
+import { handleConnect } from "../SideBar";
 dotenv.config();
 interface Props {
   heading: string;
@@ -20,6 +21,7 @@ interface Props {
 export const ChatBox=()=>{
   const MobileDevice= useMediaQuery("(max-width:600px)");
   const MediumDevice=useMediaQuery("(max-width:1028px)");
+
     const {
       activeChat,
       chatId,
@@ -50,6 +52,7 @@ export const ChatBox=()=>{
           .setActiveChat(userInputRef.current?.value as string);
       useAgentStore.getState().setActiveResponse("");
       useAgentStore.getState().handleOpenArena();
+      useAgentStore.getState().setFetching(true);
       try {
         const { data } = await axios.post(`${BACKEND_URL}/agent`, {
           message: userInputRef.current?.value,
@@ -62,6 +65,7 @@ export const ChatBox=()=>{
           data.data.agentResponse
         );
         useAgentStore.getState().setActiveResponse(response);
+        useAgentStore.getState().setFetching(false);
         useAgentStore.getState().setAgentResponses({
           query: activeChat,
           outputString: response,
@@ -79,6 +83,7 @@ export const ChatBox=()=>{
             "I am sorry, We couldn't process your request at the moment.",
           chatId: chatId,
         });
+        useAgentStore.getState().setFetching(false);
         console.error("Error processing agent response:", error);
       }
     }
@@ -194,7 +199,7 @@ export const ChatBox=()=>{
         </div>
       )}
 
-      <div className="AgentInputContainer">
+      {agentWalletAddress !== "" ? <div className="AgentInputContainer">
         <input
           ref={userInputRef}
           onKeyDown={handleKeyPress}
@@ -205,6 +210,11 @@ export const ChatBox=()=>{
           <AiOutlineEnter />
         </div>
       </div>
+      :
+      <div className="connectWallet" onClick={handleConnect}>
+        Connect Wallet
+      </div>
+      }
     </div>
   );
 };

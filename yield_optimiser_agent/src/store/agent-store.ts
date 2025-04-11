@@ -25,6 +25,8 @@ export interface YieldChat {
 interface AgentStore {
   openArena: boolean;
   openSideBar: boolean;
+  fetching:boolean;
+  yieldAgentFetching:boolean;
   walletAddress: string;
   handleCloseArena: () => void;
   handleOpenArena: () => void;
@@ -55,6 +57,8 @@ interface AgentStore {
   agentWalletAddress:string;
   setAgentWalletAddress:(value:string)=>void;
   setAgentKey:(value:string)=>void;
+  setFetching:(value:boolean)=>void;
+  setYieldAgentFetching:(value:boolean)=>void;
 }
 
 export const useAgentStore = create<AgentStore>((set, get) => ({
@@ -66,6 +70,8 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     query: "",
     activeTransactionHash: "",
   },
+  yieldAgentFetching:false,
+  fetching:false,
   agentWalletAddress:"",
   agentKey:"",
   walletAddress: "",
@@ -172,6 +178,16 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   setAgentKey:(value:string)=>{
     set({
     agentKey:value
+    })
+  },
+  setFetching:(value:boolean)=>{
+    set({
+      fetching:value
+    })
+  },
+  setYieldAgentFetching:(value:boolean)=>{
+    set({
+      yieldAgentFetching:value
     })
   }
 }));

@@ -25,7 +25,6 @@ export const ChatAgent = () => {
     }))
   );
   const MobileDevice = useMediaQuery("(max-width:600px)");
-  console.log("the active component is:", activeComponent);
   return (
     <div className="AgentUIWrapper">
       <Sidebar />

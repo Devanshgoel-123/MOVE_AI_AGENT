@@ -135,6 +135,7 @@
                 width: 90%;
             }
         }
+        
         .EnterButton{
             color: aquamarine;
             display: flex;
@@ -145,5 +146,23 @@
         }
     }
 
+    .connectWallet{
+        display: flex;
+        font-size: 12px;
+        height: 50px;
+        border-radius: 8px;
+        border: 0px;
+        background-color: transparent;
+        outline: none;
+        justify-content: center;
+        align-items: center;
+        color: #111111;
+        background-color: #7bf179;
+        @include md{
+            font-size: 18px;
+            width: 40%;
+            max-width: 200px;
+        }
+    }
 }
 

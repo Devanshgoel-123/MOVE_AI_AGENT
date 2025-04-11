@@ -8,7 +8,7 @@ import { useAgentStore, YieldChat, YieldResponse } from "@/store/agent-store";
 import { CustomTextLoader } from "@/Components/Backend/Common/CustomTextLoader";
 import Image from "next/image";
 import { BACKEND_URL, DAPP_LOGO } from "@/Components/Backend/Common/Constants";
-import { AgentChat } from "@/store/agent-store";
+import { handleConnect } from "../../Agent/SideBar";
 import dotenv from "dotenv";
 import { FormatDisplayTextForChat, prettyPrintObject } from "@/Utils/function";
 import { useMediaQuery } from "@mui/material";
@@ -40,13 +40,21 @@ export const AgentArena = () => {
       query: "Give me the details to lend token on joule Finance",
     },
   ];
-  const { activeChat, activeResponse, agentResponses, agentKey, agentWalletAddress } = useAgentStore(
+  const { 
+    activeChat,
+    activeResponse,
+    agentResponses,
+    agentKey,
+    agentWalletAddress,
+    yieldAgentFetching
+   } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeYieldChat,
       activeResponse: state.activeYieldResponse,
       agentResponses: state.yieldChats,
       agentKey:state.agentKey,
-      agentWalletAddress:state.agentWalletAddress
+      agentWalletAddress:state.agentWalletAddress,
+      yieldAgentFetching:state.yieldAgentFetching
     }))
   );
 
@@ -70,6 +78,7 @@ export const AgentArena = () => {
 
   const handleEnterClick = async () => {
     if (userInputRef.current?.value) {
+      useAgentStore.getState().setYieldAgentFetching(true)
       useAgentStore.getState().setActiveYieldChat(userInputRef.current.value);
       useAgentStore.getState().setActiveYieldResponse({
         analysis: "",
@@ -77,17 +86,17 @@ export const AgentArena = () => {
         userQueryResponse: "",
         swap: "",
       });
+
       try {
         const { data } = await axios.post(`${BACKEND_URL}/userAnalysis`, {
           message: userInputRef.current?.value,
           agentKey:agentKey,
           agentWalletAddress:agentWalletAddress
         });
+      
         delete data.data.recommendedAction.actionRequired;
         delete data.data.swap;
         delete data.data.userQueryResponse;
-        console.log("the parsed data is:", prettyPrintObject(data.data));
-        const response: YieldResponse = data.data;
         useAgentStore.getState().setActiveYieldResponse({
           analysis: prettyPrintObject(data.data),
         });
@@ -97,7 +106,9 @@ export const AgentArena = () => {
             analysis: prettyPrintObject(data.data),
           },
         });
+        useAgentStore.getState().setYieldAgentFetching(false)
       } catch (error) {
+        useAgentStore.getState().setYieldAgentFetching(false)
         useAgentStore.getState().setActiveYieldResponse({
           analysis: "Sorry We couldn't process your request at the moment",
           recommendedAction: "",
@@ -192,14 +203,8 @@ export const AgentArena = () => {
           </div>
         )}
 
-        {chatArray.length > 1
+        {chatArray.length > 0
           ? chatArray
-              .slice(
-                0,
-                activeResponse.analysis !== ""
-                  ? chatArray.length - 1
-                  : chatArray.length
-              )
               .map((item, index) => {
                 const agentResponse: YieldChat = {
                   query: item.query,
@@ -216,19 +221,20 @@ export const AgentArena = () => {
                   </div>
                 );
               })
-          : null}
-        {activeChat !== "" && (
+          : 
+          null
+        }
+        {activeResponse.analysis === "" && activeChat !== "" && (
           <div className="YieldChatTextQuestion">
             <div className="YieldChatText">{activeChat}</div>
           </div>
         )}
-        {activeResponse.analysis === "" && activeChat === "" ? null : (
-          <div className="YieldChatTextResponse">
-            {renderText(activeResponse)}
-          </div>
-        )}
-      </div>
-      <div className="YieldAgentArenaInputContainer">
+         { yieldAgentFetching ? <div className="YieldChatTextResponse">
+          <CustomTextLoader text="Loading" />
+                    </div> : null}
+        </div>
+      <div>
+      {agentWalletAddress ? <div className="YieldAgentArenaInputContainer">
         <input
           ref={userInputRef}
           onKeyDown={handleKeyPress}
@@ -238,7 +244,13 @@ export const AgentArena = () => {
         <div className="EnterButton" onClick={handleEnterClick}>
           <AiOutlineEnter />
         </div>
+      </div> 
+      :
+      <div className="connectWallet" onClick={handleConnect}>
+        Connect Wallet
       </div>
+      }
+    </div>
     </div>
   );
 };

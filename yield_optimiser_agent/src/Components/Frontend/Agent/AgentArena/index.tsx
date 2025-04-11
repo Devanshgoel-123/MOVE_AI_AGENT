@@ -19,18 +19,18 @@ export const AgentArena = () => {
     activeResponse, 
     agentResponses, 
     chatId ,
-    agentKey
+    agentKey,
+    fetching
   } = useAgentStore(
     useShallow((state) => ({
       activeChat: state.activeChat,
       activeResponse: state.activeResponse,
       agentResponses: state.agentResponses,
       chatId: state.activeChatId,
-      agentKey:state.agentKey
+      agentKey:state.agentKey,
+      fetching:state.fetching
     }))
   );
-
-  console.log("the chat id is", chatId);
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -44,14 +44,15 @@ export const AgentArena = () => {
     if (e.key === "Enter" && userInputRef.current) {
       const userInput = userInputRef.current?.value;
       if (userInput.trim()) {
-        handleEnterClick();
+        handleEnterClick(userInput);
         userInputRef.current.value = "";
       }
     }
   };
 
-  const handleEnterClick = async () => {
+  const handleEnterClick = async (value:string) => {
     if (userInputRef.current?.value) {
+      useAgentStore.getState().setFetching(true)
       useAgentStore.getState().setActiveChat(userInputRef.current.value);
       useAgentStore.getState().setActiveResponse("");
       try {
@@ -60,15 +61,18 @@ export const AgentArena = () => {
           chatId: chatId,
           agentKey:agentKey
         });
-        console.log(data.data);
         const response: string = data.data.agentResponse;
+       
         useAgentStore.getState().setActiveResponse(response);
         useAgentStore.getState().setAgentResponses({
-          query: activeChat,
+          query: value,
           outputString: response,
           chatId: chatId,
         });
+        console.log("the agent chats are",useAgentStore.getState().agentResponses)
+        useAgentStore.getState().setFetching(false);
       } catch (error) {
+        useAgentStore.getState().setFetching(false);
         useAgentStore
           .getState()
           .setActiveResponse(
@@ -123,17 +127,13 @@ export const AgentArena = () => {
       renderGeneralToolResponse(response)
     );
   };
+
   const chatArray = agentResponses.length > 0 ? agentResponses : [];
-  console.log(chatArray);
   return (
     <div className="ArenaChatArea">
       <div className="ArenaChatBox" ref={chatBoxRef}>
-        {chatArray.length > 1
+        {chatArray.length > 0
           ? chatArray
-              .slice(
-                0,
-                activeResponse !== "" ? chatArray.length - 1 : chatArray.length
-              )
               .map((item, index) => {
                 const agentResponse: AgentChat = {
                   query: item.query,
@@ -152,15 +152,15 @@ export const AgentArena = () => {
                   </div>
                 );
               })
-          : null}
-        {activeChat !== "" && (
+          : 
+           null
+          }
+        {activeResponse === "" && activeChat !== "" && (
           <div className="chatTextQuestion">
             <div className="chatText">{activeChat}</div>
           </div>
         )}
-        {activeResponse === "" && activeChat === "" ? null : (
-          <div className="chatTextResponse">{renderText(activeResponse)}</div>
-        )}
+        { fetching ? <div className="chatTextResponse"><CustomTextLoader text="Loading" /></div> : null}
       </div>
       <div className="AgentArenaInputContainer">
         <input
@@ -169,7 +169,7 @@ export const AgentArena = () => {
           placeholder="Ask Anything"
           className="AgentInput"
         />
-        <div className="EnterButton" onClick={handleEnterClick}>
+        <div className="EnterButton" onClick={()=>{handleEnterClick(userInputRef.current?.value || "")}}>
           <AiOutlineEnter />
         </div>
       </div>
